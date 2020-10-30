@@ -2,6 +2,7 @@
 using PokemonUnity.Character;
 using PokemonUnity.Monster;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class DemoStadiumManager : MonoBehaviour

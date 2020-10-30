@@ -81,7 +81,7 @@ public class MovesetData : MonoBehaviour
                 return Color.clear;
         }
     }
-    public static string ReturnMoveName(PokemonUnity.Moves move)
+public static string ReturnMoveName(PokemonUnity.Moves move)
     {
         if (move == PokemonUnity.Moves.NONE)
         {

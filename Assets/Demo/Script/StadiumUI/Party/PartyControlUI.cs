@@ -17,14 +17,14 @@ public class PartyControlUI : MonoBehaviour
     public void DisplayPartyUI()
     {
         ID = new List<int>();
-        
-        for (int i = 0; i<=5; i++)
+
+        for (int i = 0; i <= 5; i++)
         {
             ID.Add(i);
-            
+
         }
         GetPartyButton();
-        
+
     }
     private void GetPartyButton()
     {

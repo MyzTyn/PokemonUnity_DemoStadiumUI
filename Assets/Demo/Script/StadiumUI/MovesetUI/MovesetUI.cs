@@ -1,29 +1,24 @@
-﻿using PokemonUnity;
-using PokemonUnity.Attack;
-using PokemonUnity.Attack.Data;
-using PokemonUnity.Monster;
-using System;
-using System.Net.NetworkInformation;
+﻿using PokemonUnity.Monster;
 using UnityEngine;
 
 public class MovesetUI : MonoBehaviour
 {
     [SerializeField]
     private GameObject MoveSetUIObject;
+
     [SerializeField]
     private MovesetData Data;
-    [SerializeField]
-    private DemoStadiumManager demo;
+
     private Pokemon pokemon;
     public bool IsWindowActive { get; private set; } = false;
     public void ActiveGameobject(bool active)
     {
-        IsWindowActive = true;
+        IsWindowActive = active;
         MoveSetUIObject.SetActive(active);
     }
-    public void DisplayPkmnStats(Pokemon pokemon)
+    public void DisplayPkmnStats()
     {
-        this.pokemon = pokemon;
+        pokemon = DemoStadiumManager.StorePokemon[DemoStadiumManager.PkmnSelected];
         Display_ID_UI();
         Display_PkmnInfo_UI();
         Display_Move_Set_UI();
@@ -31,13 +26,13 @@ public class MovesetUI : MonoBehaviour
     private void Display_ID_UI()
     {
         Data.PkmnName.text = pokemon.Name;
-        Data.Level.text = "L "+pokemon.Level;
+        Data.Level.text = "L " + pokemon.Level;
         Data.PkmnID.text = "No." + string.Format("{0:000}", (int)pokemon.Species);
         Data.Species_Name.text = pokemon.Species.ToString();
     }
     private void Display_PkmnInfo_UI()
     {
-        Data.PokemonSprite.sprite = demo.iconSprites[(int)pokemon.Species];
+        Data.PokemonSprite.sprite = DemoStadiumManager.IconSprites[(int)pokemon.Species];
         Data.Health.text = "HP   " + pokemon.TotalHP;
         Data.Attack.text = "Attack    " + pokemon.ATK;
         Data.Defense.text = "Defense " + pokemon.DEF;
@@ -45,20 +40,20 @@ public class MovesetUI : MonoBehaviour
         Data.Special.text = "Special  " + pokemon.SPA;
         if (pokemon.Type2 == PokemonUnity.Types.NONE)
         {
-            Data.Type1.sprite = demo.pkmnType[(int)pokemon.Type1];
+            Data.Type1.sprite = DemoStadiumManager.PkmnType[(int)pokemon.Type1];
             Data.Type2.sprite = null;
-            Data.Type2.color = UnityEngine.Color.clear;
+            Data.Type2.color = Color.clear;
         }
         else
         {
-            Data.Type2.color = UnityEngine.Color.white;
-            Data.Type1.sprite = demo.pkmnType[(int)pokemon.Type1];
-            Data.Type2.sprite = demo.pkmnType[(int)pokemon.Type2];
+            Data.Type2.color = Color.white;
+            Data.Type1.sprite = DemoStadiumManager.PkmnType[(int)pokemon.Type1];
+            Data.Type2.sprite = DemoStadiumManager.PkmnType[(int)pokemon.Type2];
         }
     }
     private void Display_Move_Set_UI()
     {
-        
+
         //
         Data.Move_1.text = MovesetData.ReturnMoveName(pokemon.moves[0].MoveId);
         Data.Move_2.text = MovesetData.ReturnMoveName(pokemon.moves[1].MoveId);
@@ -110,5 +105,5 @@ public class MovesetUI : MonoBehaviour
         ActiveGameobject(false);
         IsWindowActive = false;
     }
-    
+
 }

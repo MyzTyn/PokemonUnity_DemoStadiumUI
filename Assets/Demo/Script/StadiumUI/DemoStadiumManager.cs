@@ -1,17 +1,16 @@
 ﻿using PokemonUnity;
 using PokemonUnity.Character;
 using PokemonUnity.Monster;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DemoStadiumManager : MonoBehaviour
 {
 
-    public byte LevelFixed = 50;
-    
+
+    static public byte LevelFixed = 50;
     private int CurrentOnParty;
-    public int PkmnSelected { get; private set; } = 0;
+    static public int PkmnSelected { get; private set; } = 0;
 
     private Player player;
     //
@@ -24,26 +23,24 @@ public class DemoStadiumManager : MonoBehaviour
     //
     //List
     private Dictionary<int, PartyButton> PartyViewer;
-    private Dictionary<int, Pokemon> StorePokemon;
+    static public Dictionary<int, Pokemon> StorePokemon { get; private set; }
     private Dictionary<int, StadiumRentalUIButton> StoreButtonData;
     //Sprite
-    [HideInInspector]
-    public Sprite[] iconSprites;
-    [HideInInspector]
-    public Sprite[] pkmnType;
+    static public Sprite[] IconSprites { get; private set; }
+    static public Sprite[] PkmnType { get; private set; }
     void Start()
     {
         PartyViewer = new Dictionary<int, PartyButton>();
         StorePokemon = new Dictionary<int, Pokemon>();
         StoreButtonData = new Dictionary<int, StadiumRentalUIButton>();
         //
-        iconSprites = Resources.LoadAll<Sprite>("PokemonIcon");
-        pkmnType = Resources.LoadAll<Sprite>("PokemonType");
+        IconSprites = Resources.LoadAll<Sprite>("PokemonIcon");
+        PkmnType = Resources.LoadAll<Sprite>("PokemonType");
         //
         CurrentOnParty = 0;
         player = new Player();
         //
-        RentalControlUI.DisplayPokemonSelectUI(Convert.ToInt32(LevelFixed));
+        RentalControlUI.DisplayPokemonSelectUI();
         party.DisplayPartyUI();
         //Use ID but I will leave 00000 as Example
         party.SetTrainerID(00000);
@@ -67,7 +64,7 @@ public class DemoStadiumManager : MonoBehaviour
     void DisplayMoveSetUI()
     {
         movesetUI.ActiveGameobject(true);
-        movesetUI.DisplayPkmnStats(StorePokemon[PkmnSelected]);
+        movesetUI.DisplayPkmnStats();
     }
     public void AddToParty()
     {
@@ -81,9 +78,7 @@ public class DemoStadiumManager : MonoBehaviour
             {
                 StoreButtonData[PkmnSelected].DisableOnClick(true);
                 player.Party[CurrentOnParty] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
-                PartyViewer[CurrentOnParty].SetIcon(iconSprites[PkmnSelected]);
-                PartyViewer[CurrentOnParty].SetName(player.Party[CurrentOnParty].Name);
-                PartyViewer[CurrentOnParty].SetLevel(player.Party[CurrentOnParty].Level);
+                PartyViewer[CurrentOnParty].DisplayPartyButton();
                 PartyViewer[CurrentOnParty].ActivePokemonDisplay(true);
                 CurrentOnParty += 1;
                 if (player.Party[5].IsNotNullOrNone())

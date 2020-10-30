@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using PokemonUnity;
+using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class PartyButton : MonoBehaviour
@@ -13,13 +15,12 @@ public class PartyButton : MonoBehaviour
     private GameObject PokemonDisplay;
     [SerializeField]
     private GameObject PartyUIButton;
-    public void SetIcon(Sprite icon)
+    public void DisplayPartyButton()
     {
-        PokemonIcon.sprite = icon;
-    }
-    public void SetName(string name)
-    {
-        Name.text = name;
+        PokemonIcon.sprite = DemoStadiumManager.IconSprites[DemoStadiumManager.PkmnSelected];
+        Name.text = Convert.ToString((Pokemons)DemoStadiumManager.PkmnSelected);
+        Level.text = "L " + DemoStadiumManager.LevelFixed;
+        ActivePokemonDisplay(true);
     }
     public void ActivePokemonDisplay(bool active)
     {
@@ -29,19 +30,10 @@ public class PartyButton : MonoBehaviour
     {
         PartyUIButton.SetActive(active);
     }
-    public void SetBackgroundColor(Color color)
-    {
-        PartyUIButton.GetComponent<Image>().color = color;
-    }
-    public void SetLevel(int level)
-    {
-        Level.text = "L " + level;
-    }
     public void Clear()
     {
         PokemonIcon.sprite = null;
         Name.text = null;
         Level.text = null;
-
     }
 }

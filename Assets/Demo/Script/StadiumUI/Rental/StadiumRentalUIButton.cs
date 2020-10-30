@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using PokemonUnity;
+using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class StadiumRentalUIButton : MonoBehaviour
@@ -13,22 +15,10 @@ public class StadiumRentalUIButton : MonoBehaviour
     private Button button;
     [SerializeField]
     private DemoStadiumManager demo;
-    public int ID;
-    public void SetIcon(Sprite mySprite)
+    public int ID { get; private set; }
+    public void SetID(int id)
     {
-        myIcon.sprite = mySprite;
-    }
-    public void SetName(string name)
-    {
-        Name.text = name;
-    }
-    public void SetLevel(int Level)
-    {
-        L.text = "L" + Level;
-    }
-    public void SetID(int Id)
-    {
-        ID = Id;
+        ID = id;
     }
     public void DisableOnClick(bool active)
     {
@@ -42,10 +32,13 @@ public class StadiumRentalUIButton : MonoBehaviour
             button.onClick.AddListener(delegate { demo.PokemonStatsandMoveUI(ID); });
         }
     }
-    private void Awake()
+    private void Start()
     {
         button.onClick.AddListener(delegate { demo.PokemonStatsandMoveUI(ID); });
+        new WaitForSeconds(1);
+        myIcon.sprite = DemoStadiumManager.IconSprites[ID];
+        L.text = "L" + DemoStadiumManager.LevelFixed;
+        Name.text = Convert.ToString((Pokemons)ID);
     }
-    
 }
 

@@ -1,18 +1,9 @@
 {
   "dependencies": {
-    "com.unity.collab-proxy": "1.2.16",
-    "com.unity.ide.rider": "1.1.4",
-    "com.unity.ide.vscode": "1.2.1",
-    "com.unity.test-framework": "1.1.16",
-    "com.unity.textmeshpro": "2.1.1",
-    "com.unity.timeline": "1.2.16",
-    "com.unity.ugui": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
-    "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
-    "com.unity.modules.cloth": "1.0.0",
     "com.unity.modules.director": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",
     "com.unity.modules.imgui": "1.0.0",
@@ -36,7 +27,6 @@
     "com.unity.modules.vehicles": "1.0.0",
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
-    "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.wind": "1.0.0"
   }
 }

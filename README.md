@@ -9,5 +9,16 @@ Replace sqlite from PokemonUnity Framework to where that Unity created a blank s
 
 You can do whatever you want this repo.
 
-(C) MyzTyn(Script)
+(C) MyzTyn(Script, and custom UI)
+
 (C) Pokemon (Anything that related to Pokemon)
+
+Credit:
+
+1. Pokemon Sprite: [Sprite](https://github.com/msikma/pokesprite)
+
+2. Pokemon Type: found on Google
+
+3. Stadium Background: Pokemon Stadium Game
+
+4. Pokemon Framework: [PokemonUnity](https://github.com/herbertmilhomme/PokemonUnity)

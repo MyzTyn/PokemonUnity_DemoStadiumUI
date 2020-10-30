@@ -1,0 +1,577 @@
+fileFormatVersion: 2
+guid: a1b3b7fb6090f5848b25bd8508f91597
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8543211843469515053
+    second: PokemonType_0
+  - first:
+      213: 980385450861360985
+    second: PokemonType_7
+  - first:
+      213: 2867625172443815118
+    second: PokemonType_1
+  - first:
+      213: -8096495844228874542
+    second: PokemonType_2
+  - first:
+      213: -5643127751825169104
+    second: PokemonType_4
+  - first:
+      213: 6708475476107717150
+    second: PokemonType_5
+  - first:
+      213: -5600512963170178599
+    second: PokemonType_6
+  - first:
+      213: -3306834482144038925
+    second: PokemonType_8
+  - first:
+      213: 41133278406881052
+    second: PokemonType_9
+  - first:
+      213: 4597497676707756219
+    second: PokemonType_10
+  - first:
+      213: 852888438726037613
+    second: PokemonType_11
+  - first:
+      213: 7853671419608284819
+    second: PokemonType_12
+  - first:
+      213: -6699076753951495222
+    second: PokemonType_13
+  - first:
+      213: -8504325723548364066
+    second: PokemonType_14
+  - first:
+      213: 6762989297300730638
+    second: PokemonType_15
+  - first:
+      213: 4033027702032201415
+    second: PokemonType_16
+  - first:
+      213: -3638306734359793951
+    second: PokemonType_17
+  - first:
+      213: -7260746262141684680
+    second: PokemonType_18
+  - first:
+      213: -5517598544966381157
+    second: PokemonType_3
+  - first:
+      213: -1749923720270487330
+    second: PokemonType_20
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: -1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: PokemonType_0
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1141
+        width: 31
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2919e268e59f8670800000000000000
+      internalID: 8543211843469515053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_7
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 1041
+        width: 318
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9577d8d8f570b9d00800000000000000
+      internalID: 980385450861360985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_1
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 243
+        width: 319
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecc5b78a6e9dbc720800000000000000
+      internalID: 2867625172443815118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_2
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 845
+        width: 319
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2debf4f3de773af80800000000000000
+      internalID: -8096495844228874542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_4
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 247
+        width: 321
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 035ef4255359fa1b0800000000000000
+      internalID: -5643127751825169104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_5
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 445
+        width: 319
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1ae1d907ea491d50800000000000000
+      internalID: 6708475476107717150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_6
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 42
+        width: 320
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d9654ef12bf642b0800000000000000
+      internalID: -5600512963170178599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_8
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 645
+        width: 321
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ffaac01f83cb12d0800000000000000
+      internalID: -3306834482144038925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_9
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 42
+        width: 321
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1fa3efaf72229000800000000000000
+      internalID: 41133278406881052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_10
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 646
+        width: 321
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb879d347c79dcf30800000000000000
+      internalID: 4597497676707756219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_11
+      rect:
+        serializedVersion: 2
+        x: 829
+        y: 42
+        width: 317
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d609d47248116db00800000000000000
+      internalID: 852888438726037613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_12
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 443
+        width: 321
+        height: 126
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39eb36cab88ddfc60800000000000000
+      internalID: 7853671419608284819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_13
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 845
+        width: 323
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acbe4ad7f291803a0800000000000000
+      internalID: -6699076753951495222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_14
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 244
+        width: 318
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed2dea1ffc09af980800000000000000
+      internalID: -8504325723548364066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_15
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 445
+        width: 319
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e03f06d1fe6fadd50800000000000000
+      internalID: 6762989297300730638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_16
+      rect:
+        serializedVersion: 2
+        x: 823
+        y: 1039
+        width: 318
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c670fcb35138f730800000000000000
+      internalID: 4033027702032201415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_17
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 1038
+        width: 320
+        height: 125
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1eea29a3d43228dc0800000000000000
+      internalID: -3638306734359793951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_18
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 845
+        width: 319
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 834bcc06eb5ac3b90800000000000000
+      internalID: -7260746262141684680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PokemonType_3
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 646
+        width: 322
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b91111a5b5d8d63b0800000000000000
+      internalID: -5517598544966381157
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 62bc8fe4184876d449382c11d89adc23
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

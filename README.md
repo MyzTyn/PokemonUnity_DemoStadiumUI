@@ -7,9 +7,7 @@ Replace sqlite from PokemonUnity Framework to where that Unity created a blank s
 ![alt text](https://github.com/MyzTyn/PokemonUnity_DemoStadiumUI/blob/main/ForReadMe/Capture1.PNG)
 ![alt text](https://github.com/MyzTyn/PokemonUnity_DemoStadiumUI/blob/main/ForReadMe/Capture2.PNG)
 
-You can do whatever you want this repo.
-
-(C) MyzTyn(Script, and custom UI)
+You can use this repo for anything. This project was created to show how to use Herbertmilhomme's framework.
 
 (C) Pokemon (Anything that related to Pokemon)
 

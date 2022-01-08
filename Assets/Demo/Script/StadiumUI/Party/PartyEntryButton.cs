@@ -1,0 +1,131 @@
+﻿using System;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using PokemonUnity;
+using PokemonUnity.Monster;
+using System.Collections.Generic;
+
+[ExecuteInEditMode]
+public class PartyEntryButton : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
+{
+	#region Variables
+	[SerializeField] private Image PokemonIcon;
+	[SerializeField] private Text Name;
+	[SerializeField] private Text Level;
+	[SerializeField] private GameObject PokemonDisplay;
+	//[SerializeField] private GameObject PartyUIButton;
+
+	[SerializeField] private bool isFocused;
+	public bool IsSelected;
+	public bool IsRental;
+	public int PartySlot;
+	public PokemonSelect PokemonSelect;
+	/// <summary>
+	/// Where was this pokemon original from in menu selection? (box, rental, party...)
+	/// </summary>
+	public KeyValuePair<int,int> Position;
+	#endregion
+	#region Methods
+	//public void DisplayPartyButton()
+	//{
+	//	PokemonIcon.sprite = DemoStadiumManager.IconSprites[DemoStadiumManager.PkmnSelected];
+	//	Name.text = Convert.ToString((Pokemons)DemoStadiumManager.PkmnSelected);
+	//	Level.text = "L " + DemoStadiumManager.LevelFixed;
+	//	ActivePokemonDisplay(true);
+	//}
+	//public void SetDisplay(string name, Pokemons pkmn, int level)
+	//{
+	//	PokemonIcon.sprite = DemoStadiumManager.IconSprites[(int)pkmn];
+	//	//Name.text = pkmn.ToString(TextScripts.Name);
+	//	Name.text = name;
+	//	Level.text = "L " + level;
+	//	ActivePokemonDisplay(true);
+	//}
+	/// <summary>
+	/// Shows pokemon text and sprite display for this pokemon
+	/// </summary>
+	public void SetDisplay()
+	{
+		Pokemon pkmn = Game.GameData.Player.Party[PartySlot];
+		if (!pkmn.IsNotNullOrNone())
+		{
+			ActivePokemonDisplay(false);
+			Clear();
+		}
+		else
+		{
+			PokemonIcon.sprite = DemoStadiumManager.IconSprites[(int)pkmn.Species];
+			//Name.text = pkmn.ToString(TextScripts.Name);
+			Name.text = pkmn.Name;
+			Level.text = "L " + pkmn.Level;
+			ActivePokemonDisplay(true);
+		}
+	}
+	public void ActivePokemonDisplay(bool active)
+	{
+		PokemonDisplay.SetActive(active);
+	}
+	public void ActivePartyUIButton(bool active)
+	{
+		//PartyUIButton.SetActive(active);
+		gameObject.SetActive(active);
+	}
+	public void Clear()
+	{
+		PokemonIcon.sprite = null;
+		Name.text = null;
+		Level.text = null;
+	}
+
+	/// <summary>
+	/// If player selects a pokemon, the party changes the bool of all pokemon buttons to active selection
+	/// </summary>
+	/// <param name="obj"></param>
+	private void Scene_onSelectPartyEntry(int obj)
+	{
+		//PokemonSelect.CurrentSelectedPartySlot = obj;
+		if(PartySlot == obj)
+		{
+			IsSelected = true;
+		}
+		else
+		{
+			IsSelected = false;
+		}
+	}
+	#endregion
+	#region Unity Monobehavior
+	void Start()
+	{
+		GameEvents.current.onSelectPartyEntry += Scene_onSelectPartyEntry;
+	}
+	void OnDestroy()
+	{
+		try
+		{
+			GameEvents.current.onSelectPartyEntry -= Scene_onSelectPartyEntry;
+		}
+		catch (NullReferenceException) { } //Ignore...
+	}
+	//public void OnSelect(BaseEventData eventData)
+	//{
+	//	//base.OnSelect(eventData);
+	//	UnityEngine.Debug.Log("Selected");
+	//	isFocused = true;
+	//}
+	//
+	//public void OnDeselect(BaseEventData eventData)
+	//{
+	//	//base.OnDeselect(eventData);
+	//	UnityEngine.Debug.Log("De-Selected");
+	//	isFocused = false;
+	//}
+	//
+	//public void OnSubmit(BaseEventData eventData)
+	//{
+	//	throw new NotImplementedException();
+	//}
+	#endregion
+}

@@ -53,6 +53,7 @@ public class TabGroup : MonoBehaviour
 
 	public virtual void OnTabSelected(TabButton tab)
 	{
+		Debug.Log($"[LOG]: TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
 		if (tab.disabled) return;
 		if (selectedTab != null)
 			selectedTab.Deselect();

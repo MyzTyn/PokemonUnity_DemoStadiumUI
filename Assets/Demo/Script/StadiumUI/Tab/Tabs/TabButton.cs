@@ -24,10 +24,32 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 	public UnityEvent onTabSelected;
 	public UnityEvent onTabDeselected;
 
-	public virtual void Select() { if (onTabSelected != null) onTabSelected.Invoke(); }
-	public virtual void Deselect() { if (onTabDeselected != null) onTabDeselected.Invoke(); }
-	public virtual void Select(UnityAction action) { if (action != null) onTabSelected.AddListener(action); }
-	public virtual void Deselect(UnityAction action) { if (action != null) onTabDeselected.AddListener(action); }
+	public virtual void Select() 
+	{
+		Debug.Log($"[LOG]: TabButton[{name}].Select();");
+		if (onTabSelected != null)
+		{
+			Debug.Log($"[LOG]: TabButton[{name}].onTabSelected.Invoke();");
+			onTabSelected.Invoke();
+		}
+	}
+	public virtual void Deselect() 
+	{
+		if (onTabDeselected != null) onTabDeselected.Invoke();
+	}
+	public virtual void Select(UnityAction action) 
+	{
+		Debug.Log($"[LOG]: TabButton[{name}].Select(UnityAction);");
+		if (action != null)
+		{
+			Debug.Log($"[LOG]: TabButton[{name}].onTabSelected.AddListener(UnityAction);");
+			onTabSelected.AddListener(action);
+		}
+	}
+	public virtual void Deselect(UnityAction action) 
+	{
+		if (action != null) onTabDeselected.AddListener(action);
+	}
 
 	private void Start()
 	{
@@ -47,6 +69,7 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
 	public virtual void OnPointerClick(PointerEventData eventData)
 	{
+		Debug.Log($"[LOG]: TabButton[{name}].OnPointerClick(PointerEventData);");
 		tabGroup?.OnTabSelected(this);
 	}
 }

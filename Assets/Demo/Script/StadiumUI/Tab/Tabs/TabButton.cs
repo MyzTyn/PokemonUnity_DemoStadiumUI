@@ -10,23 +10,20 @@ using UnityEngine.EventSystems;
 /// https://www.youtube.com/watch?v=211t6r12XPQ
 /// </remarks>
 [RequireComponent(typeof(Image))]
+[RequireComponent(typeof(Selectable))]
 public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 	public TabGroup tabGroup;
-	public bool disabled;
+	public Selectable selectable;
 	public Image background;
-	public Color? tabIdleOverride;
-	public Color? tabActiveOverride;
-	public Color? tabHoverOverride;
-	public Color? tabTextIdleOverride;
-	public Color? tabTextActiveOverride;
-	public Color? tabTextHoverOverride;
 	public UnityEvent onTabSelected;
 	public UnityEvent onTabDeselected;
 
 	public virtual void Select() 
 	{
 		Debug.Log($"[LOG]: TabButton[{name}].Select();");
+		//selectable.Select();
+		if (selectable is Toggle t) t.isOn = true; //!t.isOn;
 		if (onTabSelected != null)
 		{
 			Debug.Log($"[LOG]: TabButton[{name}].onTabSelected.Invoke();");
@@ -35,6 +32,7 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 	}
 	public virtual void Deselect() 
 	{
+		if (selectable is Toggle t) t.isOn = false; //!t.isOn;
 		if (onTabDeselected != null) onTabDeselected.Invoke();
 	}
 	public virtual void Select(UnityAction action) 
@@ -51,9 +49,22 @@ public class TabButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 		if (action != null) onTabDeselected.AddListener(action);
 	}
 
+	private void Awake()
+	{
+		//selectable = GetComponent(typeof(Selectable)) as Selectable;
+		//selectable = GetComponents(typeof(Selectable))[0] as Selectable;
+		//var components = GetComponents(typeof(MonoBehaviour));
+		//foreach (var component in components)
+		//	if (component != null && typeof(Selectable).IsAssignableFrom(component.GetType())) //typeof(Component)
+		//	{
+		//		selectable = (Selectable)component;
+		//		break;
+		//	}
+		background = GetComponent<Image>();
+	}
+
 	private void Start()
 	{
-		background = GetComponent<Image>();
 		tabGroup?.Subscribe(this);
 	}
 

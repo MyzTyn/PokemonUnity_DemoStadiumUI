@@ -17,9 +17,6 @@ public class TabGroup : MonoBehaviour
 	public Color tabIdle;
 	public Color tabActive;
 	public Color tabHover;
-	public Color tabTextIdle;
-	public Color tabTextActive;
-	public Color tabTextHover;
 	public TabButton selectedTab;
 
 	public virtual void Subscribe(TabButton tab)
@@ -34,35 +31,30 @@ public class TabGroup : MonoBehaviour
 
 	public virtual void OnTabEnter(TabButton tab)
 	{
-		if (tab.disabled) return;
+		if (!tab.selectable.interactable) return;
 		ResetTabs();
-		if (selectedTab == null || tab != selectedTab)
-        {
-			tab.background.color = tab.tabHoverOverride ?? tabHover;
-			//tab.background.color = tab.tabTextHoverOverride ?? tabTextHover;
-        }
-		//if (tab.tabHoverOverride != null)
-		//	tab.background.color = tab.tabHoverOverride.Value;
+		//if (selectedTab == null || tab != selectedTab)
+		//{
+		//	tab.background.color = tabHover;
+		//}
 	}
 
 	public virtual void OnTabExit(TabButton tab)
 	{
-		if (tab.disabled) return;
+		if (!tab.selectable.interactable) return;
 		ResetTabs();
 	}
 
 	public virtual void OnTabSelected(TabButton tab)
 	{
 		Debug.Log($"[LOG]: TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
-		if (tab.disabled) return;
+		if (!tab.selectable.interactable) return;
 		if (selectedTab != null)
 			selectedTab.Deselect();
 		selectedTab = tab;
 		selectedTab.Select();
 		ResetTabs();
-		tab.background.color = tab.tabActiveOverride ?? tabActive;
-		//if (tab.tabActiveOverride != null)
-		//	tab.background.color = tab.tabActiveOverride.Value;
+		//tab.background.color = tabActive;
 		int index = tab.transform.GetSiblingIndex();
 		for (int i = 0; i < tabPages.Count; i++)
 			if (i == index)
@@ -76,9 +68,7 @@ public class TabGroup : MonoBehaviour
 		foreach (TabButton tab in tabButtons)
 		{
 			if (selectedTab != null && selectedTab == tab) continue;
-			tab.background.color = tab.tabIdleOverride ?? tabIdle;
-			//if (tab.tabIdleOverride != null)
-			//	tab.background.color = tab.tabIdleOverride.Value;
+			//tab.background.color = tabIdle;
 		}
 	}
 }

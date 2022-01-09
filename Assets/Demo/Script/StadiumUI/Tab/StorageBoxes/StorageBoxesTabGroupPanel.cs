@@ -30,14 +30,29 @@ public class StorageBoxesTabGroupPanel : TabGroup
 			//Instantiate new Prefab to Scene
 			var tabButton = Instantiate<StorageBoxTabButton>(pokemonStorageBoxesTabButtonPrefab, transform);
 			tabButton.tabGroup = this;
+			tabButton.selectable.enabled = true;
+			tabButton.background.color = tabIdle;
+			if (tabButton.selectable is Toggle t) //|| tabButton.selectable is Button
+			{
+				t.isOn = false;
+				t.group = GetComponent<ToggleGroup>();
+				//tabButton.GetComponent<Toggle>().colors = new ColorBlock()
+				//{
+				//	normalColor = tabActive,
+				//	highlightedColor = tabHover,
+				//	pressedColor = tabActive,
+				//	disabledColor = tabIdle
+				//};
+			}
 			//Change UI Text on Screen
 			if (i == 0)			//Current
 			{
 				tabButton.name = "tabC";
 				tabButton.label.text = "C";
+				tabButton.selectable.interactable = false;
 				//Assign Custom Color
-				//tabButton.tabIdleOverride = 
-				tabButton.disabled = true;
+				tabButton.background.color = new Color32(171, 57, 56, 255); //disabled
+				//tabButton.background.color = new Color32(214, 57, 74, 255); //enabled
 
 			}
 			else if (i == 13)	//Rental
@@ -46,22 +61,35 @@ public class StorageBoxesTabGroupPanel : TabGroup
 				tabButton.name = "tabR";
 				tabButton.label.text = "R";
 				//Assign Custom Color
-				//tabButton.tabTextActiveOverride = new Color(255, 203, 249, 255);
-				//tabButton.tabActiveOverride = new Color(205, 62, 186, 255);
-				//tabButton.tabIdleOverride = 
-				selectedTab = tabButtons[13];
+				if (tabButton.selectable is Toggle t0) //|| tabButton.selectable is Button
+				{
+					tabButton.background.color = new Color32(201, 67, 182, 255);
+					//Toggle t1 = tabButton.GetComponent<Toggle>();
+					//Debug.Log($"[LOG]: TabButton[{tabButton.name}].Toggle.Colors = " + t0.colors.normalColor);
+					//t1.colors = new ColorBlock()
+					//{
+					//	normalColor = new Color32(201, 67, 182, 255),
+					//	highlightedColor = new Color32(201, 67, 182, 255),
+					//	pressedColor = new Color32(201, 67, 182, 255),
+					//	disabledColor = new Color32(164, 59, 144, 255)
+					//};
+					//Debug.Log($"[LOG]: TabButton[{tabButton.name}].Toggle.Colors = " + t0.colors.normalColor);
+				}
+				//tabButton.tabTextActiveOverride = new Color32(255, 203, 249, 255);
+				//tabButton.tabActiveOverride = new Color32(205, 62, 186, 255);
+				selectedTab = tabButton;
 			}
 			else if (i == 1)	//First Player Box
 			{
 				tabButton.name = "tab1";
 				tabButton.label.text = "GB"+i;
-				tabButton.disabled = true;
+				tabButton.selectable.interactable = false;
 			}
 			else				//Player Game Boxes
 			{
 				tabButton.name = "tab"+i;
 				tabButton.label.text = i.ToString();
-				tabButton.disabled = true;
+				tabButton.selectable.interactable = false;
 			}
 			tabButton.Select(new UnityEngine.Events.UnityAction(() =>
 			{
@@ -140,6 +168,35 @@ public class StorageBoxesTabGroupPanel : TabGroup
 		}
 	}
 	#endregion
+
+	public override void OnTabSelected(TabButton tab)
+	{
+		Debug.Log($"[LOG]: TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
+		if (!tab.selectable.interactable) return;
+		if (selectedTab != null)
+			selectedTab.Deselect();
+		selectedTab = tab;
+		selectedTab.Select();
+		ResetTabs();
+		//tab.background.color = tabActive;
+		(tab as StorageBoxTabButton).label.color = new Color(1f,1f,1f,1f);
+		int index = tab.transform.GetSiblingIndex();
+		for (int i = 0; i < tabPages.Count; i++)
+			if (i == index)
+				tabPages[i]?.SetActive(true);
+			else
+				tabPages[i]?.SetActive(false);
+	}
+
+	public override void ResetTabs()
+	{
+		foreach (StorageBoxTabButton tab in tabButtons)
+		{
+			if (selectedTab != null && selectedTab == tab) continue;
+			//tab.background.color = tabIdle;
+			tab.label.color = new Color(1f,1f,1f,.5f);
+		}
+	}
 
 	public void MoveSelectorToCurrentItem(TabButton tabButton)
 	{

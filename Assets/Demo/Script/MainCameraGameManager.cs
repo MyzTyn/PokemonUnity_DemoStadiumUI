@@ -9,15 +9,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 //[ExecuteInEditMode]
-public class DemoStadiumManager : MonoBehaviour
+public class MainCameraGameManager : MonoBehaviour
 {
 	#region Variables
 	public float CurrentSrollPosition { get { return scrollBar.value; } set { scrollBar.value = value; } }
 	public PokemonSelect PokemonSelect;
 	public Scrollbar scrollBar;
 
-	[SerializeField] private PartyPanelUI party;
-	//[SerializeField] private MovesetUI movesetUI;
+	[SerializeField] private TrainerPartyPanel party;
+	//[SerializeField] private ViewPokemonModal movesetUI;
 	[SerializeField] private GameObject pageTabPrefab;
 	[SerializeField] private GameObject rosterEntryPrefab;
 	[SerializeField] private GameObject partyEntryPrefab;
@@ -27,8 +27,8 @@ public class DemoStadiumManager : MonoBehaviour
 	[SerializeField] private ToggleGroup toggleGroup;
 	
 	//List
-	private Dictionary<int, PartyEntryButton> PartyViewer;
-	private Dictionary<int, RosterEntryButton> StoreButtonData;
+	private Dictionary<int, TrainerPokemonButton> PartyViewer;
+	private Dictionary<int, SelectPokemonButton> StoreButtonData;
 	//Sprite
 	public static Sprite[] PkmnType { get; private set; }
 	public static Sprite[] IconSprites { get; private set; }
@@ -43,7 +43,7 @@ public class DemoStadiumManager : MonoBehaviour
 	//	get 
 	//	{
 	//		//return Game.GameData.Player.Party.
-	//		//PartyEntryButton party = PartyViewer
+	//		//TrainerPokemonButton party = PartyViewer
 	//		//	.Values
 	//		//	.SingleOrDefault(x => x.IsSelected);
 	//		//	//.Select(x => x.PartySlot);
@@ -58,11 +58,11 @@ public class DemoStadiumManager : MonoBehaviour
 		Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
 		toggleGroup = GetComponent<ToggleGroup>();
 		Debug.Log("Create Dictionary for Player Party UI Mono");
-		PartyViewer = new Dictionary<int, PartyEntryButton>();
+		PartyViewer = new Dictionary<int, TrainerPokemonButton>();
 		Debug.Log("Create Dictionary for Temp Instantiated Pokemon Objects");
 		StorePokemon = new Dictionary<Pokemons, Pokemon>();
 		Debug.Log("Create Dictionary for Roster Entry UI Mono");
-		StoreButtonData = new Dictionary<int, RosterEntryButton>();
+		StoreButtonData = new Dictionary<int, SelectPokemonButton>();
 		Debug.Log("Create Dictionary for Temp Viewed Pokemons");
 		ViewedRentalPokemon = new Queue<Pokemons>();
 		//Debug.Log("Create Dictionary for Pokemons Selected by Player");
@@ -211,11 +211,11 @@ public class DemoStadiumManager : MonoBehaviour
 	//		movesetUI.CancelUI();
 	//	}
 	//}
-	//public void PartyData(int id, PartyEntryButton partybutton)
+	//public void PartyData(int id, TrainerPokemonButton partybutton)
 	//{
 	//	PartyViewer.Add(id, partybutton);
 	//}
-	//public void RentalData(int id, RosterEntryButton button)
+	//public void RentalData(int id, SelectPokemonButton button)
 	//{
 	//	StoreButtonData.Add(id, button);
 	//}
@@ -260,12 +260,12 @@ public class DemoStadiumManager : MonoBehaviour
 		{
 			//if (Id == Core.MAXPARTYSIZE) break;
 			GameObject Button = Instantiate(partyEntryPrefab);
-			PartyEntryButton slot = Button.GetComponent<PartyEntryButton>();
+			TrainerPokemonButton slot = Button.GetComponent<TrainerPokemonButton>();
 			slot.PokemonSelect = PokemonSelect; //Should be duplicated for each player controller on screen
 			//PartyData(Id, slot);
 			PartyViewer.Add(Id, slot);
-			//Button.GetComponent<PartyEntryButton>().ActivePartyUIButton(true);
-			//Button.GetComponent<PartyEntryButton>().ActivePokemonDisplay(false);
+			//Button.GetComponent<TrainerPokemonButton>().ActivePartyUIButton(true);
+			//Button.GetComponent<TrainerPokemonButton>().ActivePokemonDisplay(false);
 			slot.ActivePartyUIButton(true);
 			slot.ActivePokemonDisplay(false);
 			//Button.transform.SetParent(partyEntryPrefab.transform.parent, false);
@@ -285,7 +285,7 @@ public class DemoStadiumManager : MonoBehaviour
 			bool isSelected = page.HasValue && page.Value == (int)gen;
 
 			GameObject Button = Instantiate(pageTabPrefab);
-			//RosterEntryButton roster = Button.GetComponent<RosterEntryButton>();
+			//SelectPokemonButton roster = Button.GetComponent<SelectPokemonButton>();
 			//roster.PokemonSelect = PokemonSelect; 
 			//StoreButtonData.Add(id, roster);
 			//roster.SetID(i,(Pokemons)id,page:page,selected:isSelected); i++;
@@ -322,11 +322,11 @@ public class DemoStadiumManager : MonoBehaviour
 					new KeyValuePair<bool, int?>(true, page), i));
 
 			GameObject Button = Instantiate(rosterEntryPrefab);
-			RosterEntryButton roster = Button.GetComponent<RosterEntryButton>();
+			SelectPokemonButton roster = Button.GetComponent<SelectPokemonButton>();
 			roster.PokemonSelect = PokemonSelect; //Should be duplicated for each player controller on screen
 			//RentalData(id, roster);
 			StoreButtonData.Add(id, roster);
-			//Button.GetComponent<RosterEntryButton>().SetID(id);
+			//Button.GetComponent<SelectPokemonButton>().SetID(id);
 			roster.SetID(i,(Pokemons)id,page:page,selected:isSelected); i++;
 			Button.SetActive(true);
 			Button.transform.SetParent(rosterGridContent, false);
@@ -337,7 +337,7 @@ public class DemoStadiumManager : MonoBehaviour
 	private void Scene_onChangePartyLineup()
 	{
 		Game.GameData.Player.Party.PackParty();
-		foreach (PartyEntryButton item in PartyViewer.Values)
+		foreach (TrainerPokemonButton item in PartyViewer.Values)
 		{
 			if (Game.GameData.Player.Party[item.PartySlot].IsNotNullOrNone())
 			{

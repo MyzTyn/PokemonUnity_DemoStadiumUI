@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class MovesetData : MonoBehaviour
+public class ViewPokemonData : MonoBehaviour
 {
 	//ID
 	public Text PkmnName;

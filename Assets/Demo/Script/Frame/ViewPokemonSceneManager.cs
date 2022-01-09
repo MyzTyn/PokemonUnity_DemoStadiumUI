@@ -14,14 +14,14 @@ public class ViewPokemonSceneManager : MonoBehaviour
 	#region Variables
 	public PokemonSelect PokemonSelect;
 
-	[SerializeField] private PartyPanelUI partySelectionUI;
-	[SerializeField] private MovesetUI movesetUI;
+	[SerializeField] private TrainerPartyPanel partySelectionUI;
+	[SerializeField] private ViewPokemonModal movesetUI;
 	[SerializeField] private GameObject partyEntryPrefab;
 	[SerializeField] private Transform partyGridContent;
 	[SerializeField] private ToggleGroup toggleGroup;
 	
 	//List
-	private Dictionary<int, PartyEntryButton> PartyViewer;
+	private Dictionary<int, TrainerPokemonButton> PartyViewer;
 	//Sprite
 	public static Sprite[] PkmnType { get; private set; }
 	public static Sprite[] IconSprites { get; private set; }
@@ -32,7 +32,7 @@ public class ViewPokemonSceneManager : MonoBehaviour
 		Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
 		toggleGroup = GetComponent<ToggleGroup>();
 		Debug.Log("Create Dictionary for Player Party UI Mono");
-		PartyViewer = new Dictionary<int, PartyEntryButton>();
+		PartyViewer = new Dictionary<int, TrainerPokemonButton>();
 		//
 		Debug.Log("Load Assets for UI into Array");
 		IconSprites = Resources.LoadAll<Sprite>("PokemonIcon");
@@ -182,12 +182,12 @@ public class ViewPokemonSceneManager : MonoBehaviour
 		{
 			//if (Id == Core.MAXPARTYSIZE) break;
 			GameObject Button = Instantiate(partyEntryPrefab);
-			PartyEntryButton slot = Button.GetComponent<PartyEntryButton>();
+			TrainerPokemonButton slot = Button.GetComponent<TrainerPokemonButton>();
 			slot.PokemonSelect = PokemonSelect; //Should be duplicated for each player controller on screen
 			//PartyData(Id, slot);
 			PartyViewer.Add(Id, slot);
-			//Button.GetComponent<PartyEntryButton>().ActivePartyUIButton(true);
-			//Button.GetComponent<PartyEntryButton>().ActivePokemonDisplay(false);
+			//Button.GetComponent<TrainerPokemonButton>().ActivePartyUIButton(true);
+			//Button.GetComponent<TrainerPokemonButton>().ActivePokemonDisplay(false);
 			slot.ActivePartyUIButton(true);
 			slot.ActivePokemonDisplay(false);
 			//Button.transform.SetParent(partyEntryPrefab.transform.parent, false);
@@ -198,7 +198,7 @@ public class ViewPokemonSceneManager : MonoBehaviour
 	private void Scene_onChangePartyLineup()
 	{
 		Game.GameData.Player.Party.PackParty();
-		foreach (PartyEntryButton item in PartyViewer.Values)
+		foreach (TrainerPokemonButton item in PartyViewer.Values)
 		{
 			if (Game.GameData.Player.Party[item.PartySlot].IsNotNullOrNone())
 			{

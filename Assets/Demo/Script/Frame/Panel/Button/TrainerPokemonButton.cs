@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using PokemonUnity;
+using PokemonUnity.Monster;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using PokemonUnity;
-using PokemonUnity.Monster;
-using System.Collections.Generic;
 
 [ExecuteInEditMode]
-public class PartyEntryButton : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
+public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
 {
 	#region Variables
 	[SerializeField] private Image PokemonIcon;
@@ -30,14 +30,14 @@ public class PartyEntryButton : MonoBehaviour//, IEventSystemHandler, ISelectHan
 	#region Methods
 	//public void DisplayPartyButton()
 	//{
-	//	PokemonIcon.sprite = DemoStadiumManager.IconSprites[DemoStadiumManager.PkmnSelected];
-	//	Name.text = Convert.ToString((Pokemons)DemoStadiumManager.PkmnSelected);
-	//	Level.text = "L " + DemoStadiumManager.LevelFixed;
+	//	PokemonIcon.sprite = MainCameraGameManager.IconSprites[MainCameraGameManager.PkmnSelected];
+	//	Name.text = Convert.ToString((Pokemons)MainCameraGameManager.PkmnSelected);
+	//	Level.text = "L " + MainCameraGameManager.LevelFixed;
 	//	ActivePokemonDisplay(true);
 	//}
 	//public void SetDisplay(string name, Pokemons pkmn, int level)
 	//{
-	//	PokemonIcon.sprite = DemoStadiumManager.IconSprites[(int)pkmn];
+	//	PokemonIcon.sprite = MainCameraGameManager.IconSprites[(int)pkmn];
 	//	//Name.text = pkmn.ToString(TextScripts.Name);
 	//	Name.text = name;
 	//	Level.text = "L " + level;
@@ -56,7 +56,7 @@ public class PartyEntryButton : MonoBehaviour//, IEventSystemHandler, ISelectHan
 		}
 		else
 		{
-			PokemonIcon.sprite = DemoStadiumManager.IconSprites[(int)pkmn.Species];
+			PokemonIcon.sprite = MainCameraGameManager.IconSprites[(int)pkmn.Species];
 			//Name.text = pkmn.ToString(TextScripts.Name);
 			Name.text = pkmn.Name;
 			Level.text = "L " + pkmn.Level;

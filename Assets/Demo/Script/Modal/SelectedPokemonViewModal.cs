@@ -6,7 +6,7 @@ public class SelectedPokemonViewModal : MonoBehaviour
 {
 	#region 
 	[SerializeField] private GameObject MoveSetUIObject;
-	[SerializeField] private MovesetData Data;
+	[SerializeField] private ViewPokemonData Data;
 	[SerializeField] private int RentalViewCount = 5;
 
 	private Pokemon pokemon;
@@ -24,22 +24,22 @@ public class SelectedPokemonViewModal : MonoBehaviour
 	{
 		if (PokemonSelect.IsRentalPokemon)
 		{
-			if (DemoStadiumManager.ViewedRentalPokemon.Count == RentalViewCount)
+			if (MainCameraGameManager.ViewedRentalPokemon.Count == RentalViewCount)
 			{
-				Pokemons pkmn = DemoStadiumManager.ViewedRentalPokemon.Dequeue();
-				if (DemoStadiumManager.StorePokemon.ContainsKey(pkmn)) 
-					DemoStadiumManager.StorePokemon.Remove(pkmn);
+				Pokemons pkmn = MainCameraGameManager.ViewedRentalPokemon.Dequeue();
+				if (MainCameraGameManager.StorePokemon.ContainsKey(pkmn)) 
+					MainCameraGameManager.StorePokemon.Remove(pkmn);
 			}
-			if(DemoStadiumManager.ViewedRentalPokemon.Contains(PokemonSelect.Species) && 
-				DemoStadiumManager.StorePokemon.ContainsKey(PokemonSelect.Species))
+			if(MainCameraGameManager.ViewedRentalPokemon.Contains(PokemonSelect.Species) && 
+				MainCameraGameManager.StorePokemon.ContainsKey(PokemonSelect.Species))
 			{
-				pokemon = DemoStadiumManager.StorePokemon[PokemonSelect.Species];
+				pokemon = MainCameraGameManager.StorePokemon[PokemonSelect.Species];
 			}
 			else
 			{
 				pokemon = new Pokemon(PokemonSelect.Species, PokemonSelect.LevelFixed, isEgg: false);
-				DemoStadiumManager.StorePokemon.Add(PokemonSelect.Species, pokemon);
-				DemoStadiumManager.ViewedRentalPokemon.Enqueue(PokemonSelect.Species);
+				MainCameraGameManager.StorePokemon.Add(PokemonSelect.Species, pokemon);
+				MainCameraGameManager.ViewedRentalPokemon.Enqueue(PokemonSelect.Species);
 			}
 		}
 		Display_ID_UI();
@@ -55,7 +55,7 @@ public class SelectedPokemonViewModal : MonoBehaviour
 	}
 	private void Display_PkmnInfo_UI()
 	{
-		Data.PokemonSprite.sprite = DemoStadiumManager.IconSprites[(int)pokemon.Species];
+		Data.PokemonSprite.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
 		Data.Health.text = "HP   " + pokemon.TotalHP;
 		Data.Attack.text = "Attack    " + pokemon.ATK;
 		Data.Defense.text = "Defense " + pokemon.DEF;
@@ -64,35 +64,35 @@ public class SelectedPokemonViewModal : MonoBehaviour
 		Data.SpecialDef.text = "Special  " + pokemon.SPD;
 		if (pokemon.Type2 == PokemonUnity.Types.NONE)
 		{
-			Data.Type1.sprite = DemoStadiumManager.PkmnType[(int)pokemon.Type1];
+			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
 			Data.Type2.sprite = null;
 			Data.Type2.color = UnityEngine.Color.clear;
 		}
 		else
 		{
 			Data.Type2.color = UnityEngine.Color.white;
-			Data.Type1.sprite = DemoStadiumManager.PkmnType[(int)pokemon.Type1];
-			Data.Type2.sprite = DemoStadiumManager.PkmnType[(int)pokemon.Type2];
+			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
+			Data.Type2.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type2];
 		}
 	}
 	private void Display_Move_Set_UI()
 	{
 
 		//
-		Data.MoveName1.text = MovesetData.ReturnMoveName(pokemon.moves[0].MoveId);
-		Data.MoveName2.text = MovesetData.ReturnMoveName(pokemon.moves[1].MoveId);
-		Data.MoveName3.text = MovesetData.ReturnMoveName(pokemon.moves[2].MoveId);
-		Data.MoveName4.text = MovesetData.ReturnMoveName(pokemon.moves[3].MoveId);
+		Data.MoveName1.text = ViewPokemonData.ReturnMoveName(pokemon.moves[0].MoveId);
+		Data.MoveName2.text = ViewPokemonData.ReturnMoveName(pokemon.moves[1].MoveId);
+		Data.MoveName3.text = ViewPokemonData.ReturnMoveName(pokemon.moves[2].MoveId);
+		Data.MoveName4.text = ViewPokemonData.ReturnMoveName(pokemon.moves[3].MoveId);
 		//
-		Data.MoveColor1.color = MovesetData.TypeToColor(pokemon.moves[0].Type);
-		Data.MoveColor2.color = MovesetData.TypeToColor(pokemon.moves[1].Type);
-		Data.MoveColor3.color = MovesetData.TypeToColor(pokemon.moves[2].Type);
-		Data.MoveColor4.color = MovesetData.TypeToColor(pokemon.moves[3].Type);
+		Data.MoveColor1.color = ViewPokemonData.TypeToColor(pokemon.moves[0].Type);
+		Data.MoveColor2.color = ViewPokemonData.TypeToColor(pokemon.moves[1].Type);
+		Data.MoveColor3.color = ViewPokemonData.TypeToColor(pokemon.moves[2].Type);
+		Data.MoveColor4.color = ViewPokemonData.TypeToColor(pokemon.moves[3].Type);
 		//
-		Data.MoveType1.text = MovesetData.ReturnMoveFirstLetter(pokemon.moves[0].Type.ToString());
-		Data.MoveType2.text = MovesetData.ReturnMoveFirstLetter(pokemon.moves[1].Type.ToString());
-		Data.MoveType3.text = MovesetData.ReturnMoveFirstLetter(pokemon.moves[2].Type.ToString());
-		Data.MoveType4.text = MovesetData.ReturnMoveFirstLetter(pokemon.moves[3].Type.ToString());
+		Data.MoveType1.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[0].Type.ToString());
+		Data.MoveType2.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[1].Type.ToString());
+		Data.MoveType3.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[2].Type.ToString());
+		Data.MoveType4.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[3].Type.ToString());
 	}
 	private void ClearDataDisplay()
 	{

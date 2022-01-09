@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using PokemonUnity;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using PokemonUnity;
 
 [ExecuteInEditMode]
-public class PartyPanelUI : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
+public class TrainerPartyPanel : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
 {
 	#region 
 	[SerializeField] private bool isFocused;
@@ -16,7 +16,7 @@ public class PartyPanelUI : MonoBehaviour//, IEventSystemHandler, ISelectHandler
 	//[SerializeField] private GridLayoutGroup gridGroup;
 	[SerializeField] private Text TrainerID;
 	/*[SerializeField] private GameObject buttonTemplate;
-	[SerializeField] DemoStadiumManager demo;
+	[SerializeField] MainCameraGameManager demo;
 	public void GetPartyButton()
 	{
 		//if (ID.Count < 4)
@@ -31,9 +31,9 @@ public class PartyPanelUI : MonoBehaviour//, IEventSystemHandler, ISelectHandler
 		{
 			//if (Id == Core.MAXPARTYSIZE) break;
 			GameObject Button = Instantiate(buttonTemplate);
-			demo.PartyData(Id, Button.GetComponent<PartyEntryButton>());
-			Button.GetComponent<PartyEntryButton>().ActivePartyUIButton(true);
-			Button.GetComponent<PartyEntryButton>().ActivePokemonDisplay(false);
+			demo.PartyData(Id, Button.GetComponent<TrainerPokemonButton>());
+			Button.GetComponent<TrainerPokemonButton>().ActivePartyUIButton(true);
+			Button.GetComponent<TrainerPokemonButton>().ActivePokemonDisplay(false);
 			Button.transform.SetParent(buttonTemplate.transform.parent, false);
 		}
 	}*/

@@ -7,14 +7,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [ExecuteInEditMode]
-public class RosterEntryButton : MonoBehaviour
+public class SelectPokemonButton : MonoBehaviour
 {
 	[SerializeField] private Pokemons Species;
 	[SerializeField] private Image myIcon;
 	[SerializeField] private Text Name;
 	[SerializeField] private Text L;
 	//[SerializeField] private Button button;
-	//[SerializeField] private DemoStadiumManager demo;
+	//[SerializeField] private MainCameraGameManager demo;
 	public bool IsRental;
 	public bool IsDisabled;
 	public bool IsSelected;
@@ -87,8 +87,8 @@ public class RosterEntryButton : MonoBehaviour
 	{
 		try
 		{
-			if(DemoStadiumManager.IconSprites.Length > (int)Species)
-				myIcon.sprite = DemoStadiumManager.IconSprites[(int)Species];
+			if(MainCameraGameManager.IconSprites.Length > (int)Species)
+				myIcon.sprite = MainCameraGameManager.IconSprites[(int)Species];
 		}
 		catch (IndexOutOfRangeException)
 		{
@@ -97,15 +97,15 @@ public class RosterEntryButton : MonoBehaviour
 		//if (PokemonSelect.IsRentalPokemon)
 		if (IsRental)
 		{
-			//if(DemoStadiumManager.SelectedPokemons.ContainsKey(new KeyValuePair<bool, int?>(IsRental, Position.Key)))
-			if(DemoStadiumManager.SelectedPokemons.Contains(new KeyValuePair<KeyValuePair<bool, int?>, int>(new KeyValuePair<bool, int?>(IsRental, Position.Key), Position.Value)))
+			//if(MainCameraGameManager.SelectedPokemons.ContainsKey(new KeyValuePair<bool, int?>(IsRental, Position.Key)))
+			if(MainCameraGameManager.SelectedPokemons.Contains(new KeyValuePair<KeyValuePair<bool, int?>, int>(new KeyValuePair<bool, int?>(IsRental, Position.Key), Position.Value)))
 			{
 				//Pokemon is selected and added to party already
 			}
 			else
 			{
 				//Create new entry display for pokemon
-				//L.text = "L" + DemoStadiumManager.LevelFixed;
+				//L.text = "L" + MainCameraGameManager.LevelFixed;
 				L.text = "L" + PokemonSelect.LevelFixed;
 				Name.text = Species.ToString(TextScripts.Name);
 			}

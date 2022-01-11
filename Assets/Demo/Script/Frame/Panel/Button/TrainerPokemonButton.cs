@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 [ExecuteInEditMode]
+[RequireComponent(typeof(Toggle))]
 public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
 {
 	#region Variables
@@ -17,16 +18,20 @@ public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelec
 	[SerializeField] private GameObject PokemonDisplay;
 	//[SerializeField] private GameObject PartyUIButton;
 
-	[SerializeField] private bool isFocused;
+	public Toggle toggle;
 	public bool IsSelected;
 	public bool IsRental;
-	public int PartySlot;
+	public int partyIndex;
 	public PokemonSelect PokemonSelect;
 	/// <summary>
 	/// Where was this pokemon original from in menu selection? (box, rental, party...)
 	/// </summary>
+	/// <remarks>
+	/// Key is Page/Tab | Value is Index
+	/// </remarks>
 	public KeyValuePair<int,int> Position;
 	#endregion
+
 	#region Methods
 	//public void DisplayPartyButton()
 	//{
@@ -48,7 +53,7 @@ public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelec
 	/// </summary>
 	public void SetDisplay()
 	{
-		Pokemon pkmn = Game.GameData.Player.Party[PartySlot];
+		Pokemon pkmn = Game.GameData.Player.Party[partyIndex];
 		if (!pkmn.IsNotNullOrNone())
 		{
 			ActivePokemonDisplay(false);
@@ -86,7 +91,7 @@ public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelec
 	private void Scene_onSelectPartyEntry(int obj)
 	{
 		//PokemonSelect.CurrentSelectedPartySlot = obj;
-		if(PartySlot == obj)
+		if(partyIndex == obj)
 		{
 			IsSelected = true;
 		}
@@ -96,16 +101,18 @@ public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelec
 		}
 	}
 	#endregion
+
 	#region Unity Monobehavior
-	void Start()
+	void Awake()
 	{
-		GameEvents.current.onSelectPartyEntry += Scene_onSelectPartyEntry;
+		toggle = gameObject.GetComponent<Toggle>();
+		//GameEvents.current.onSelectPartyEntry += Scene_onSelectPartyEntry;
 	}
 	void OnDestroy()
 	{
 		try
 		{
-			GameEvents.current.onSelectPartyEntry -= Scene_onSelectPartyEntry;
+			//GameEvents.current.onSelectPartyEntry -= Scene_onSelectPartyEntry;
 		}
 		catch (NullReferenceException) { } //Ignore...
 	}

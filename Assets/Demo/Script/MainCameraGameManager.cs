@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// </summary>
+/// 
 //[ExecuteInEditMode]
 public class MainCameraGameManager : MonoBehaviour
 {
@@ -15,13 +18,18 @@ public class MainCameraGameManager : MonoBehaviour
 	public float CurrentSrollPosition { get { return scrollBar.value; } set { scrollBar.value = value; } }
 	public PokemonSelect PokemonSelect;
 	public Scrollbar scrollBar;
+	public GameObject cursorSelectedItem;
+	/// <summary>
+	/// Player slot for currently active trainer
+	/// </summary>
+	public int trainerIndex;
 
-	[SerializeField] private TrainerPartyPanel party;
-	//[SerializeField] private ViewPokemonModal movesetUI;
+	public PokemonViewModal pokemonViewModal;
+	public TrainerPartyPanel partyPanel;
+	//[SerializeField] private PokemonViewModal pokemonViewModal;
 	[SerializeField] private GameObject pageTabPrefab;
 	[SerializeField] private GameObject rosterEntryPrefab;
 	[SerializeField] private GameObject partyEntryPrefab;
-	[SerializeField] private Transform partyGridContent;
 	[SerializeField] private Transform rosterGridContent;
 	[SerializeField] private Transform tabGridContent;
 	[SerializeField] private ToggleGroup toggleGroup;
@@ -46,12 +54,13 @@ public class MainCameraGameManager : MonoBehaviour
 	//		//TrainerPokemonButton party = PartyViewer
 	//		//	.Values
 	//		//	.SingleOrDefault(x => x.IsSelected);
-	//		//	//.Select(x => x.PartySlot);
-	//		//return party != null ? party.PartySlot : 0;
+	//		//	//.Select(x => x.partyIndex);
+	//		//return party != null ? party.partyIndex : 0;
 	//		return PokemonSelect.CurrentSelectedPartySlot;
 	//	} 
 	//}
 	#endregion
+
 	#region Unity Monobehavior
 	void Awake()
 	{
@@ -141,13 +150,12 @@ public class MainCameraGameManager : MonoBehaviour
 		//player = new Player();
 		//
 		//RentalControlUI.DisplayPokemonSelectUI();
-		SetPokemonRental();
 		//party.DisplayPartyUI();
 		//party.GetPartyButton();
-		SetPartyButton();
+		//SetPartyButton();
 		Debug.Log("Trainer Id: " + Game.GameData.Player.Trainer.TrainerID.ToString());
 		//Use ID but I will leave 00000 as Example
-		party.SetTrainerID(Game.GameData.Player.Trainer.TrainerID);
+		partyPanel.SetTrainerID(Game.GameData.Player.Trainer.TrainerID);
 	}
 	void OnDestroy()
 	{
@@ -158,6 +166,7 @@ public class MainCameraGameManager : MonoBehaviour
 		catch (NullReferenceException) { Debug.LogError("Calling destroy before event wakes up"); } //Ignore...
 	}
 	#endregion
+
 	#region Methods
 	//public void SelectToggle(int id)
 	//{
@@ -182,8 +191,8 @@ public class MainCameraGameManager : MonoBehaviour
 	//}
 	//void DisplayMoveSetUI()
 	//{
-	//	movesetUI.ActiveGameobject(true);
-	//	movesetUI.DisplayPkmnStats();
+	//	pokemonViewModal.ActiveGameobject(true);
+	//	pokemonViewModal.DisplayPkmnStats();
 	//}
 	//public void AddToParty()
 	//{
@@ -208,7 +217,7 @@ public class MainCameraGameManager : MonoBehaviour
 	//			//	RentalControlUI.ActiveRentalUI(false);
 	//			//}
 	//		}
-	//		movesetUI.CancelUI();
+	//		pokemonViewModal.CancelUI();
 	//	}
 	//}
 	//public void PartyData(int id, TrainerPokemonButton partybutton)
@@ -221,7 +230,7 @@ public class MainCameraGameManager : MonoBehaviour
 	//}
 	//public void ClearParty()
 	//{
-	//	if (!movesetUI.IsWindowActive)
+	//	if (!pokemonViewModal.IsWindowActive)
 	//	{
 	//		//CurrentOnParty = 0;
 	//		//player = new Player();
@@ -245,33 +254,8 @@ public class MainCameraGameManager : MonoBehaviour
 	//	}
 	//}
 	#endregion
+
 	#region Party Roster UI
-	public void SetPartyButton()
-	{
-		//if (ID.Count < 4)
-		//{
-		//	gridGroup.constraintCount = ID.Count;
-		//}
-		//else
-		//{
-		//	gridGroup.constraintCount = 3;
-		//}
-		for (int Id = 0; Id < Game.GameData.Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
-		{
-			//if (Id == Core.MAXPARTYSIZE) break;
-			GameObject Button = Instantiate(partyEntryPrefab);
-			TrainerPokemonButton slot = Button.GetComponent<TrainerPokemonButton>();
-			slot.PokemonSelect = PokemonSelect; //Should be duplicated for each player controller on screen
-			//PartyData(Id, slot);
-			PartyViewer.Add(Id, slot);
-			//Button.GetComponent<TrainerPokemonButton>().ActivePartyUIButton(true);
-			//Button.GetComponent<TrainerPokemonButton>().ActivePokemonDisplay(false);
-			slot.ActivePartyUIButton(true);
-			slot.ActivePokemonDisplay(false);
-			//Button.transform.SetParent(partyEntryPrefab.transform.parent, false);
-			Button.transform.SetParent(partyGridContent, false);
-		}
-	}
 	private void SetPageTabs()
 	{
 		int i = 0;
@@ -294,64 +278,25 @@ public class MainCameraGameManager : MonoBehaviour
 		} Debug.Log("Highest Species Counted: " + i);
 		tabGridContent.gameObject.SetActive(true);
 	}
-	private void SetPokemonRental()
-	{
-		//if (ID.Count < 4)
-		//{
-		//	gridGroup.constraintCount = ID.Count;
-		//}
-		//else
-		//{
-		//	gridGroup.constraintCount = 3;
-		//}
-		int i = 0;
-		//foreach (int id in ID)
-		//for (int id = 1; id <= 151; id++)
-		foreach (int id in 
-			Game.PokemonData
-			.Values
-			.Where(x => x.ID != Pokemons.NONE && 
-				(int)x.ID <= 1000 &&
-				x.GenerationId <= (int)Generation.RedBlueYellow)
-			.Select(y => (int)y.ID))
-		{
-			int? page = PokemonSelect.CurrentSelectedRosterPage;
-			bool isSelected = SelectedPokemons.Contains(
-				new KeyValuePair<KeyValuePair<bool, int?>, int>(
-					//new KeyValuePair<bool, int?>(true, null), i));
-					new KeyValuePair<bool, int?>(true, page), i));
-
-			GameObject Button = Instantiate(rosterEntryPrefab);
-			SelectPokemonButton roster = Button.GetComponent<SelectPokemonButton>();
-			roster.PokemonSelect = PokemonSelect; //Should be duplicated for each player controller on screen
-			//RentalData(id, roster);
-			StoreButtonData.Add(id, roster);
-			//Button.GetComponent<SelectPokemonButton>().SetID(id);
-			roster.SetID(i,(Pokemons)id,page:page,selected:isSelected); i++;
-			Button.SetActive(true);
-			Button.transform.SetParent(rosterGridContent, false);
-		} Debug.Log("Highest Species Counted: " + i);
-		rosterGridContent.gameObject.SetActive(true);
-	}
 
 	private void Scene_onChangePartyLineup()
 	{
 		Game.GameData.Player.Party.PackParty();
 		foreach (TrainerPokemonButton item in PartyViewer.Values)
 		{
-			if (Game.GameData.Player.Party[item.PartySlot].IsNotNullOrNone())
+			if (Game.GameData.Player.Party[item.partyIndex].IsNotNullOrNone())
 			{
-				//Game.GameData.Player.Party[item.PartySlot] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
-				PartyViewer[item.PartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-				//StoreButtonData[item.PartySlot].DisableOnClick(true);
-				PartyViewer[item.PartySlot].ActivePokemonDisplay(true);
+				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+				//StoreButtonData[item.partyIndex].DisableOnClick(true);
+				PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 			}
 			else 
 			{
-				//Game.GameData.Player.Party[item.PartySlot] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
-				PartyViewer[item.PartySlot].ActivePokemonDisplay(false);
-				PartyViewer[item.PartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-				//StoreButtonData[item.PartySlot].DisableOnClick(true);
+				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				PartyViewer[item.partyIndex].ActivePokemonDisplay(false);
+				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+				//StoreButtonData[item.partyIndex].DisableOnClick(true);
 			}
 		}
 	}

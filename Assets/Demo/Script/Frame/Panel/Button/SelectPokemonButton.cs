@@ -85,15 +85,16 @@ public class SelectPokemonButton : MonoBehaviour
 	}
 	public void Refresh()
 	{
-		try
-		{
-			if(MainCameraGameManager.IconSprites.Length > (int)Species)
-				myIcon.sprite = MainCameraGameManager.IconSprites[(int)Species];
-		}
-		catch (IndexOutOfRangeException)
-		{
-			Debug.LogError($"Index #{(int)Species}:{Species.ToString()} was outside the bounds of the array.");
-		}
+		//ToDo: Uncomment and Remove Try/Catch...
+		//try
+		//{
+		//	if(MainCameraGameManager.IconSprites?.Length > (int)Species)
+		//		myIcon.sprite = MainCameraGameManager.IconSprites[(int)Species];
+		//}
+		//catch (IndexOutOfRangeException)
+		//{
+		//	Debug.LogError($"Index #{(int)Species}:{Species.ToString()} was outside the bounds of the array.");
+		//}
 		//if (PokemonSelect.IsRentalPokemon)
 		if (IsRental)
 		{

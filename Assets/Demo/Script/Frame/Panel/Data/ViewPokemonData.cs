@@ -94,6 +94,53 @@ public class ViewPokemonData : MonoBehaviour
 			return move.ToString().Replace("_", " ");
 		}
 	}
+	public static string ReturnTypeLetter(PokemonUnity.Types type)
+	{
+		switch (type)
+		{
+			case PokemonUnity.Types.NORMAL:
+				return "N";
+			case PokemonUnity.Types.FIGHTING:
+				return "";
+			case PokemonUnity.Types.FLYING:
+				return "Fl";
+			case PokemonUnity.Types.POISON:
+				return "Po";
+			case PokemonUnity.Types.GROUND:
+				return "";
+			case PokemonUnity.Types.ROCK:
+				return "";
+			case PokemonUnity.Types.BUG:
+				return "";
+			case PokemonUnity.Types.GHOST:
+				return "";
+			case PokemonUnity.Types.STEEL:
+				return "";
+			case PokemonUnity.Types.FIRE:
+				return "";
+			case PokemonUnity.Types.WATER:
+				return "W";
+			case PokemonUnity.Types.GRASS:
+				return "";
+			case PokemonUnity.Types.ELECTRIC:
+				return "E";
+			case PokemonUnity.Types.PSYCHIC:
+				return "Ps";
+			case PokemonUnity.Types.ICE:
+				return "I";
+			case PokemonUnity.Types.DRAGON:
+				return "";
+			case PokemonUnity.Types.DARK:
+				return "";
+			case PokemonUnity.Types.FAIRY:
+				return "";
+			case PokemonUnity.Types.NONE:
+			case PokemonUnity.Types.UNKNOWN:
+			case PokemonUnity.Types.SHADOW:
+			default:
+				return string.Empty;
+		}		
+	}
 	public static string ReturnMoveFirstLetter(string s)
 	{
 		if (s == "NONE")

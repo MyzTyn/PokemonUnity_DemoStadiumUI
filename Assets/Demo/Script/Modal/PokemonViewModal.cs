@@ -1,8 +1,9 @@
 ﻿using PokemonUnity;
 using PokemonUnity.Monster;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class ViewPokemonModal : MonoBehaviour
+public class PokemonViewModal : MonoBehaviour
 {
 	#region 
 	[SerializeField] private GameObject MoveSetUIObject;
@@ -11,15 +12,22 @@ public class ViewPokemonModal : MonoBehaviour
 
 	private Pokemon pokemon;
 	public PokemonSelect PokemonSelect;
+	/// <summary>
+	/// When you press a pokemon button in scroll window, 
+	/// pass the button into the view modal, 
+	/// and assign it as selected if chosen by user
+	/// </summary>
+	public Toggle selectedPokemon;
 	public bool IsWindowActive { get; private set; }
-	#endregion
-	#region 
-	public void ActiveGameobject(bool active)
+    #endregion
+
+    #region 
+    public void ActiveGameobject(bool active)
 	{
 		IsWindowActive = active;
 		MoveSetUIObject.SetActive(active);
 	}
-	public void DisplayPkmnStats()
+	public void RefreshDisplay()
 	{
 		if (PokemonSelect.IsRentalPokemon)
 		{
@@ -41,25 +49,26 @@ public class ViewPokemonModal : MonoBehaviour
 				MainCameraGameManager.ViewedRentalPokemon.Enqueue(PokemonSelect.Species);
 			}
 		}
-		Display_ID_UI();
-		Display_PkmnInfo_UI();
-		Display_Move_Set_UI();
+		RefreshHeaderDisplay();
+		RefreshStatsDisplay();
+		RefreshMoveSetDisplay();
 	}
-	private void Display_ID_UI()
+	public void RefreshHeaderDisplay()
 	{
 		Data.PkmnName.text = pokemon.Name;
 		Data.Level.text = "L " + pokemon.Level;
 		Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Game.PokemonFormsData[pokemon.Species][pokemon.FormId].Base);
 		Data.Species_Name.text = pokemon.Species.ToString(TextScripts.Name);
 	}
-	private void Display_PkmnInfo_UI()
+	public void RefreshStatsDisplay()
 	{
 		Data.PokemonSprite.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
-		Data.Health.text = "HP   " + pokemon.TotalHP;
-		Data.Attack.text = "Attack    " + pokemon.ATK;
-		Data.Defense.text = "Defense " + pokemon.DEF;
-		Data.Speed.text = "Speed    " + pokemon.SPE;
-		Data.SpecialAtk.text = "Special  " + pokemon.SPA;
+		Data.Health.text		= pokemon.TotalHP.ToString();
+		Data.Attack.text		= pokemon.ATK.ToString();
+		Data.Defense.text		= pokemon.DEF.ToString();
+		Data.Speed.text			= pokemon.SPE.ToString();
+		Data.SpecialAtk.text	= pokemon.SPA.ToString();
+		Data.SpecialDef.text	= pokemon.SPD.ToString();
 		if (pokemon.Type2 == PokemonUnity.Types.NONE)
 		{
 			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
@@ -73,9 +82,8 @@ public class ViewPokemonModal : MonoBehaviour
 			Data.Type2.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type2];
 		}
 	}
-	private void Display_Move_Set_UI()
+	public void RefreshMoveSetDisplay()
 	{
-
 		//
 		Data.MoveName1.text = ViewPokemonData.ReturnMoveName(pokemon.moves[0].MoveId);
 		Data.MoveName2.text = ViewPokemonData.ReturnMoveName(pokemon.moves[1].MoveId);
@@ -92,7 +100,7 @@ public class ViewPokemonModal : MonoBehaviour
 		Data.MoveType3.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[2].Type.ToString());
 		Data.MoveType4.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[3].Type.ToString());
 	}
-	private void ClearDataDisplay()
+	public void ClearDisplay()
 	{
 		Data.PkmnName.text = null;
 		Data.Level.text = null;
@@ -105,6 +113,7 @@ public class ViewPokemonModal : MonoBehaviour
 		Data.Defense.text = null;
 		Data.Speed.text = null;
 		Data.SpecialAtk.text = null;
+		Data.SpecialDef.text = null;
 		Data.Type1.sprite = null;
 		Data.Type2.sprite = null;
 
@@ -121,9 +130,9 @@ public class ViewPokemonModal : MonoBehaviour
 		Data.MoveType3.text = null;
 		Data.MoveType4.text = null;
 	}
-	public void CancelUI()
+	public void CloseDisplayModal()
 	{
-		ClearDataDisplay();
+		ClearDisplay();
 		ActiveGameobject(false);
 		IsWindowActive = false;
 	}

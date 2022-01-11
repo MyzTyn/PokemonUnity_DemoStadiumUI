@@ -6,45 +6,74 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-[ExecuteInEditMode]
+[RequireComponent(typeof(ToggleGroup))]
 public class TrainerPartyPanel : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
 {
-	#region 
-	[SerializeField] private bool isFocused;
-	public bool isSelected;
+	#region Variables
+	//public ToggleGroup toggleGroup;
+	public TrainerPokemonButton[] party;
+	public TrainerPokemonButton pokemonButtonPrefab;
+	public GameObject partyContentFrame;
+	public Text trainerName;
+	public Text trainerId;
+	public int currentSlot;
 	#endregion
-	//[SerializeField] private GridLayoutGroup gridGroup;
-	[SerializeField] private Text TrainerID;
-	/*[SerializeField] private GameObject buttonTemplate;
-	[SerializeField] MainCameraGameManager demo;
-	public void GetPartyButton()
+
+	#region 
+	private void Awake()
 	{
-		//if (ID.Count < 4)
-		//{
-		//	gridGroup.constraintCount = ID.Count;
-		//}
-		//else
-		//{
-		//	gridGroup.constraintCount = 3;
-		//}
+		//Clear child objects
+		//var children = partyContentFrame.GetComponentsInChildren<Transform>(true);
+		//foreach (Transform child in children) Destroy(child.gameObject);
+		foreach (Transform child in partyContentFrame.transform) Destroy(child.gameObject);
+
+		//toggleGroup = GetComponent<ToggleGroup>();
+		party = new TrainerPokemonButton[6];
+		//foreach(TrainerPokemonButton pokemon in party)
+		for(int i = 0; i < party.Length; i++)
+		{
+			//Instantiate new Prefab to Scene
+			TrainerPokemonButton pokemon = Instantiate<TrainerPokemonButton>(pokemonButtonPrefab, partyContentFrame.transform);
+			pokemon.toggle.group = GetComponent<ToggleGroup>(); //toggleGroup;
+			pokemon.toggle.interactable = false;
+			pokemon.name = "Slot" + i;
+			party[i] = pokemon;
+		}
+		SetTrainerID(0);
+		RefreshPartyDisplay();
+	}
+	#endregion
+
+	#region 
+	public void RefreshPartyDisplay()
+	{
 		for (int Id = 0; Id < Game.GameData.Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
 		{
-			//if (Id == Core.MAXPARTYSIZE) break;
-			GameObject Button = Instantiate(buttonTemplate);
-			demo.PartyData(Id, Button.GetComponent<TrainerPokemonButton>());
-			Button.GetComponent<TrainerPokemonButton>().ActivePartyUIButton(true);
-			Button.GetComponent<TrainerPokemonButton>().ActivePokemonDisplay(false);
-			Button.transform.SetParent(buttonTemplate.transform.parent, false);
+			currentSlot = Id;
+			party[Id].toggle.interactable = false;
+			//party[Id].IsSelected = true;
+			party[Id].toggle.Select();
+			if (Game.GameData.Features.LimitPokemonPartySize == Id && Game.GameData.Player.Party[Id].IsNotNullOrNone())
+			{
+				//party[Id].IsSelected = true;
+				party[Id].toggle.isOn = false;
+				break;
+			}
+			//GameObject Button = Instantiate(buttonTemplate);
+			//demo.PartyData(Id, Button.GetComponent<TrainerPokemonButton>());
+			//party[Id].ActivePartyUIButton(true);
+			//party[Id].ActivePokemonDisplay(false);
 		}
-	}*/
-	public void SetTrainerID(int ID)
-	{
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.AppendLine("Trainer");
-		stringBuilder.AppendLine(string.Format("ID {0:00000}", ID));
-		TrainerID.text = stringBuilder.ToString().TrimEnd();
 	}
-	#region 
+	public void SetTrainerID(int ID, string name = null)
+	{
+		//StringBuilder stringBuilder = new StringBuilder();
+		//stringBuilder.AppendLine("Trainer");
+		//stringBuilder.AppendLine(string.Format("ID {0:00000}", ID));
+		//trainerId.text = stringBuilder.ToString().TrimEnd();
+		trainerName.text = string.IsNullOrWhiteSpace(name) ? "Trainer" : name.ToString().TrimEnd();
+		trainerId.text = string.Format("ID {0:00000}", ID).ToString().TrimEnd();
+	}
 	//public void OnSelect(BaseEventData eventData)
 	//{
 	//	//base.OnSelect(eventData);

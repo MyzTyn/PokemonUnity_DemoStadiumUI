@@ -15,10 +15,9 @@ public class ViewPokemonSceneManager : MonoBehaviour
 	public PokemonSelect PokemonSelect;
 
 	[SerializeField] private TrainerPartyPanel partySelectionUI;
-	[SerializeField] private ViewPokemonModal movesetUI;
+	[SerializeField] private PokemonViewModal pokemonViewModal;
 	[SerializeField] private GameObject partyEntryPrefab;
 	[SerializeField] private Transform partyGridContent;
-	[SerializeField] private ToggleGroup toggleGroup;
 	
 	//List
 	private Dictionary<int, TrainerPokemonButton> PartyViewer;
@@ -26,11 +25,12 @@ public class ViewPokemonSceneManager : MonoBehaviour
 	public static Sprite[] PkmnType { get; private set; }
 	public static Sprite[] IconSprites { get; private set; }
 	#endregion
+
 	#region Unity Monobehavior
 	void Awake()
 	{
+		SelectPokemonSceneManager.SelectedPokemonViewModal = pokemonViewModal;
 		Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
-		toggleGroup = GetComponent<ToggleGroup>();
 		Debug.Log("Create Dictionary for Player Party UI Mono");
 		PartyViewer = new Dictionary<int, TrainerPokemonButton>();
 		//
@@ -116,6 +116,7 @@ public class ViewPokemonSceneManager : MonoBehaviour
 		catch (NullReferenceException) { Debug.LogError("Calling destroy before event wakes up"); } //Ignore...
 	}
 	#endregion
+
 	#region Methods
 	//public void SelectToggle(int id)
 	//{
@@ -137,8 +138,8 @@ public class ViewPokemonSceneManager : MonoBehaviour
 	}
 	void DisplayMoveSetUI()
 	{
-		movesetUI.ActiveGameobject(true);
-		movesetUI.DisplayPkmnStats();
+		pokemonViewModal.ActiveGameobject(true);
+		pokemonViewModal.DisplayPkmnStats();
 	}
 	public void AddToParty()
 	{
@@ -163,10 +164,11 @@ public class ViewPokemonSceneManager : MonoBehaviour
 				//	RentalControlUI.ActiveRentalUI(false);
 				//}
 			}
-			movesetUI.CancelUI();
+			pokemonViewModal.CancelUI();
 		}
 	}*/
 	#endregion
+
 	#region Party Roster UI
 	public void SetPartyButton()
 	{
@@ -200,19 +202,19 @@ public class ViewPokemonSceneManager : MonoBehaviour
 		Game.GameData.Player.Party.PackParty();
 		foreach (TrainerPokemonButton item in PartyViewer.Values)
 		{
-			if (Game.GameData.Player.Party[item.PartySlot].IsNotNullOrNone())
+			if (Game.GameData.Player.Party[item.partyIndex].IsNotNullOrNone())
 			{
-				//Game.GameData.Player.Party[item.PartySlot] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
-				PartyViewer[item.PartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-				//StoreButtonData[item.PartySlot].DisableOnClick(true);
-				PartyViewer[item.PartySlot].ActivePokemonDisplay(true);
+				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+				//StoreButtonData[item.partyIndex].DisableOnClick(true);
+				PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 			}
 			else 
 			{
-				//Game.GameData.Player.Party[item.PartySlot] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
-				PartyViewer[item.PartySlot].ActivePokemonDisplay(false);
-				PartyViewer[item.PartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-				//StoreButtonData[item.PartySlot].DisableOnClick(true);
+				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				PartyViewer[item.partyIndex].ActivePokemonDisplay(false);
+				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+				//StoreButtonData[item.partyIndex].DisableOnClick(true);
 			}
 		}
 	}

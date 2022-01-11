@@ -23,16 +23,19 @@ public class GameEvents : MonoBehaviour
 	public event Action<int> onSelectRosterPool;
 	public event Action<int> onLoadLevel;
 	#endregion
+
 	#region Unity Monobehavior
 	void Awake()
 	{
 		Debug.Log("Game Events is Awake!");
 		current = this;
+		//UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject
 	}
 	void Start()
 	{
 	}
 	#endregion
+
 	#region Methods
 	public void OnLoadLevel(int id)
 	{

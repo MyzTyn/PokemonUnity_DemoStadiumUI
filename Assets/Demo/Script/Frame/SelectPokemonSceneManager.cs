@@ -1,10 +1,10 @@
-﻿using PokemonUnity;
-using PokemonUnity.Character;
-using PokemonUnity.Monster;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using PokemonUnity;
+using PokemonUnity.Character;
+using PokemonUnity.Monster;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +12,7 @@ using UnityEngine.UI;
 public class SelectPokemonSceneManager : MonoBehaviour
 {
 	#region Variables
+	public static PokemonViewModal SelectedPokemonViewModal;
 	public PokemonSelect SelectionState;
 
 	[SerializeField] private TrainerPartyPanel partySelectionUI;
@@ -37,12 +38,13 @@ public class SelectPokemonSceneManager : MonoBehaviour
 	//		//TrainerPokemonButton party = PartyViewer
 	//		//	.Values
 	//		//	.SingleOrDefault(x => x.IsSelected);
-	//		//	//.Select(x => x.PartySlot);
-	//		//return party != null ? party.PartySlot : 0;
+	//		//	//.Select(x => x.partyIndex);
+	//		//return party != null ? party.partyIndex : 0;
 	//		return PokemonSelect.CurrentSelectedPartySlot;
 	//	} 
 	//}
 	#endregion
+	
 	#region Unity Monobehavior
 	void Awake()
 	{
@@ -145,6 +147,7 @@ public class SelectPokemonSceneManager : MonoBehaviour
 		catch (NullReferenceException) { Debug.LogError("Calling destroy before event wakes up"); } //Ignore...
 	}
 	#endregion
+	
 	#region Methods
 	//public void SelectToggle(int id)
 	//{
@@ -152,6 +155,7 @@ public class SelectPokemonSceneManager : MonoBehaviour
 	//	toggles[id].isOn = true;
 	//}
 	#endregion
+
 	#region Party Roster UI
 	public void SetPartyButton()
 	{
@@ -209,19 +213,19 @@ public class SelectPokemonSceneManager : MonoBehaviour
 		Game.GameData.Player.Party.PackParty();
 		foreach (TrainerPokemonButton item in PartyViewer.Values)
 		{
-			if (Game.GameData.Player.Party[item.PartySlot].IsNotNullOrNone())
+			if (Game.GameData.Player.Party[item.partyIndex].IsNotNullOrNone())
 			{
-				//Game.GameData.Player.Party[item.PartySlot] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
-				PartyViewer[item.PartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-				//StoreButtonData[item.PartySlot].DisableOnClick(true);
-				PartyViewer[item.PartySlot].ActivePokemonDisplay(true);
+				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+				//StoreButtonData[item.partyIndex].DisableOnClick(true);
+				PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 			}
 			else 
 			{
-				//Game.GameData.Player.Party[item.PartySlot] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
-				PartyViewer[item.PartySlot].ActivePokemonDisplay(false);
-				PartyViewer[item.PartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-				//StoreButtonData[item.PartySlot].DisableOnClick(true);
+				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				PartyViewer[item.partyIndex].ActivePokemonDisplay(false);
+				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+				//StoreButtonData[item.partyIndex].DisableOnClick(true);
 			}
 		}
 	}

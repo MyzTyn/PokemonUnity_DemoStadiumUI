@@ -19,6 +19,7 @@ public class LevelLoader : MonoBehaviour
 	#region Variables
 	public float transitionTime = .5f;
 	#endregion
+
 	#region Unity Monobehavior
 	void Awake()
 	{
@@ -32,6 +33,7 @@ public class LevelLoader : MonoBehaviour
 		GameEvents.current.onLoadLevel -= Scene_onLoadLevel;
 	}
 	#endregion
+
 	#region Methods
 	public void LoadNextLevel(int id)
 	{

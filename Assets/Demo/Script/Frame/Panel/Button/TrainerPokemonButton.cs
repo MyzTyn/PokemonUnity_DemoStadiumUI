@@ -3,18 +3,20 @@ using System.Linq;
 using System.Collections.Generic;
 using PokemonUnity;
 using PokemonUnity.Monster;
+using PokemonEssentials.Interface;
+using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 [RequireComponent(typeof(Toggle))]
 public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelectHandler, IDeselectHandler, ISubmitHandler//, IUpdateSelectedHandler
 {
 	#region Variables
-	[SerializeField] private Image PokemonIcon;
-	[SerializeField] private Text Name;
-	[SerializeField] private Text Level;
+	public Image PokemonIcon;
+	public Text Name;
+	public Text Level;
 	[SerializeField] private GameObject PokemonDisplay;
 	//[SerializeField] private GameObject PartyUIButton;
 
@@ -53,7 +55,7 @@ public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelec
 	/// </summary>
 	public void SetDisplay()
 	{
-		Pokemon pkmn = Game.GameData.Player.Party[partyIndex];
+		IPokemon pkmn = Game.GameData.Trainer.party[partyIndex];
 		if (!pkmn.IsNotNullOrNone())
 		{
 			ActivePokemonDisplay(false);
@@ -105,7 +107,7 @@ public class TrainerPokemonButton : MonoBehaviour//, IEventSystemHandler, ISelec
 	#region Unity Monobehavior
 	void Awake()
 	{
-		toggle = gameObject.GetComponent<Toggle>();
+		toggle = GetComponent<Toggle>();
 		//GameEvents.current.onSelectPartyEntry += Scene_onSelectPartyEntry;
 	}
 	void OnDestroy()

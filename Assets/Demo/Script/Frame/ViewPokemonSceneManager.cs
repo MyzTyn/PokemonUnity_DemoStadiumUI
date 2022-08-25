@@ -52,8 +52,8 @@ public class ViewPokemonSceneManager : MonoBehaviour
 			{
 				//Game.con.Open();
 
-				Debug.Log("Is Pokemon DB Null? " + (Game.PokemonData == null).ToString());
-				if (Game.PokemonData == null)
+				Debug.Log("Is Pokemon DB Null? " + (Kernal.PokemonData == null).ToString());
+				if (Kernal.PokemonData == null)
 				{
 					//Game.InitPokemons();
 					try
@@ -75,24 +75,24 @@ public class ViewPokemonSceneManager : MonoBehaviour
 					catch (Exception) { Debug.LogError("there were some problems running sql..."); } //ignore...
 				}
 				Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-					(Game.PokemonData.Count > 0).ToString(), Game.PokemonData.Count));
-				if (Game.PokemonData.Count == 0) 
+					(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
+				if (Kernal.PokemonData.Count == 0) 
 					Debug.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
 				Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-					(Game.PokemonData.Count > 0).ToString(), Game.PokemonData.Count));
+					(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
 			}
 		}
 
 		Debug.Log("Is Game Null? " + (Game.GameData == null).ToString());
 		Debug.Log("Is Player Null? " + (Game.GameData.Player == null).ToString());
-		if(Game.GameData.Player == null)
-		{
-			Debug.Log("Create Player Object");
-			Player p = new Player();
-			Debug.Log("Saving Player Object to Global Singleton");
-			Game.GameData.Player = p;
-		}
-		Debug.Log("Is Trainer Null? " + (Game.GameData.Player.Trainer == null).ToString());
+		//if(Game.GameData.Player == null)
+		//{
+		//	Debug.Log("Create Player Object");
+		//	Player p = new Player();
+		//	Debug.Log("Saving Player Object to Global Singleton");
+		//	Game.GameData.Player = p;
+		//}
+		Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 	}
 
 	void Start()
@@ -103,9 +103,9 @@ public class ViewPokemonSceneManager : MonoBehaviour
 		//party.DisplayPartyUI();
 		//party.GetPartyButton();
 		SetPartyButton();
-		Debug.Log("Trainer Id: " + Game.GameData.Player.Trainer.TrainerID.ToString());
+		Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
 		//Use ID but I will leave 00000 as Example
-		partySelectionUI.SetTrainerID(Game.GameData.Player.Trainer.TrainerID);
+		partySelectionUI.SetTrainerID(Game.GameData.Trainer.publicID());
 	}
 	void OnDestroy()
 	{
@@ -152,13 +152,13 @@ public class ViewPokemonSceneManager : MonoBehaviour
 			if (PokemonSelect.CurrentSelectedPartySlot >= 0 && PokemonSelect.CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
 			{
 				StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(true);
-				Game.GameData.Player.Party[PokemonSelect.CurrentSelectedPartySlot] = new Pokemon((Pokemons)PkmnSelected, PokemonSelect.LevelFixed, false);
+				Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = new Pokemon((Pokemons)PkmnSelected, PokemonSelect.LevelFixed, false);
 				//PartyViewer[CurrentOnParty].DisplayPartyButton();
 				PartyViewer[PokemonSelect.CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 				PartyViewer[PokemonSelect.CurrentSelectedPartySlot].ActivePokemonDisplay(true);
 				//CurrentOnParty += 1;
 				//Ask player if they're done and wish to move on; but in another function...
-				//if (Game.GameData.Player.Party[5].IsNotNullOrNone())
+				//if (Game.GameData.Trainer.party[5].IsNotNullOrNone())
 				//{
 				//	Debug.Log("Disable the UI");
 				//	RentalControlUI.ActiveRentalUI(false);
@@ -180,7 +180,7 @@ public class ViewPokemonSceneManager : MonoBehaviour
 		//{
 		//	gridGroup.constraintCount = 3;
 		//}
-		for (int Id = 0; Id < Game.GameData.Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
+		for (int Id = 0; Id < ((Game)Game.GameData).Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
 		{
 			//if (Id == Core.MAXPARTYSIZE) break;
 			GameObject Button = Instantiate(partyEntryPrefab);
@@ -199,19 +199,19 @@ public class ViewPokemonSceneManager : MonoBehaviour
 
 	private void Scene_onChangePartyLineup()
 	{
-		Game.GameData.Player.Party.PackParty();
+		Game.GameData.Trainer.party.PackParty();
 		foreach (TrainerPokemonButton item in PartyViewer.Values)
 		{
-			if (Game.GameData.Player.Party[item.partyIndex].IsNotNullOrNone())
+			if (Game.GameData.Trainer.party[item.partyIndex].IsNotNullOrNone())
 			{
-				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				//Game.GameData.Trainer.party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
 				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 				//StoreButtonData[item.partyIndex].DisableOnClick(true);
 				PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 			}
 			else 
 			{
-				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				//Game.GameData.Trainer.party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
 				PartyViewer[item.partyIndex].ActivePokemonDisplay(false);
 				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 				//StoreButtonData[item.partyIndex].DisableOnClick(true);

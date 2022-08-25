@@ -57,7 +57,7 @@ public class PokemonViewModal : MonoBehaviour
 	{
 		Data.PkmnName.text = pokemon.Name;
 		Data.Level.text = "L " + pokemon.Level;
-		Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Game.PokemonFormsData[pokemon.Species][pokemon.FormId].Base);
+		Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonFormsData[pokemon.Species][pokemon.FormId].Base);
 		Data.Species_Name.text = pokemon.Species.ToString(TextScripts.Name);
 	}
 	public void RefreshStatsDisplay()
@@ -85,10 +85,10 @@ public class PokemonViewModal : MonoBehaviour
 	public void RefreshMoveSetDisplay()
 	{
 		//
-		Data.MoveName1.text = ViewPokemonData.ReturnMoveName(pokemon.moves[0].MoveId);
-		Data.MoveName2.text = ViewPokemonData.ReturnMoveName(pokemon.moves[1].MoveId);
-		Data.MoveName3.text = ViewPokemonData.ReturnMoveName(pokemon.moves[2].MoveId);
-		Data.MoveName4.text = ViewPokemonData.ReturnMoveName(pokemon.moves[3].MoveId);
+		Data.MoveName1.text = ViewPokemonData.ReturnMoveName(pokemon.moves[0].id);
+		Data.MoveName2.text = ViewPokemonData.ReturnMoveName(pokemon.moves[1].id);
+		Data.MoveName3.text = ViewPokemonData.ReturnMoveName(pokemon.moves[2].id);
+		Data.MoveName4.text = ViewPokemonData.ReturnMoveName(pokemon.moves[3].id);
 		//
 		Data.MoveColor1.color = ViewPokemonData.TypeToColor(pokemon.moves[0].Type);
 		Data.MoveColor2.color = ViewPokemonData.TypeToColor(pokemon.moves[1].Type);

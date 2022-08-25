@@ -47,13 +47,13 @@ public class TrainerPartyPanel : MonoBehaviour//, IEventSystemHandler, ISelectHa
 	#region 
 	public void RefreshPartyDisplay()
 	{
-		for (int Id = 0; Id < Game.GameData.Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
+		for (int Id = 0; Id < ((Game)Game.GameData).Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
 		{
 			currentSlot = Id;
 			party[Id].toggle.interactable = false;
 			//party[Id].IsSelected = true;
 			party[Id].toggle.Select();
-			if (Game.GameData.Features.LimitPokemonPartySize == Id && Game.GameData.Player.Party[Id].IsNotNullOrNone())
+			if (((Game)Game.GameData).Features.LimitPokemonPartySize == Id && Game.GameData.Trainer.party[Id].IsNotNullOrNone())
 			{
 				//party[Id].IsSelected = true;
 				party[Id].toggle.isOn = false;

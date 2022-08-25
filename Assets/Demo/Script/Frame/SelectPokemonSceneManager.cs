@@ -34,7 +34,7 @@ public class SelectPokemonSceneManager : MonoBehaviour
 	//{ 
 	//	get 
 	//	{
-	//		//return Game.GameData.Player.Party.
+	//		//return Game.GameData.Trainer.party.
 	//		//TrainerPokemonButton party = PartyViewer
 	//		//	.Values
 	//		//	.SingleOrDefault(x => x.IsSelected);
@@ -81,8 +81,8 @@ public class SelectPokemonSceneManager : MonoBehaviour
 			{
 				//Game.con.Open();
 
-				Debug.Log("Is Pokemon DB Null? " + (Game.PokemonData == null).ToString());
-				if (Game.PokemonData == null)
+				Debug.Log("Is Pokemon DB Null? " + (Kernal.PokemonData == null).ToString());
+				if (Kernal.PokemonData == null)
 				{
 					//Game.InitPokemons();
 					try
@@ -104,24 +104,24 @@ public class SelectPokemonSceneManager : MonoBehaviour
 					catch (Exception) { Debug.LogError("there were some problems running sql..."); } //ignore...
 				}
 				Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-					(Game.PokemonData.Count > 0).ToString(), Game.PokemonData.Count));
-				if (Game.PokemonData.Count == 0) 
+					(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
+				if (Kernal.PokemonData.Count == 0) 
 					Debug.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
 				Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-					(Game.PokemonData.Count > 0).ToString(), Game.PokemonData.Count));
+					(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
 			}
 		}
 
 		Debug.Log("Is Game Null? " + (Game.GameData == null).ToString());
 		Debug.Log("Is Player Null? " + (Game.GameData.Player == null).ToString());
-		if(Game.GameData.Player == null)
-		{
-			Debug.Log("Create Player Object");
-			Player p = new Player();
-			Debug.Log("Saving Player Object to Global Singleton");
-			Game.GameData.Player = p;
-		}
-		Debug.Log("Is Trainer Null? " + (Game.GameData.Player.Trainer == null).ToString());
+		//if(Game.GameData.Player == null)
+		//{
+		//	Debug.Log("Create Player Object");
+		//	Player p = new Player();
+		//	Debug.Log("Saving Player Object to Global Singleton");
+		//	Game.GameData.Player = p;
+		//}
+		Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 	}
 
 	void Start()
@@ -134,9 +134,9 @@ public class SelectPokemonSceneManager : MonoBehaviour
 		//party.DisplayPartyUI();
 		//party.GetPartyButton();
 		SetPartyButton();
-		Debug.Log("Trainer Id: " + Game.GameData.Player.Trainer.TrainerID.ToString());
+		Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
 		//Use ID but I will leave 00000 as Example
-		partySelectionUI.SetTrainerID(Game.GameData.Player.Trainer.TrainerID);
+		partySelectionUI.SetTrainerID(Game.GameData.Trainer.publicID());
 	}
 	void OnDestroy()
 	{
@@ -159,7 +159,7 @@ public class SelectPokemonSceneManager : MonoBehaviour
 	#region Party Roster UI
 	public void SetPartyButton()
 	{
-		for (int Id = 0; Id < Game.GameData.Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
+		for (int Id = 0; Id < ((Game)Game.GameData).Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
 		{
 			//if (Id == Core.MAXPARTYSIZE) break;
 			GameObject Button = Instantiate(partyEntryPrefab);
@@ -181,7 +181,7 @@ public class SelectPokemonSceneManager : MonoBehaviour
 		//foreach (int id in ID)
 		//for (int id = 1; id <= 151; id++)
 		foreach (int id in 
-			Game.PokemonData
+			Kernal.PokemonData
 			.Values
 			.Where(x => x.ID != Pokemons.NONE && 
 				(int)x.ID <= 1000 &&
@@ -210,19 +210,19 @@ public class SelectPokemonSceneManager : MonoBehaviour
 
 	private void Scene_onChangePartyLineup()
 	{
-		Game.GameData.Player.Party.PackParty();
+		Game.GameData.Trainer.party.PackParty();
 		foreach (TrainerPokemonButton item in PartyViewer.Values)
 		{
-			if (Game.GameData.Player.Party[item.partyIndex].IsNotNullOrNone())
+			if (Game.GameData.Trainer.party[item.partyIndex].IsNotNullOrNone())
 			{
-				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				//Game.GameData.Trainer.party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
 				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 				//StoreButtonData[item.partyIndex].DisableOnClick(true);
 				PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 			}
 			else 
 			{
-				//Game.GameData.Player.Party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
+				//Game.GameData.Trainer.party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
 				PartyViewer[item.partyIndex].ActivePokemonDisplay(false);
 				PartyViewer[item.partyIndex].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 				//StoreButtonData[item.partyIndex].DisableOnClick(true);

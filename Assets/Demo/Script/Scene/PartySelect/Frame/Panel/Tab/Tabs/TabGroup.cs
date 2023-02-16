@@ -49,7 +49,7 @@ namespace PokemonUnity.Stadium
 
 		public virtual void OnTabSelected(TabButton tab)
 		{
-			Debug.Log($"[LOG]: TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
+			GameDebug.Log($"TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
 			if (!tab.selectable.interactable) return;
 			if (selectedTab != null)
 				selectedTab.Deselect();
@@ -61,7 +61,7 @@ namespace PokemonUnity.Stadium
 			for (int i = 0; i < tabPages.Count; i++)
 				if (i == index)
 					tabPages[i]?.SetActive(true);
-			else
+				else
 					tabPages[i]?.SetActive(false);
 		}
 

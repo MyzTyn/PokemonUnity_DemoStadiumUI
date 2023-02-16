@@ -23,12 +23,12 @@ namespace PokemonUnity.Stadium
 
 		public virtual void Select() 
 		{
-			Debug.Log($"[LOG]: TabButton[{name}].Select();");
+			GameDebug.Log($"TabButton[{name}].Select();");
 			//selectable.Select();
 			if (selectable is Toggle t) t.isOn = true; //!t.isOn;
 			if (onTabSelected != null)
 			{
-				Debug.Log($"[LOG]: TabButton[{name}].onTabSelected.Invoke();");
+				GameDebug.Log($"TabButton[{name}].onTabSelected.Invoke();");
 				onTabSelected.Invoke();
 			}
 		}
@@ -39,10 +39,10 @@ namespace PokemonUnity.Stadium
 		}
 		public virtual void Select(UnityAction action) 
 		{
-			Debug.Log($"[LOG]: TabButton[{name}].Select(UnityAction);");
+			GameDebug.Log($"TabButton[{name}].Select(UnityAction);");
 			if (action != null)
 			{
-				Debug.Log($"[LOG]: TabButton[{name}].onTabSelected.AddListener(UnityAction);");
+				GameDebug.Log($"TabButton[{name}].onTabSelected.AddListener(UnityAction);");
 				onTabSelected.AddListener(action);
 			}
 		}
@@ -82,7 +82,7 @@ namespace PokemonUnity.Stadium
 
 		public virtual void OnPointerClick(PointerEventData eventData)
 		{
-			Debug.Log($"[LOG]: TabButton[{name}].OnPointerClick(PointerEventData);");
+			GameDebug.Log($"TabButton[{name}].OnPointerClick(PointerEventData);");
 			tabGroup?.OnTabSelected(this);
 		}
 	}

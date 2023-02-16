@@ -39,9 +39,9 @@ namespace PokemonUnity.Stadium
 		/// Reference to the UI's experience bar.
 		/// </summary>
 		public UnityEngine.UI.Slider sliderExp;
-		public UnityEngine.UI.Image spriteItem, spriteStatus, spriteCaught, spriteFillHP, spriteFillExp, gender, shiny, primal;
-		//public UnityEngine.UI.Text currentHP, slash, maxHP, Name, level, gender;
-		new public TMPro.TextMeshProUGUI name, HPValue, level;
+		public UnityEngine.UI.Image spriteItem, spriteStatus, spriteCaught, spriteFillHP, spriteFillExp, shiny, primal;
+		public UnityEngine.UI.Text currentHP, slash, maxHP, Name, level, gender;
+		//new public TMPro.TextMeshProUGUI name, HPValue, level;
 		//private UnityEngine.Color colorFillExp;
 		//private UnityEngine.UI.Image panelbg;
 		//private UnityEngine.Sprite databox; //AnimatedBitmap
@@ -153,9 +153,9 @@ namespace PokemonUnity.Stadium
 						break;
 				}
 			}
-			//maxHP.gameObject.SetActive(@showhp);
-			//currentHP.gameObject.SetActive(@showhp);
-			HPValue.gameObject.SetActive(@showhp);
+			maxHP.gameObject.SetActive(@showhp);
+			currentHP.gameObject.SetActive(@showhp);
+			//HPValue.gameObject.SetActive(@showhp);
 			/*panelbg.sprite = databox;
 			//@statuses = Resources.Load<UnityEngine.Sprite>(Game._INTL("Graphics/Pictures/battleStatuses")); //if image is localized, grab the current region
 			@spriteStatus.sprite = Resources.Load<UnityEngine.Sprite>(Game._INTL("Graphics/Pictures/battleStatuses"));
@@ -265,47 +265,51 @@ namespace PokemonUnity.Stadium
 			//IList<ITextPosition> textpos = new List<ITextPosition>() {
 			//	new TextPosition (pokename,@spritebaseX+8,6,false,base_,shadow)
 			//};
-			//Name.text = pokename;
-			name.SetText(pokename);
+			Name.text = pokename;
+			//name.SetText(pokename);
 			//Set gender toggle on/off; change color based on gender
 			//float genderX = this.bitmap.text_size(pokename).width;
 			//genderX += @spritebaseX + 14;
 			if (@battler.displayGender > 0) //switch (@battler.displayGender)
 			{
-				gender.gameObject.SetActive(true);
+				//gender.gameObject.SetActive(true);
 				if (@battler.displayGender == 1) //	case 0: // Male
 				{
 					//textpos.Add(new TextPosition(Game._INTL("♂"), genderX, 6, false, new Color(48, 96, 216), shadow));
+					gender.text = Game._INTL("♂");
+					gender.color = new Color(48, 96, 216);
 					//gender.sprite = BattleInterface.main.genderMale; // Male
 					//break;
 				}
 				else //	case 1: // Female
 				{
 					//textpos.Add(new TextPosition(Game._INTL("♀"), genderX, 6, false, new Color(248, 88, 40), shadow));
+					gender.text = Game._INTL("♀");
+					gender.color = new Color(248, 88, 40);
 					//gender.sprite = BattleInterface.main.genderFemale; // Female
 					//break;
 				}
 			}
 			else
 			{
-				gender.gameObject.SetActive(false);
-				//gender.text = string.Empty;
+				//gender.gameObject.SetActive(false);
+				gender.text = string.Empty;
 			}
 			//pbDrawTextPositions(this.bitmap,textpos);
 			//pbSetSmallFont(this.bitmap);
 			//textpos = new List<ITextPosition>() {
 			//	new TextPosition (Game._INTL("Lv{1}",@battler.Level),@spritebaseX+202,8,true,base_,shadow)
 			//};
-			//level.text = Game._INTL("{0}", @battler.Level);
-			level.SetText($"Lv. {@battler.Level}");
+			level.text = Game._INTL("{0}", @battler.Level);
+			//level.SetText($"Lv. {@battler.Level}");
 			GameDebug.Log(string.Format("Pokemon #{0} HP: `{1}/{2}`", battler.Index, this.HP, @battler.TotalHP));
 			if (@showhp)
 			{
 				//string hpstring = string.Format("{1: 2d}/{2: 2d}", this.HP, @battler.TotalHP);
 				//textpos.Add(new TextPosition(hpstring, @spritebaseX + 188, 48, true, base_, shadow));
-				//maxHP.text = sliderHP.maxValue.ToString(); //Set text under hp to match slider maxHealth
-				//currentHP.text = sliderHP.value.ToString(); //Set text under hp to match slider currentHealth
-				HPValue.SetText($"{this.HP}/{@battler.TotalHP}"); //($"{sliderHP.value}/{sliderHP.maxValue}");
+				maxHP.text		= this.HP.ToString();			//sliderHP.maxValue.ToString(); //Set text under hp to match slider maxHealth
+				currentHP.text	= @battler.TotalHP.ToString();	//sliderHP.value.ToString();	//Set text under hp to match slider currentHealth
+				//HPValue.SetText($"{this.HP}/{@battler.TotalHP}"); //($"{sliderHP.value}/{sliderHP.maxValue}");
 			}
 			//pbDrawTextPositions(this.bitmap,textpos);
 			//IList<ITextPosition> imagepos = new List<ITextPosition>();
@@ -577,9 +581,9 @@ namespace PokemonUnity.Stadium
 			else
 				spriteFillHP.color = Color.green; //(SeriColor)PokeBattle_SceneConstants.HPCOLORGREEN;
 			//each time the slider's value is changed, write to text displaying the hp
-			//maxHP.text = sliderHP.maxValue.ToString(); //Set text under hp to match slider maxHealth
-			//currentHP.text = sliderHP.value.ToString(); //Set text under hp to match slider currentHealth
-			HPValue.SetText($"{sliderHP.value}/{sliderHP.maxValue}");
+			maxHP.text = sliderHP.maxValue.ToString(); //Set text under hp to match slider maxHealth
+			currentHP.text = sliderHP.value.ToString(); //Set text under hp to match slider currentHealth
+			//HPValue.SetText($"{sliderHP.value}/{sliderHP.maxValue}");
 		}
 
 		private System.Collections.IEnumerator AnimateSliderHP(int amount) //Slider as input?

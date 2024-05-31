@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using PokemonUnity;
 using PokemonUnity.Character;
 using PokemonUnity.Monster;
+using PokemonEssentials.Interface;
+using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,6 +29,13 @@ namespace PokemonUnity.Stadium
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
 		private Dictionary<int, SelectPokemonButton> StoreButtonData;
+		/// <summary>
+		/// When pokemons are selected by player from UI, store in this variable
+		/// </summary>
+		/// <remarks>
+		/// First-In, Last-Out; Player can deselect their choice by removing their last choice
+		/// </remarks>
+		private Stack<IPokemon> TemporaryParty;
 		//Sprite
 		public static Sprite[] PkmnType { get; private set; }
 		public static Sprite[] IconSprites { get; private set; }

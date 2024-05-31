@@ -23,7 +23,7 @@ namespace PokemonUnity.Stadium
 		[SerializeField] private Transform partyGridContent;
 		[SerializeField] private Transform rosterGridContent;
 		[SerializeField] private ToggleGroup toggleGroup;
-	
+
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
 		private Dictionary<int, SelectPokemonButton> StoreButtonData;
@@ -32,9 +32,9 @@ namespace PokemonUnity.Stadium
 		public static Sprite[] IconSprites { get; private set; }
 
 		//public Toggle Toggle { get { return toggleGroup.ActiveToggles().FirstOrDefault(); } }
-		//public int CurrentOnParty 
-		//{ 
-		//	get 
+		//public int CurrentOnParty
+		//{
+		//	get
 		//	{
 		//		//return Game.GameData.Trainer.party.
 		//		//TrainerPokemonButton party = PartyViewer
@@ -43,10 +43,10 @@ namespace PokemonUnity.Stadium
 		//		//	//.Select(x => x.partyIndex);
 		//		//return party != null ? party.partyIndex : 0;
 		//		return PokemonSelect.CurrentSelectedPartySlot;
-		//	} 
+		//	}
 		//}
 		#endregion
-	
+
 		#region Unity Monobehavior
 		void Awake()
 		{
@@ -68,62 +68,6 @@ namespace PokemonUnity.Stadium
 			Debug.Log("Load Assets for UI into Array");
 			IconSprites = Resources.LoadAll<Sprite>("PokemonIcon");
 			PkmnType = Resources.LoadAll<Sprite>("PokemonType");
-
-			if (Game.DatabasePath == @"Data Source=..\..\..\\veekun-pokedex.sqlite")
-			{
-				try
-				{
-					Game.DatabasePath = @"Data Source=..\..\\veekun-pokedex.sqlite";
-					Game g = new Game();
-					//Game.ResetSqlConnection();
-					//Debug.Log("Path to DB: " + Game.con.FileName);
-				}
-				catch (InvalidOperationException) { Debug.LogError("problem connecting with database"); } //ignore...
-				finally
-				{
-					//Game.con.Open();
-
-					Debug.Log("Is Pokemon DB Null? " + (Kernal.PokemonData == null).ToString());
-					if (Kernal.PokemonData == null)
-					{
-						//Game.InitPokemons();
-						try
-						{
-							Game.InitTypes();
-							Game.InitNatures();
-							Game.InitPokemons();
-							Game.InitPokemonForms();
-							Game.InitPokemonMoves();
-							//Game.InitPokemonEvolutions();
-							Game.InitPokemonItems();
-							Game.InitMoves();
-							Game.InitItems();
-							Game.InitBerries();
-							Game.InitTrainers();
-							//Game.InitRegions();
-							//Game.InitLocations();
-						}
-						catch (Exception) { Debug.LogError("there were some problems running sql..."); } //ignore...
-					}
-					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-						(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
-					if (Kernal.PokemonData.Count == 0) 
-						Debug.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
-					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-						(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
-				}
-			}
-
-			Debug.Log("Is Game Null? " + (Game.GameData == null).ToString());
-			Debug.Log("Is Player Null? " + (Game.GameData.Player == null).ToString());
-			//if(Game.GameData.Player == null)
-			//{
-			//	Debug.Log("Create Player Object");
-			//	Player p = new Player();
-			//	Debug.Log("Saving Player Object to Global Singleton");
-			//	Game.GameData.Player = p;
-			//}
-			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 		}
 
 		void Start()
@@ -149,7 +93,7 @@ namespace PokemonUnity.Stadium
 			catch (NullReferenceException) { Debug.LogError("Calling destroy before event wakes up"); } //Ignore...
 		}
 		#endregion
-	
+
 		#region Methods
 		//public void SelectToggle(int id)
 		//{
@@ -182,10 +126,10 @@ namespace PokemonUnity.Stadium
 			int i = 0;
 			//foreach (int id in ID)
 			//for (int id = 1; id <= 151; id++)
-			foreach (int id in 
+			foreach (int id in
 				Kernal.PokemonData
 				.Values
-				.Where(x => x.ID != Pokemons.NONE && 
+				.Where(x => x.ID != Pokemons.NONE &&
 					(int)x.ID <= 1000 &&
 					//x.GenerationId <= (int)Generation.RedBlueYellow)
 					SelectionState.PokemonGens.Contains((Generation)x.GenerationId))
@@ -222,7 +166,7 @@ namespace PokemonUnity.Stadium
 					//StoreButtonData[item.partyIndex].DisableOnClick(true);
 					PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 				}
-				else 
+				else
 				{
 					//Game.GameData.Trainer.party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
 					PartyViewer[item.partyIndex].ActivePokemonDisplay(false);

@@ -20,7 +20,7 @@ namespace PokemonUnity.Stadium
 		[SerializeField] private PokemonViewModal pokemonViewModal;
 		[SerializeField] private GameObject partyEntryPrefab;
 		[SerializeField] private Transform partyGridContent;
-	
+
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
 		//Sprite
@@ -39,62 +39,6 @@ namespace PokemonUnity.Stadium
 			Debug.Log("Load Assets for UI into Array");
 			IconSprites = Resources.LoadAll<Sprite>("PokemonIcon");
 			PkmnType = Resources.LoadAll<Sprite>("PokemonType");
-
-			if (Game.DatabasePath == @"Data Source=..\..\..\\veekun-pokedex.sqlite")
-			{
-				try
-				{
-					Game.DatabasePath = @"Data Source=..\..\\veekun-pokedex.sqlite";
-					Game g = new Game();
-					//Game.ResetSqlConnection();
-					//Debug.Log("Path to DB: " + Game.con.FileName);
-				}
-				catch (InvalidOperationException) { Debug.LogError("problem connecting with database"); } //ignore...
-				finally
-				{
-					//Game.con.Open();
-
-					Debug.Log("Is Pokemon DB Null? " + (Kernal.PokemonData == null).ToString());
-					if (Kernal.PokemonData == null)
-					{
-						//Game.InitPokemons();
-						try
-						{
-							Game.InitTypes();
-							Game.InitNatures();
-							Game.InitPokemons();
-							Game.InitPokemonForms();
-							Game.InitPokemonMoves();
-							//Game.InitPokemonEvolutions();
-							Game.InitPokemonItems();
-							Game.InitMoves();
-							Game.InitItems();
-							Game.InitBerries();
-							Game.InitTrainers();
-							//Game.InitRegions();
-							//Game.InitLocations();
-						}
-						catch (Exception) { Debug.LogError("there were some problems running sql..."); } //ignore...
-					}
-					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-						(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
-					if (Kernal.PokemonData.Count == 0) 
-						Debug.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
-					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
-						(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
-				}
-			}
-
-			Debug.Log("Is Game Null? " + (Game.GameData == null).ToString());
-			Debug.Log("Is Player Null? " + (Game.GameData.Player == null).ToString());
-			//if(Game.GameData.Player == null)
-			//{
-			//	Debug.Log("Create Player Object");
-			//	Player p = new Player();
-			//	Debug.Log("Saving Player Object to Global Singleton");
-			//	Game.GameData.Player = p;
-			//}
-			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 		}
 
 		void Start()
@@ -211,7 +155,7 @@ namespace PokemonUnity.Stadium
 					//StoreButtonData[item.partyIndex].DisableOnClick(true);
 					PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 				}
-				else 
+				else
 				{
 					//Game.GameData.Trainer.party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
 					PartyViewer[item.partyIndex].ActivePokemonDisplay(false);

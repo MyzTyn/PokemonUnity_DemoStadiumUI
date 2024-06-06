@@ -36,18 +36,19 @@ namespace PokemonUnity.Stadium
 			Species = species;
 			Name.text = name;
 		}
-		//public void DisableOnClick(bool active)
-		//{
-		//	if (active)
-		//	{
-		//		button.onClick.RemoveAllListeners();
-		//	}
-		//	else
-		//	{
-		//		button.onClick.RemoveAllListeners();
-		//		button.onClick.AddListener(delegate { demo.PokemonStatsandMoveUI(ID); });
-		//	}
-		//}
+		public void DisableOnClick(bool active)
+		{
+			if (active)
+			{
+				Debug.Log($"Disabled the {Species} button");
+                GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
+			}
+			else
+			{
+                GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
+                GetComponent<Toggle>().onValueChanged.AddListener(delegate { Scene_onButtonSelected(); });
+            }
+		}
 		//public void PokemonStatsandMoveUI(int Pkmn_ID)
 		//{
 		//	PkmnSelected = Pkmn_ID;
@@ -66,49 +67,48 @@ namespace PokemonUnity.Stadium
 		//}
 		public void Scene_onButtonSelected()
 		{
-			Debug.Log("Pressed! " + Name);
+			Debug.Log("Pressed! " + Species);
 			PokemonSelect.Species = Species;
 			PokemonSelect.PokemonPosition = Position;
 			PokemonSelect.IsRentalPokemon = IsRental;
 			PokemonSelect.EditPokemon = true;
-			GameEvents.current.OnLoadLevel(1); //Change scene...
+			// ToDo: Avoid this hack
+			MainCameraGameManager.Instance.pokemonViewModal.ActiveGameobject(true);
+			MainCameraGameManager.Instance.pokemonViewModal.RefreshDisplay();
+
+			//GameEvents.current.OnLoadLevel(1); //Change scene...
 		}
-		private void Awake()
+        private void Awake()
 		{
-			//button.onClick.AddListener(delegate { demo.PokemonStatsandMoveUI(ID); });
+			GetComponent<Toggle>().onValueChanged.AddListener(delegate { Scene_onButtonSelected(); });
 			//new WaitForSeconds(1);
 		}
-		private void Start()
+        private void Start()
 		{
 			Refresh();
 		}
-		private void OnDestory()
-		{
-		}
+
 		public void Refresh()
 		{
-			//ToDo: Uncomment and Remove Try/Catch...
-			//try
-			//{
-			//	if(MainCameraGameManager.IconSprites?.Length > (int)Species)
-			//		myIcon.sprite = MainCameraGameManager.IconSprites[(int)Species];
-			//}
-			//catch (IndexOutOfRangeException)
-			//{
-			//	Debug.LogError($"Index #{(int)Species}:{Species.ToString()} was outside the bounds of the array.");
-			//}
-			//if (PokemonSelect.IsRentalPokemon)
-			if (IsRental)
+            if (MainCameraGameManager.IconSprites.Length > (int)Species)
+            {
+                myIcon.sprite = MainCameraGameManager.IconSprites[(int)Species];
+            }
+            else
+            {
+                Debug.LogError($"Index #{(int)Species}:{Species} was outside the bounds of the array.");
+            }
+
+            if (IsRental)
 			{
-				//if(MainCameraGameManager.SelectedPokemons.ContainsKey(new KeyValuePair<bool, int?>(IsRental, Position.Key)))
 				if(MainCameraGameManager.SelectedPokemons.Contains(new KeyValuePair<KeyValuePair<bool, int?>, int>(new KeyValuePair<bool, int?>(IsRental, Position.Key), Position.Value)))
 				{
 					//Pokemon is selected and added to party already
+					Debug.Log("This Pokemon is selected and added to party already");
 				}
 				else
 				{
 					//Create new entry display for pokemon
-					//L.text = "L" + MainCameraGameManager.LevelFixed;
 					L.text = "L" + PokemonSelect.LevelFixed;
 					Name.text = Species.ToString(TextScripts.Name);
 				}

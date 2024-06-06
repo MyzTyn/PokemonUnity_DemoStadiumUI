@@ -7,8 +7,8 @@ namespace PokemonUnity.Stadium
 {
 	public class PokemonViewModal : MonoBehaviour
 	{
-		#region 
-		[SerializeField] private GameObject MoveSetUIObject;
+        #region Variables
+        [SerializeField] private GameObject MoveSetUIObject;
 		[SerializeField] private ViewPokemonData Data;
 		[SerializeField] private int RentalViewCount = 5;
 
@@ -21,10 +21,29 @@ namespace PokemonUnity.Stadium
 		/// </summary>
 		public Toggle selectedPokemon;
 		public bool IsWindowActive { get; private set; }
-		#endregion
+        #endregion
 
-		#region 
-		public void ActiveGameobject(bool active)
+        public void Awake()
+        {
+			// Accept it and add to the party
+			// Bug: At start of the scene this button will pressed if no button pressed after that it is normal
+			// ToDo: Check the toggle group code.
+			yesButton.onValueChanged.AddListener(delegate {
+                Debug.Log("Yes Button Pressed!");
+                // Fix this bad code
+                PokemonSelect.CurrentSelectedPokemon = pokemon.Species;
+                MainCameraGameManager.Instance.AddToParty();
+            });
+            // Close it
+            noButton.onValueChanged.AddListener(delegate {
+				Debug.Log("No Button Pressed!");
+				CloseDisplayModal(); 
+			});
+
+        }
+
+        #region Methods
+        public void ActiveGameobject(bool active)
 		{
 			IsWindowActive = active;
 			MoveSetUIObject.SetActive(active);
@@ -70,17 +89,18 @@ namespace PokemonUnity.Stadium
 			Data.Defense.text		= pokemon.DEF.ToString();
 			Data.Speed.text			= pokemon.SPE.ToString();
 			Data.SpecialAtk.text	= pokemon.SPA.ToString();
-			Data.SpecialDef.text	= pokemon.SPD.ToString();
-			if (pokemon.Type2 == PokemonUnity.Types.NONE)
+            // ToDo: Use Null handing?
+            // Data.SpecialDef.text	= pokemon.SPD.ToString();
+
+            Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
+            if (pokemon.Type2 == PokemonUnity.Types.NONE)
 			{
-				Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
 				Data.Type2.sprite = null;
 				Data.Type2.color = UnityEngine.Color.clear;
 			}
 			else
 			{
 				Data.Type2.color = UnityEngine.Color.white;
-				Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
 				Data.Type2.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type2];
 			}
 		}
@@ -115,7 +135,8 @@ namespace PokemonUnity.Stadium
 			Data.Defense.text = null;
 			Data.Speed.text = null;
 			Data.SpecialAtk.text = null;
-			Data.SpecialDef.text = null;
+			// ToDo: Fix this
+			//Data.SpecialDef.text = null;
 			Data.Type1.sprite = null;
 			Data.Type2.sprite = null;
 
@@ -139,5 +160,9 @@ namespace PokemonUnity.Stadium
 			IsWindowActive = false;
 		}
 		#endregion
+
+		// ToDo: Fix this
+		[SerializeField] private Toggle yesButton;
+		[SerializeField] private Toggle noButton;
 	}
 }

@@ -21,7 +21,7 @@ namespace PokemonUnity.Stadium
 		public int currentSlot;
 		#endregion
 
-		#region 
+		#region Unity
 		private void Awake()
 		{
 			//Clear child objects
@@ -35,8 +35,15 @@ namespace PokemonUnity.Stadium
 			for(int i = 0; i < party.Length; i++)
 			{
 				//Instantiate new Prefab to Scene
-				TrainerPokemonButton pokemon = Instantiate<TrainerPokemonButton>(pokemonButtonPrefab, partyContentFrame.transform);
-				pokemon.toggle.group = GetComponent<ToggleGroup>(); //toggleGroup;
+				TrainerPokemonButton pokemon = Instantiate(pokemonButtonPrefab, partyContentFrame.transform);
+				
+				// Set the width/height (ToDo: Fix this code)
+				var layoutElement = pokemon.GetComponent<LayoutElement>();
+				layoutElement.preferredWidth = 125;
+				layoutElement.preferredHeight = 41;
+				pokemon.partyIndex = i;
+
+                pokemon.toggle.group = GetComponent<ToggleGroup>(); //toggleGroup;
 				pokemon.toggle.interactable = false;
 				pokemon.name = "Slot" + i;
 				party[i] = pokemon;
@@ -46,7 +53,7 @@ namespace PokemonUnity.Stadium
 		}
 		#endregion
 
-		#region 
+		#region Methods
 		public void RefreshPartyDisplay()
 		{
 			for (int Id = 0; Id < ((Game)Game.GameData).Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)

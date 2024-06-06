@@ -16,6 +16,9 @@ namespace PokemonUnity.Stadium
 	//[ExecuteInEditMode]
 	public class MainCameraGameManager : MonoBehaviour
 	{
+		// ToDo: Remove this code!!!
+		public static MainCameraGameManager Instance { get; private set; }
+
 		#region Variables
 		public float CurrentSrollPosition { get { return scrollBar.value; } set { scrollBar.value = value; } }
 		public PokemonSelect PokemonSelect;
@@ -66,7 +69,10 @@ namespace PokemonUnity.Stadium
 		#region Unity Monobehavior
 		void Awake()
 		{
-			Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
+			if (Instance == null)
+                Instance = this;
+
+            Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
 			toggleGroup = GetComponent<ToggleGroup>();
 			Debug.Log("Create Dictionary for Player Party UI Mono");
 			PartyViewer = new Dictionary<int, TrainerPokemonButton>();
@@ -148,7 +154,17 @@ namespace PokemonUnity.Stadium
 			//	Debug.Log("Saving Player Object to Global Singleton");
 			//	Game.GameData.Player = p;
 			//}
+
+			// ToDo: Fix this
+			if (Game.GameData.Trainer == null)
+			{
+                Game.GameData.Trainer = new Trainer("Player", TrainerTypes.PLAYER);
+
+            }
 			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
+
+			// Pass the variables To Do: Fix this
+			pokemonViewModal.PokemonSelect = PokemonSelect;
 		}
 
 		void Start()
@@ -166,7 +182,15 @@ namespace PokemonUnity.Stadium
 			Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
 			//Use ID but I will leave 00000 as Example
 			partyPanel.SetTrainerID(Game.GameData.Trainer.publicID());
-		}
+
+			DisplayRentalPokemons();
+
+			// ToDo: Fix this
+            for (int i = 0; i < partyPanel.party.Count(); i++)
+            {
+                PartyViewer.Add(i, partyPanel.party[i]);
+            }
+        }
 		void OnDestroy()
 		{
 			try
@@ -204,32 +228,38 @@ namespace PokemonUnity.Stadium
 		//	pokemonViewModal.ActiveGameobject(true);
 		//	pokemonViewModal.DisplayPkmnStats();
 		//}
-		//public void AddToParty()
-		//{
-		//	if (PokemonSelect.CurrentSelectedPokemon == 0)
-		//	{
-		//		Debug.Log("Error. There no Pokemon!");
-		//	}
-		//	else
-		//	{
-		//		if (PokemonSelect.CurrentSelectedPartySlot >= 0 && PokemonSelect.CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
-		//		{
-		//			StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(true);
-		//			Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = new Pokemon((Pokemons)PkmnSelected, /PokemonSelect.LevelFixed, false);
-		//			//PartyViewer[CurrentOnParty].DisplayPartyButton();
-		//			PartyViewer[PokemonSelect.CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-		//			PartyViewer[PokemonSelect.CurrentSelectedPartySlot].ActivePokemonDisplay(true);
-		//			//CurrentOnParty += 1;
-		//			//Ask player if they're done and wish to move on; but in another function...
-		//			//if (Game.GameData.Trainer.party[5].IsNotNullOrNone())
-		//			//{
-		//			//	Debug.Log("Disable the UI");
-		//			//	RentalControlUI.ActiveRentalUI(false);
-		//			//}
-		//		}
-		//		pokemonViewModal.CancelUI();
-		//	}
-		//}
+		public void AddToParty()
+		{
+			if (PokemonSelect.CurrentSelectedPokemon == 0)
+			{
+				Debug.Log("Error. There no Pokemon!");
+			}
+			else
+			{
+				// ToDo: Fix this mess code
+				if (PokemonSelect.CurrentSelectedPartySlot >= 0 && PokemonSelect.CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
+				{
+					//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(true);
+					Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = StorePokemon[PokemonSelect.Species];
+                    //PartyViewer[CurrentOnParty].DisplayPartyButton();
+                    PartyViewer[PokemonSelect.CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+					PartyViewer[PokemonSelect.CurrentSelectedPartySlot].ActivePokemonDisplay(true);
+					PokemonSelect.CurrentSelectedPartySlot++;
+
+					// ToDo: Fix this code
+					StoreButtonData[PokemonSelect.PokemonPosition.Value].DisableOnClick(true);
+
+					//Ask player if they're done and wish to move on; but in another function...
+					if (Game.GameData.Trainer.party[5].IsNotNullOrNone())
+					{
+						Debug.Log("Disable the UI");
+						// RentalControlUI.ActiveRentalUI(false);
+					}
+				}
+				
+				pokemonViewModal.CloseDisplayModal();
+			}
+		}
 		//public void PartyData(int id, TrainerPokemonButton partybutton)
 		//{
 		//	PartyViewer.Add(id, partybutton);
@@ -311,5 +341,27 @@ namespace PokemonUnity.Stadium
 			}
 		}
 		#endregion
+
+		[SerializeField] private SelectPokemonButton pokemonButton;
+		[SerializeField] private Transform pokemonListPanel;
+
+		private void DisplayRentalPokemons()
+		{
+			Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
+			if (StoreButtonData.Count == 0)
+			{
+				Debug.Log("Creating 151 Pokemons");
+
+                for (int i = 0; i < 151; i++)
+				{
+					SelectPokemonButton item = Instantiate(pokemonButton, pokemonListPanel);
+					item.gameObject.SetActive(true);
+					item.SetID(i, (Pokemons)(i + 1));
+					item.PokemonSelect = PokemonSelect;
+					item.name = $"ID {i}";
+					StoreButtonData.Add(i, item);
+				}
+			}
+		}
 	}
 }

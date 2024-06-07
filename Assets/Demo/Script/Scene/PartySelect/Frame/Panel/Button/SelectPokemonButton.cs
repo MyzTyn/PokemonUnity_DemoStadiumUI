@@ -18,13 +18,13 @@ namespace PokemonUnity.Stadium
 		[SerializeField] private Image myIcon;
 		[SerializeField] private Text Name;
 		[SerializeField] private Text Level;
-		public bool IsRental;
 		public bool IsDisabled;
 		public bool IsSelected;
 		//public Pokemon Pokemon;
 		public PokemonSelect PokemonSelect;
 		public KeyValuePair<int?,int> Position;
 		private PokemonViewModal PokemonViewModal;
+		public bool IsRental { get { return pokemon.ot == null; } }
 		//public int ID { get; private set; }
 
 		#region Unity Monobehavior
@@ -34,16 +34,12 @@ namespace PokemonUnity.Stadium
 		}
 		private void Start()
 		{
-			Refresh();
+			//Just call Refresh() when values are set, it's possible values could change but still display wrong values
+			//Refresh();
 		}
 		#endregion
 
 		#region Methods
-		//public void SetID(int id)
-		//{
-		//	ID = id;
-		//}
-
 		/// <summary>
 		/// Generate random pokemon in display matching Species
 		/// </summary>
@@ -55,11 +51,11 @@ namespace PokemonUnity.Stadium
 		/// <param name="page"></param>
 		/// <param name="selected"></param>
 		/// <param name="name"></param>
-		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, Pokemons species, bool isRental = true, int? page = null, bool selected = false, string name = null)
+		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, Pokemons species, bool isRental = true, int? page = null, bool selected = false)
 		{
 			//ToDo: Use battle rules to determine the constraints of the pokemon
-			IPokemon pokemon = new Pokemon(species);
-			SetID(pokemonViewModal, pokemonSelect, id, pokemon, isRental, page, selected, name);
+			IPokemon pokemon = new Pokemon(pkmn: species, level: PokemonSelect.LevelFixed);
+			SetID(pokemonViewModal, pokemonSelect, id, pokemon, isRental, page, selected);
 		}
 
 		/// <summary>
@@ -73,16 +69,20 @@ namespace PokemonUnity.Stadium
 		/// <param name="page"></param>
 		/// <param name="selected"></param>
 		/// <param name="name"></param>
-		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, IPokemon pkmn, bool isRental = true, int? page = null, bool selected = false, string name = null)
+		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, IPokemon pkmn, bool isRental = true, int? page = null, bool selected = false)
 		{
 			PokemonViewModal = pokemonViewModal;
 			PokemonSelect = pokemonSelect;
 			Position = new KeyValuePair<int?, int>(page, id);
-			IsRental = isRental;
+			//IsRental = isRental;
 			IsSelected = selected;
 			//Species = species;
 			pokemon = pkmn;
-			Name.text = name;
+			//Just Call Refresh() instead of setting values here
+			//Name.text = pokemon.Name;
+			//Level.text = "L" + pokemon.Level;
+			//myIcon.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
+			Refresh();
 		}
 
 		public void DisableOnClick(bool active)
@@ -137,7 +137,8 @@ namespace PokemonUnity.Stadium
 				else
 				{
 					//Create new entry display for pokemon
-					Level.text = "L" + PokemonSelect.LevelFixed;
+					//Level.text = "L" + PokemonSelect.LevelFixed;
+					Level.text = "L" + pokemon.Level;
 					Name.text = pokemon.Name;
 				}
 			}
@@ -155,12 +156,14 @@ namespace PokemonUnity.Stadium
 		{
 			IsSelected = arg;
 			Debug.Log($"Pokemon [{pokemon.Name}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
-			PokemonSelect.Species = pokemon.Species;
+			//PokemonSelect.Species = pokemon.Species;
 			PokemonSelect.PokemonPosition = Position;
+			//if (arg) // If selected
+			//	PokemonSelect.SelectedPokemonPositions.Push(Position);
 			PokemonSelect.IsRentalPokemon = IsRental;
 			PokemonSelect.EditPokemon = true;
 			PokemonViewModal.ActiveGameobject(true);
-			PokemonViewModal.RefreshDisplay();
+			PokemonViewModal.RefreshDisplay(PokemonSelect.CurrentSelectedPokemon);
 
 			//GameEvents.current.OnLoadLevel(1); //Change scene...
 		}

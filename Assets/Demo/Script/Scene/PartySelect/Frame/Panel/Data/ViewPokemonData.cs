@@ -5,39 +5,42 @@ namespace PokemonUnity.Stadium
 {
 	public class ViewPokemonData : MonoBehaviour
 	{
+		#region Variables
 		[Header("ID")]
-		public Text PkmnName;
-		public Text Level;
-		public Text PkmnID;
-		public Text Species_Name;
+		public Text		PkmnName;
+		public Text		Level;
+		public Text		PkmnID;
+		public Text		SpeciesName;
 		[Space(5)]
 		[Header("Pokemon Stats")]
-		public Image PokemonSprite;
-		public Text Health;
-		public Text Attack;
-		public Text Defense;
-		public Text Speed;
-		public Text SpecialAtk;
-		public Text SpecialDef;
-		public Image Type1;
-		public Image Type2;
+		public Image	PokemonSprite;
+		public Text		Health;
+		public Text		Attack;
+		public Text		Defense;
+		public Text		Speed;
+		public Text		SpecialAtk;
+		public Text		SpecialDef;
+		public Image	Type1;
+		public Image	Type2;
 		[Space(5)]
 		[Header("Move Set")]
-		public Text MoveName1;
-		public Image MoveColor1;
-		public Text MoveName2;
-		public Image MoveColor2;
-		public Text MoveName3;
-		public Image MoveColor3;
-		public Text MoveName4;
-		public Image MoveColor4;
+		public Text		MoveName1;
+		public Image	MoveColor1;
+		public Text		MoveName2;
+		public Image	MoveColor2;
+		public Text		MoveName3;
+		public Image	MoveColor3;
+		public Text		MoveName4;
+		public Image	MoveColor4;
 		[Space(5)]
 		[Header("Move Type")]
-		public Text MoveType1;
-		public Text MoveType2;
-		public Text MoveType3;
-		public Text MoveType4;
+		public Text		MoveType1;
+		public Text		MoveType2;
+		public Text		MoveType3;
+		public Text		MoveType4;
+		#endregion
 
+		#region Methods
 		public static Color TypeToColor(PokemonUnity.Types type)
 		{
 			//Convert from Hex(TypeToColorHEX) to RGB
@@ -172,5 +175,6 @@ namespace PokemonUnity.Stadium
 				return s[0].ToString().ToUpper();
 			}
 		}
+		#endregion
 	}
 }

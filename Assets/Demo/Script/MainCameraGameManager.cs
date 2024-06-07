@@ -13,11 +13,10 @@ namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// </summary>
-	///
 	//[ExecuteInEditMode]
 	public class MainCameraGameManager : MonoBehaviour
 	{
-		// ToDo: Remove this code!!!
+		// ToDo: Remove this code!!! Why, is a singleton needed for camera manager bad?
 		public static MainCameraGameManager Instance { get; private set; }
 
 		#region Variables
@@ -167,7 +166,7 @@ namespace PokemonUnity.Stadium
 			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 
 			// Pass the variables To Do: Fix this
-			pokemonViewModal.PokemonSelect = PokemonSelect;
+			//pokemonViewModal.PokemonSelect = PokemonSelect;
 		}
 
 		void Start()
@@ -182,13 +181,16 @@ namespace PokemonUnity.Stadium
 			//party.DisplayPartyUI();
 			//party.GetPartyButton();
 			//SetPartyButton();
-			Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
-			//Use ID but I will leave 00000 as Example
-			partyPanel.SetTrainerID(Game.GameData.Trainer.publicID());
+			if (Game.GameData.Trainer != null)
+			{
+				Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
+				//Use ID but I will leave 00000 as Example
+				partyPanel.SetTrainerID(Game.GameData.Trainer.publicID(), Game.GameData.Trainer.name);
+			}
 
 			DisplayRentalPokemons();
 
-			// ToDo: Fix this
+			// ToDo: Fix this; What is this for?
 			for (int i = 0; i < partyPanel.party.Count(); i++)
 			{
 				PartyViewer.Add(i, partyPanel.party[i]);
@@ -233,9 +235,9 @@ namespace PokemonUnity.Stadium
 		//}
 		public void AddToParty()
 		{
-			if (PokemonSelect.CurrentSelectedPokemon == 0)
+			if (PokemonSelect.CurrentSelectedPokemon.IsNotNullOrNone())
 			{
-				Debug.Log("Error. There no Pokemon!");
+				Debug.LogWarning("Error. There is no Pokemon in display view, nothing to add!");
 			}
 			else
 			{
@@ -243,19 +245,36 @@ namespace PokemonUnity.Stadium
 				if (PokemonSelect.CurrentSelectedPartySlot >= 0 && PokemonSelect.CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
 				{
 					//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(true);
-					Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = StorePokemon[PokemonSelect.Species];
+					//Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = StorePokemon[PokemonSelect.Species]; //ToDo: Dont use GameData Trainer for Stadium party, it should remain immutable
+					//if (CurrentSelectedRosterPage != null)
+					//{
+					//	//Search for the pokemon in the rental list
+					//	PokemonSelect.TemporaryParty.Push(); //FIXME: Use roster collection that populates the rental list
+					//}
+					//else if (CurrentSelectedRosterPage == 0)
+					//{
+					//	//Search for the pokemon in the party list
+					//	PokemonSelect.TemporaryParty.Push(Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot]);
+					//}
+					//else if (CurrentSelectedRosterPage > 0)
+					//{
+					//	//Search for the pokemon in the trainer's PC storage box
+					//	PokemonSelect.TemporaryParty.Push(Game.GameData.PokemonStorage.boxes[PokemonSelect.CurrentSelectedRosterPage.Value][PokemonSelect.CurrentSelectedPartySlot]);
+					//}
+
+					bool canStart = PokemonSelect.RegisterSelectedPokemon();
 					//PartyViewer[CurrentOnParty].DisplayPartyButton();
 					PartyViewer[PokemonSelect.CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 					PartyViewer[PokemonSelect.CurrentSelectedPartySlot].ActivePokemonDisplay(true);
-					PokemonSelect.CurrentSelectedPartySlot++;
+					//PokemonSelect.CurrentSelectedPartySlot++;
 
 					// ToDo: Fix this code
 					StoreButtonData[PokemonSelect.PokemonPosition.Value].DisableOnClick(true);
 
 					//Ask player if they're done and wish to move on; but in another function...
-					if (Game.GameData.Trainer.party[5].IsNotNullOrNone())
+					if (canStart)
 					{
-						Debug.Log("Disable the UI");
+						Debug.Log("Disable the Player from selecting more pokemons, and prompt if they're ready to move on...");
 						// RentalControlUI.ActiveRentalUI(false);
 					}
 				}

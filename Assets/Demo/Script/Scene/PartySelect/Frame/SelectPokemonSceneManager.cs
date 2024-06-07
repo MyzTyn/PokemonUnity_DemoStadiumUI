@@ -29,13 +29,6 @@ namespace PokemonUnity.Stadium
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
 		private Dictionary<int, SelectPokemonButton> StoreButtonData;
-		/// <summary>
-		/// When pokemons are selected by player from UI, store in this variable
-		/// </summary>
-		/// <remarks>
-		/// First-In, Last-Out; Player can deselect their choice by removing their last choice
-		/// </remarks>
-		private Stack<IPokemon> TemporaryParty;
 		//Sprite
 		public static Sprite[] PkmnType { get; private set; }
 		public static Sprite[] IconSprites { get; private set; }
@@ -73,7 +66,6 @@ namespace PokemonUnity.Stadium
 			////SelectedPokemons = new Dictionary<KeyValuePair<bool, int?>, int>();
 			//Debug.Log("Create LookUp Table for Pokemons Selected by Player");
 			//SelectedPokemons = new HashSet<KeyValuePair<KeyValuePair<bool, int?>, int>>();
-			//
 			Debug.Log("Load Assets for UI into Array");
 			IconSprites = Resources.LoadAll<Sprite>("PokemonIcon");
 			PkmnType = Resources.LoadAll<Sprite>("PokemonType");
@@ -140,16 +132,18 @@ namespace PokemonUnity.Stadium
 				.Values
 				.Where(x => x.ID != Pokemons.NONE &&
 					(int)x.ID <= 1000 &&
-					//x.GenerationId <= (int)Generation.RedBlueYellow)
-					SelectionState.PokemonGens.Contains((Generation)x.GenerationId))
+					//x.ID <= (int)Core.PokemonIndexLimit &&
+					x.GenerationId <= (int)Generation.RedBlueYellow)
+					//SelectionState.PokemonGens.Contains((Generation)x.GenerationId))
 				.Select(y => (int)y.ID))
 			{
 				int? page = SelectionState.CurrentSelectedRosterPage;
-				bool isSelected = SelectionState.SelectedPokemons.Contains(
-					new KeyValuePair<KeyValuePair<bool, int?>, int>(
-						//new KeyValuePair<bool, int?>(true, null), i));
-						new KeyValuePair<bool, int?>(true, page), i));
-
+				bool isSelected = false; //FIXME: Should be a function to check if pokemon is selected, but tracked between scenes
+				//bool isSelected = SelectionState.SelectedPokemons.Contains(
+				//	new KeyValuePair<KeyValuePair<bool, int?>, int>(
+				//		//new KeyValuePair<bool, int?>(true, null), i));
+				//		new KeyValuePair<bool, int?>(true, page), i));
+				isSelected = SelectionState.SelectedPokemonPositions.Contains(new KeyValuePair<int?, int>(page, i));
 				GameObject Button = Instantiate(rosterEntryPrefab);
 				SelectPokemonButton roster = Button.GetComponent<SelectPokemonButton>();
 				roster.PokemonSelect = SelectionState; //Should be duplicated for each player controller on screen

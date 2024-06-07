@@ -9,11 +9,14 @@ namespace PokemonUnity.Stadium
 	public class PokemonViewModal : MonoBehaviour
 	{
 		#region Variables
+		/// <summary>
+		/// </summary>
+		/// FIXME: What is this? What game object is this referring to?
+		[SerializeField] private GameObject MoveSetUIObject;
+		[SerializeField] private ViewPokemonData Data;
 		// ToDo: Fix this; Rename to: IsYesButtonPressed or IsPokemonSelected/Registered
 		[SerializeField] private Toggle yesButton; //Do we need two for a yes/no (true/false) bool?
 		[SerializeField] private Toggle noButton;
-		[SerializeField] private GameObject MoveSetUIObject;
-		[SerializeField] private ViewPokemonData Data;
 		[SerializeField] private int RentalViewCount = 5;
 
 		private IPokemon pokemon;
@@ -36,8 +39,9 @@ namespace PokemonUnity.Stadium
 			yesButton.onValueChanged.AddListener(delegate {
 				Debug.Log("Yes Button Pressed!");
 				// Fix this bad code
-				PokemonSelect.CurrentSelectedPokemon = pokemon.Species;
-				MainCameraGameManager.Instance.AddToParty();
+				//PokemonSelect.CurrentSelectedPokemon = pokemon.Species;
+				//MainCameraGameManager.Instance.AddToParty();
+				PokemonSelect.RegisterSelectedPokemon();
 			});
 			// Close it
 			noButton.onValueChanged.AddListener(noButtonSelected_Event);
@@ -59,24 +63,27 @@ namespace PokemonUnity.Stadium
 		{
 			if (PokemonSelect.IsRentalPokemon)
 			{
+				Pokemons species = Pokemons.NONE;
 				if (MainCameraGameManager.ViewedRentalPokemon.Count == RentalViewCount)
 				{
-					Pokemons species = MainCameraGameManager.ViewedRentalPokemon.Dequeue();
+					species = MainCameraGameManager.ViewedRentalPokemon.Dequeue();
 					if (MainCameraGameManager.StorePokemon.ContainsKey(species))
 						MainCameraGameManager.StorePokemon.Remove(species);
 				}
+				species = pkmn.Species;
+				if (!pkmn.IsNotNullOrNone()) species = PokemonSelect.CurrentSelectedPokemon.Species; //PokemonSelect.Species;
 				//This is interesting game design logic, but not sure if it should go here...
-				if(MainCameraGameManager.ViewedRentalPokemon.Contains(PokemonSelect.Species) &&
-					MainCameraGameManager.StorePokemon.ContainsKey(PokemonSelect.Species))
+				if(MainCameraGameManager.ViewedRentalPokemon.Contains(species) &&
+					MainCameraGameManager.StorePokemon.ContainsKey(species))
 				{
-					pokemon = MainCameraGameManager.StorePokemon[PokemonSelect.Species];
+					pokemon = MainCameraGameManager.StorePokemon[species];
 				}
 				else
 				{
 					if (pokemon.IsNotNullOrNone()) pokemon = pkmn; else //ToDo: if pokemon is not null then we can get rid of below
-					pokemon = new Pokemon(PokemonSelect.Species, PokemonSelect.LevelFixed, isEgg: false);
-					MainCameraGameManager.StorePokemon.Add(PokemonSelect.Species, pokemon);
-					MainCameraGameManager.ViewedRentalPokemon.Enqueue(PokemonSelect.Species);
+					pokemon = new Pokemon(species, PokemonSelect.LevelFixed, isEgg: false);
+					MainCameraGameManager.StorePokemon.Add(species, pokemon);
+					MainCameraGameManager.ViewedRentalPokemon.Enqueue(species);
 				}
 			}
 			RefreshHeaderDisplay();
@@ -90,7 +97,7 @@ namespace PokemonUnity.Stadium
 			//Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonFormsData[pokemon.Species][(pokemon as Pokemon).FormId].Base); //Why are we using Form to lookup data?
 			//Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonData[pokemon.Species].ID); //Refactored above; Why are we performing a lookup in dictionary for pokemon Id?
 			Data.PkmnID.text = "No." + string.Format("{0:000}", (int)pokemon.Species); //All 3 lines perform the same action and refer to the same value
-			Data.Species_Name.text = pokemon.Species.ToString(TextScripts.Name);
+			Data.SpeciesName.text = pokemon.Species.ToString(TextScripts.Name);
 		}
 		public void RefreshStatsDisplay()
 		{
@@ -139,7 +146,7 @@ namespace PokemonUnity.Stadium
 			Data.PkmnName.text = null;
 			Data.Level.text = null;
 			Data.PkmnID.text = null;
-			Data.Species_Name.text = null;
+			Data.SpeciesName.text = null;
 
 			Data.PokemonSprite.sprite = null;
 			Data.Health.text = null;

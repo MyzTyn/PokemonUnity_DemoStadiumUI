@@ -1,4 +1,5 @@
-﻿using PokemonUnity;
+﻿using PokemonEssentials.Interface.PokeBattle;
+using PokemonUnity;
 using PokemonUnity.Monster;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,64 +8,72 @@ namespace PokemonUnity.Stadium
 {
 	public class PokemonViewModal : MonoBehaviour
 	{
-        #region Variables
-        [SerializeField] private GameObject MoveSetUIObject;
+		#region Variables
+		// ToDo: Fix this; Rename to: IsYesButtonPressed or IsPokemonSelected/Registered
+		[SerializeField] private Toggle yesButton; //Do we need two for a yes/no (true/false) bool?
+		[SerializeField] private Toggle noButton;
+		[SerializeField] private GameObject MoveSetUIObject;
 		[SerializeField] private ViewPokemonData Data;
 		[SerializeField] private int RentalViewCount = 5;
 
-		private Pokemon pokemon;
+		private IPokemon pokemon;
 		public PokemonSelect PokemonSelect;
 		/// <summary>
-		/// When you press a pokemon button in scroll window, 
-		/// pass the button into the view modal, 
+		/// When you press a pokemon button in scroll window,
+		/// pass the button into the view modal,
 		/// and assign it as selected if chosen by user
 		/// </summary>
 		public Toggle selectedPokemon;
 		public bool IsWindowActive { get; private set; }
-        #endregion
+		#endregion
 
-        public void Awake()
-        {
+		public void Awake()
+		{
 			// Accept it and add to the party
 			// Bug: At start of the scene this button will pressed if no button pressed after that it is normal
+			// Possible Fix: Start with object disabled, then enable it after the scene is loaded
 			// ToDo: Check the toggle group code.
 			yesButton.onValueChanged.AddListener(delegate {
-                Debug.Log("Yes Button Pressed!");
-                // Fix this bad code
-                PokemonSelect.CurrentSelectedPokemon = pokemon.Species;
-                MainCameraGameManager.Instance.AddToParty();
-            });
-            // Close it
-            noButton.onValueChanged.AddListener(delegate {
-				Debug.Log("No Button Pressed!");
-				CloseDisplayModal(); 
+				Debug.Log("Yes Button Pressed!");
+				// Fix this bad code
+				PokemonSelect.CurrentSelectedPokemon = pokemon.Species;
+				MainCameraGameManager.Instance.AddToParty();
 			});
+			// Close it
+			noButton.onValueChanged.AddListener(noButtonSelected_Event);
+		}
 
-        }
-
-        #region Methods
-        public void ActiveGameobject(bool active)
+		#region Methods
+		public void ActiveGameobject(bool active)
 		{
 			IsWindowActive = active;
 			MoveSetUIObject.SetActive(active);
 		}
-		public void RefreshDisplay()
+
+		/// <summary>
+		/// Refreshes the Pokemon view window that displays the active pokemon's stats and profile.
+		/// </summary>
+		/// <param name="pkmn">Pokemon to be displayed in UI</param>
+		/// ToDo: pokemon should be passed as a parameter for this method, and use the object to assign values to display
+		public void RefreshDisplay(IPokemon pkmn = null) //FIXME: Remove null overload
 		{
 			if (PokemonSelect.IsRentalPokemon)
 			{
 				if (MainCameraGameManager.ViewedRentalPokemon.Count == RentalViewCount)
 				{
-					Pokemons pkmn = MainCameraGameManager.ViewedRentalPokemon.Dequeue();
-					if (MainCameraGameManager.StorePokemon.ContainsKey(pkmn)) 
-						MainCameraGameManager.StorePokemon.Remove(pkmn);
+					Pokemons species = MainCameraGameManager.ViewedRentalPokemon.Dequeue();
+					if (MainCameraGameManager.StorePokemon.ContainsKey(species))
+						MainCameraGameManager.StorePokemon.Remove(species);
 				}
-				if(MainCameraGameManager.ViewedRentalPokemon.Contains(PokemonSelect.Species) && 
+				//This is interesting game design logic, but not sure if it should go here...
+				if(MainCameraGameManager.ViewedRentalPokemon.Contains(PokemonSelect.Species) &&
 					MainCameraGameManager.StorePokemon.ContainsKey(PokemonSelect.Species))
 				{
 					pokemon = MainCameraGameManager.StorePokemon[PokemonSelect.Species];
 				}
 				else
 				{
+					if (pokemon.IsNotNullOrNone()) pokemon = pkmn; else //ToDo: if pokemon is not null then we can get rid of below
 					pokemon = new Pokemon(PokemonSelect.Species, PokemonSelect.LevelFixed, isEgg: false);
 					MainCameraGameManager.StorePokemon.Add(PokemonSelect.Species, pokemon);
 					MainCameraGameManager.ViewedRentalPokemon.Enqueue(PokemonSelect.Species);
@@ -78,7 +87,9 @@ namespace PokemonUnity.Stadium
 		{
 			Data.PkmnName.text = pokemon.Name;
 			Data.Level.text = "L " + pokemon.Level;
-			Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonFormsData[pokemon.Species][pokemon.FormId].Base);
+			//Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonFormsData[pokemon.Species][(pokemon as Pokemon).FormId].Base); //Why are we using Form to lookup data?
+			//Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonData[pokemon.Species].ID); //Refactored above; Why are we performing a lookup in dictionary for pokemon Id?
+			Data.PkmnID.text = "No." + string.Format("{0:000}", (int)pokemon.Species); //All 3 lines perform the same action and refer to the same value
 			Data.Species_Name.text = pokemon.Species.ToString(TextScripts.Name);
 		}
 		public void RefreshStatsDisplay()
@@ -89,11 +100,11 @@ namespace PokemonUnity.Stadium
 			Data.Defense.text		= pokemon.DEF.ToString();
 			Data.Speed.text			= pokemon.SPE.ToString();
 			Data.SpecialAtk.text	= pokemon.SPA.ToString();
-            // ToDo: Use Null handing?
-            // Data.SpecialDef.text	= pokemon.SPD.ToString();
+			// Use Null handing? No, just dont display (leave unity inspector toggle to determine if used)
+			Data.SpecialDef.text	= pokemon.SPD.ToString();
 
-            Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
-            if (pokemon.Type2 == PokemonUnity.Types.NONE)
+			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
+			if (pokemon.Type2 == PokemonUnity.Types.NONE)
 			{
 				Data.Type2.sprite = null;
 				Data.Type2.color = UnityEngine.Color.clear;
@@ -122,6 +133,7 @@ namespace PokemonUnity.Stadium
 			Data.MoveType3.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[2].Type.ToString());
 			Data.MoveType4.text = ViewPokemonData.ReturnMoveFirstLetter(pokemon.moves[3].Type.ToString());
 		}
+
 		public void ClearDisplay()
 		{
 			Data.PkmnName.text = null;
@@ -135,8 +147,7 @@ namespace PokemonUnity.Stadium
 			Data.Defense.text = null;
 			Data.Speed.text = null;
 			Data.SpecialAtk.text = null;
-			// ToDo: Fix this
-			//Data.SpecialDef.text = null;
+			Data.SpecialDef.text = null; //Logic can remain even if item isnt displayed
 			Data.Type1.sprite = null;
 			Data.Type2.sprite = null;
 
@@ -153,16 +164,36 @@ namespace PokemonUnity.Stadium
 			Data.MoveType3.text = null;
 			Data.MoveType4.text = null;
 		}
+
 		public void CloseDisplayModal()
 		{
 			ClearDisplay();
 			ActiveGameobject(false);
 			IsWindowActive = false;
 		}
-		#endregion
 
-		// ToDo: Fix this
-		[SerializeField] private Toggle yesButton;
-		[SerializeField] private Toggle noButton;
+		/// <summary>
+		/// When the no button is pressed, close the modal
+		/// </summary>
+		/// <param name="arg0"></param>
+		private void noButtonSelected_Event(bool arg0)
+		{
+			Debug.Log("No Button Pressed!");
+			CloseDisplayModal();
+		}
+
+		/// <summary>
+		/// When a toggle button is pressed, close the modal
+		/// </summary>
+		/// <param name="arg0"></param>
+		private void ToggleButtonSelected_Event(bool arg0)
+		{
+			if (arg0 == true)
+				Debug.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [YES]!");
+			else
+				Debug.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [NO]!");
+			CloseDisplayModal();
+		}
+		#endregion
 	}
 }

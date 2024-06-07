@@ -7,12 +7,13 @@ using PokemonUnity.Character;
 using PokemonUnity.Monster;
 using UnityEngine;
 using UnityEngine.UI;
+using PokemonEssentials.Interface.PokeBattle;
 
 namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// </summary>
-	/// 
+	///
 	//[ExecuteInEditMode]
 	public class MainCameraGameManager : MonoBehaviour
 	{
@@ -32,28 +33,30 @@ namespace PokemonUnity.Stadium
 		public PokemonViewModal pokemonViewModal;
 		public TrainerPartyPanel partyPanel;
 		//[SerializeField] private PokemonViewModal pokemonViewModal;
+		[SerializeField] private SelectPokemonButton pokemonButton;
+		[SerializeField] private Transform pokemonListPanel;
 		[SerializeField] private GameObject pageTabPrefab;
 		[SerializeField] private GameObject rosterEntryPrefab;
 		[SerializeField] private GameObject partyEntryPrefab;
 		[SerializeField] private Transform rosterGridContent;
 		[SerializeField] private Transform tabGridContent;
 		[SerializeField] private ToggleGroup toggleGroup;
-	
+
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
 		private Dictionary<int, SelectPokemonButton> StoreButtonData;
 		//Sprite
 		public static UnityEngine.Sprite[] PkmnType { get; private set; }
 		public static UnityEngine.Sprite[] IconSprites { get; private set; }
-		public static Dictionary<Pokemons, Pokemon> StorePokemon { get; private set; }
+		public static Dictionary<Pokemons, IPokemon> StorePokemon { get; private set; } //FIXME: Why is this a key-value dictionary? Why not a hashset of pokemons to prevent duplicates? What is the Key for?
 		//ToDo: Move this to ScriptableObject?...
 		public static HashSet<KeyValuePair<KeyValuePair<bool,int?>, int>> SelectedPokemons { get; private set; }
 		public static Queue<Pokemons> ViewedRentalPokemon { get; private set; }
 		//public static int PkmnSelected { get; private set; }
 		//public Toggle Toggle { get { return toggleGroup.ActiveToggles().FirstOrDefault(); } }
-		//public int CurrentOnParty 
-		//{ 
-		//	get 
+		//public int CurrentOnParty
+		//{
+		//	get
 		//	{
 		//		//return Game.GameData.Trainer.party.
 		//		//TrainerPokemonButton party = PartyViewer
@@ -62,7 +65,7 @@ namespace PokemonUnity.Stadium
 		//		//	//.Select(x => x.partyIndex);
 		//		//return party != null ? party.partyIndex : 0;
 		//		return PokemonSelect.CurrentSelectedPartySlot;
-		//	} 
+		//	}
 		//}
 		#endregion
 
@@ -70,14 +73,14 @@ namespace PokemonUnity.Stadium
 		void Awake()
 		{
 			if (Instance == null)
-                Instance = this;
+				Instance = this;
 
-            Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
+			Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
 			toggleGroup = GetComponent<ToggleGroup>();
 			Debug.Log("Create Dictionary for Player Party UI Mono");
 			PartyViewer = new Dictionary<int, TrainerPokemonButton>();
 			Debug.Log("Create Dictionary for Temp Instantiated Pokemon Objects");
-			StorePokemon = new Dictionary<Pokemons, Pokemon>();
+			StorePokemon = new Dictionary<Pokemons, IPokemon>();
 			Debug.Log("Create Dictionary for Roster Entry UI Mono");
 			StoreButtonData = new Dictionary<int, SelectPokemonButton>();
 			Debug.Log("Create Dictionary for Temp Viewed Pokemons");
@@ -136,11 +139,11 @@ namespace PokemonUnity.Stadium
 						}
 						catch (Exception) { Debug.LogError("there were some problems running sql..."); } //ignore...
 					}
-					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
+					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}",
 						(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
 					if (Kernal.PokemonData.Count == 0)
 						Debug.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
-					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}", 
+					Debug.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}",
 						(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
 				}
 			}
@@ -158,9 +161,9 @@ namespace PokemonUnity.Stadium
 			// ToDo: Fix this
 			if (Game.GameData.Trainer == null)
 			{
-                Game.GameData.Trainer = new Trainer("Player", TrainerTypes.PLAYER);
+				Game.GameData.Trainer = new Trainer("Player", TrainerTypes.PLAYER);
 
-            }
+			}
 			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 
 			// Pass the variables To Do: Fix this
@@ -186,11 +189,11 @@ namespace PokemonUnity.Stadium
 			DisplayRentalPokemons();
 
 			// ToDo: Fix this
-            for (int i = 0; i < partyPanel.party.Count(); i++)
-            {
-                PartyViewer.Add(i, partyPanel.party[i]);
-            }
-        }
+			for (int i = 0; i < partyPanel.party.Count(); i++)
+			{
+				PartyViewer.Add(i, partyPanel.party[i]);
+			}
+		}
 		void OnDestroy()
 		{
 			try
@@ -241,8 +244,8 @@ namespace PokemonUnity.Stadium
 				{
 					//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(true);
 					Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = StorePokemon[PokemonSelect.Species];
-                    //PartyViewer[CurrentOnParty].DisplayPartyButton();
-                    PartyViewer[PokemonSelect.CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+					//PartyViewer[CurrentOnParty].DisplayPartyButton();
+					PartyViewer[PokemonSelect.CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 					PartyViewer[PokemonSelect.CurrentSelectedPartySlot].ActivePokemonDisplay(true);
 					PokemonSelect.CurrentSelectedPartySlot++;
 
@@ -256,7 +259,7 @@ namespace PokemonUnity.Stadium
 						// RentalControlUI.ActiveRentalUI(false);
 					}
 				}
-				
+
 				pokemonViewModal.CloseDisplayModal();
 			}
 		}
@@ -302,15 +305,15 @@ namespace PokemonUnity.Stadium
 			int? page = PokemonSelect.CurrentSelectedRosterPage;
 			//foreach (int id in ID)
 			//for (int id = 1; id <= 151; id++)
-			foreach (Generation gen in new Generation[] { 
-				Generation.RedBlueYellow, Generation.GoldSilverCrystal, Generation.RubySapphireEmerald, 
+			foreach (Generation gen in new Generation[] {
+				Generation.RedBlueYellow, Generation.GoldSilverCrystal, Generation.RubySapphireEmerald,
 				Generation.DiamondPearlPlatinum, Generation.BlackWhite, Generation.XY, Generation.SunMoon })
 			{
 				bool isSelected = page.HasValue && page.Value == (int)gen;
 
 				GameObject Button = Instantiate(pageTabPrefab);
 				//SelectPokemonButton roster = Button.GetComponent<SelectPokemonButton>();
-				//roster.PokemonSelect = PokemonSelect; 
+				//roster.PokemonSelect = PokemonSelect;
 				//StoreButtonData.Add(id, roster);
 				//roster.SetID(i,(Pokemons)id,page:page,selected:isSelected); i++;
 				Button.SetActive(true);
@@ -331,7 +334,7 @@ namespace PokemonUnity.Stadium
 					//StoreButtonData[item.partyIndex].DisableOnClick(true);
 					PartyViewer[item.partyIndex].ActivePokemonDisplay(true);
 				}
-				else 
+				else
 				{
 					//Game.GameData.Trainer.party[item.partyIndex] = new Pokemon((Pokemons)PkmnSelected, LevelFixed, false);
 					PartyViewer[item.partyIndex].ActivePokemonDisplay(false);
@@ -342,9 +345,6 @@ namespace PokemonUnity.Stadium
 		}
 		#endregion
 
-		[SerializeField] private SelectPokemonButton pokemonButton;
-		[SerializeField] private Transform pokemonListPanel;
-
 		private void DisplayRentalPokemons()
 		{
 			Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
@@ -352,11 +352,11 @@ namespace PokemonUnity.Stadium
 			{
 				Debug.Log("Creating 151 Pokemons");
 
-                for (int i = 0; i < 151; i++)
+				for (int i = 0; i < 151; i++)
 				{
 					SelectPokemonButton item = Instantiate(pokemonButton, pokemonListPanel);
 					item.gameObject.SetActive(true);
-					item.SetID(i, (Pokemons)(i + 1));
+					item.SetID(pokemonViewModal, PokemonSelect, i, (Pokemons)(i + 1));
 					item.PokemonSelect = PokemonSelect;
 					item.name = $"ID {i}";
 					StoreButtonData.Add(i, item);

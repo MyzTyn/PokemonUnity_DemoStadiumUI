@@ -156,7 +156,7 @@ namespace PokemonUnity.Stadium
 				//RentalData(id, roster);
 				StoreButtonData.Add(id, roster);
 				//Button.GetComponent<SelectPokemonButton>().SetID(id);
-				roster.SetID(i,(Pokemons)id,page:page,selected:isSelected); i++;
+				roster.SetID(SelectedPokemonViewModal,SelectionState,i,(Pokemons)id,page:page,selected:isSelected); i++;
 				Button.SetActive(true);
 				Button.transform.SetParent(rosterGridContent, false);
 			} Debug.Log("Highest Species Counted: " + i);

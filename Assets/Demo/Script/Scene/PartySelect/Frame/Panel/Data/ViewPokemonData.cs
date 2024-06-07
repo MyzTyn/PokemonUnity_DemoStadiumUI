@@ -5,13 +5,13 @@ namespace PokemonUnity.Stadium
 {
 	public class ViewPokemonData : MonoBehaviour
 	{
-		//ID
+		[Header("ID")]
 		public Text PkmnName;
 		public Text Level;
 		public Text PkmnID;
 		public Text Species_Name;
 		[Space(5)]
-		//PkmnInfo
+		[Header("Pokemon Stats")]
 		public Image PokemonSprite;
 		public Text Health;
 		public Text Attack;
@@ -21,8 +21,8 @@ namespace PokemonUnity.Stadium
 		public Text SpecialDef;
 		public Image Type1;
 		public Image Type2;
-		//Move Set
 		[Space(5)]
+		[Header("Move Set")]
 		public Text MoveName1;
 		public Image MoveColor1;
 		public Text MoveName2;
@@ -32,6 +32,7 @@ namespace PokemonUnity.Stadium
 		public Text MoveName4;
 		public Image MoveColor4;
 		[Space(5)]
+		[Header("Move Type")]
 		public Text MoveType1;
 		public Text MoveType2;
 		public Text MoveType3;
@@ -85,6 +86,7 @@ namespace PokemonUnity.Stadium
 					return Color.clear;
 			}
 		}
+
 		public static string ReturnMoveName(PokemonUnity.Moves move)
 		{
 			if (move == PokemonUnity.Moves.NONE)
@@ -96,6 +98,12 @@ namespace PokemonUnity.Stadium
 				return move.ToString().Replace("_", " ");
 			}
 		}
+
+		/// <summary>
+		/// Abbreviates the type name to short-hand letters (typically 1 or 2 letters)
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
 		public static string ReturnTypeLetter(PokemonUnity.Types type)
 		{
 			switch (type)
@@ -141,8 +149,18 @@ namespace PokemonUnity.Stadium
 				case PokemonUnity.Types.SHADOW:
 				default:
 					return string.Empty;
-			}		
+			}
 		}
+
+		/// <summary>
+		/// </summary>
+		/// <remarks>
+		/// <see cref="ReturnTypeLetter(PokemonUnity.Types)"/>
+		/// </remarks>
+		/// <param name="s"></param>
+		/// <returns>Returns the First Letter of string</returns>
+		/// ToDo: Rename to ReturnMoveTypeLetter or ReturnFirstLetter...
+		[System.Obsolete("Use `ReturnTypeLetter` instead")]
 		public static string ReturnMoveFirstLetter(string s)
 		{
 			if (s == "NONE")

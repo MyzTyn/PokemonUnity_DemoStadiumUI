@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using PokemonEssentials.Interface.PokeBattle;
 using PokemonUnity;
 using PokemonUnity.Monster;
 using UnityEngine;
@@ -11,44 +12,93 @@ namespace PokemonUnity.Stadium
 	[ExecuteInEditMode]
 	public class SelectPokemonButton : MonoBehaviour
 	{
-		[SerializeField] private Pokemons Species;
+		//[SerializeField] private MainCameraGameManager demo;
+		//[SerializeField] private Button button;
+		[SerializeField] private IPokemon pokemon;
 		[SerializeField] private Image myIcon;
 		[SerializeField] private Text Name;
-		[SerializeField] private Text L;
-		//[SerializeField] private Button button;
-		//[SerializeField] private MainCameraGameManager demo;
+		[SerializeField] private Text Level;
 		public bool IsRental;
 		public bool IsDisabled;
 		public bool IsSelected;
 		//public Pokemon Pokemon;
 		public PokemonSelect PokemonSelect;
 		public KeyValuePair<int?,int> Position;
+		private PokemonViewModal PokemonViewModal;
 		//public int ID { get; private set; }
+
+		#region Unity Monobehavior
+		private void Awake()
+		{
+			GetComponent<Toggle>().onValueChanged.AddListener(Scene_onButtonSelected);
+		}
+		private void Start()
+		{
+			Refresh();
+		}
+		#endregion
+
+		#region Methods
 		//public void SetID(int id)
 		//{
 		//	ID = id;
 		//}
-		public void SetID(int id, Pokemons species, bool isRental = true, int? page = null, bool selected = false, string name = null)
+
+		/// <summary>
+		/// Generate random pokemon in display matching Species
+		/// </summary>
+		/// <param name="pokemonViewModal"></param>
+		/// <param name="pokemonSelect"></param>
+		/// <param name="id"></param>
+		/// <param name="pkmn"></param>
+		/// <param name="isRental"></param>
+		/// <param name="page"></param>
+		/// <param name="selected"></param>
+		/// <param name="name"></param>
+		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, Pokemons species, bool isRental = true, int? page = null, bool selected = false, string name = null)
 		{
+			//ToDo: Use battle rules to determine the constraints of the pokemon
+			IPokemon pokemon = new Pokemon(species);
+			SetID(pokemonViewModal, pokemonSelect, id, pokemon, isRental, page, selected, name);
+		}
+
+		/// <summary>
+		/// Load pokemon in display with given profile
+		/// </summary>
+		/// <param name="pokemonViewModal"></param>
+		/// <param name="pokemonSelect"></param>
+		/// <param name="id"></param>
+		/// <param name="pkmn"></param>
+		/// <param name="isRental"></param>
+		/// <param name="page"></param>
+		/// <param name="selected"></param>
+		/// <param name="name"></param>
+		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, IPokemon pkmn, bool isRental = true, int? page = null, bool selected = false, string name = null)
+		{
+			PokemonViewModal = pokemonViewModal;
+			PokemonSelect = pokemonSelect;
 			Position = new KeyValuePair<int?, int>(page, id);
 			IsRental = isRental;
 			IsSelected = selected;
-			Species = species;
+			//Species = species;
+			pokemon = pkmn;
 			Name.text = name;
 		}
+
 		public void DisableOnClick(bool active)
 		{
 			if (active)
 			{
-				Debug.Log($"Disabled the {Species} button");
-                GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
+				Debug.Log($"Disabled the button for [{pokemon.Name}] in position [{Position.Key},{Position.Value}]");
+				GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
 			}
 			else
 			{
-                GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
-                GetComponent<Toggle>().onValueChanged.AddListener(delegate { Scene_onButtonSelected(); });
-            }
+				GetComponent<Toggle>().onValueChanged.RemoveAllListeners();
+				GetComponent<Toggle>().onValueChanged.AddListener(Scene_onButtonSelected);
+			}
 		}
+
 		//public void PokemonStatsandMoveUI(int Pkmn_ID)
 		//{
 		//	PkmnSelected = Pkmn_ID;
@@ -65,41 +115,19 @@ namespace PokemonUnity.Stadium
 		//		DisplayMoveSetUI();
 		//	}
 		//}
-		public void Scene_onButtonSelected()
-		{
-			Debug.Log("Pressed! " + Species);
-			PokemonSelect.Species = Species;
-			PokemonSelect.PokemonPosition = Position;
-			PokemonSelect.IsRentalPokemon = IsRental;
-			PokemonSelect.EditPokemon = true;
-			// ToDo: Avoid this hack
-			MainCameraGameManager.Instance.pokemonViewModal.ActiveGameobject(true);
-			MainCameraGameManager.Instance.pokemonViewModal.RefreshDisplay();
-
-			//GameEvents.current.OnLoadLevel(1); //Change scene...
-		}
-        private void Awake()
-		{
-			GetComponent<Toggle>().onValueChanged.AddListener(delegate { Scene_onButtonSelected(); });
-			//new WaitForSeconds(1);
-		}
-        private void Start()
-		{
-			Refresh();
-		}
 
 		public void Refresh()
 		{
-            if (MainCameraGameManager.IconSprites.Length > (int)Species)
-            {
-                myIcon.sprite = MainCameraGameManager.IconSprites[(int)Species];
-            }
-            else
-            {
-                Debug.LogError($"Index #{(int)Species}:{Species} was outside the bounds of the array.");
-            }
+			if (MainCameraGameManager.IconSprites.Length > (int)pokemon.Species)
+			{
+				myIcon.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
+			}
+			else
+			{
+				Debug.LogError($"Pokemon [{pokemon.Name}] Index #{(int)pokemon.Species}:{pokemon.Species} was outside the bounds of the array.");
+			}
 
-            if (IsRental)
+			if (IsRental)
 			{
 				if(MainCameraGameManager.SelectedPokemons.Contains(new KeyValuePair<KeyValuePair<bool, int?>, int>(new KeyValuePair<bool, int?>(IsRental, Position.Key), Position.Value)))
 				{
@@ -109,8 +137,8 @@ namespace PokemonUnity.Stadium
 				else
 				{
 					//Create new entry display for pokemon
-					L.text = "L" + PokemonSelect.LevelFixed;
-					Name.text = Species.ToString(TextScripts.Name);
+					Level.text = "L" + PokemonSelect.LevelFixed;
+					Name.text = pokemon.Name;
 				}
 			}
 			else
@@ -118,5 +146,24 @@ namespace PokemonUnity.Stadium
 				//Load data from player saved games and use as pokemons to select from
 			}
 		}
+
+		/// <summary>
+		/// When pokemon has been registered to player's active pokemon party
+		/// </summary>
+		/// <param name="arg">if pokemon is queued for battle</param>
+		public void Scene_onButtonSelected(bool arg)
+		{
+			IsSelected = arg;
+			Debug.Log($"Pokemon [{pokemon.Name}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
+			PokemonSelect.Species = pokemon.Species;
+			PokemonSelect.PokemonPosition = Position;
+			PokemonSelect.IsRentalPokemon = IsRental;
+			PokemonSelect.EditPokemon = true;
+			PokemonViewModal.ActiveGameobject(true);
+			PokemonViewModal.RefreshDisplay();
+
+			//GameEvents.current.OnLoadLevel(1); //Change scene...
+		}
+		#endregion
 	}
 }

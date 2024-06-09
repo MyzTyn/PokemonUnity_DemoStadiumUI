@@ -261,7 +261,7 @@ namespace PokemonUnity.Stadium
 			//IColor base_ = PokeBattle_SceneConstants.BOXTEXTBASECOLOR;
 			//IColor shadow = PokeBattle_SceneConstants.BOXTEXTSHADOWCOLOR;
 			string pokename = @battler.Name;
-			//pbSetSystemFont(this.bitmap);
+			//SetSystemFont(this.bitmap);
 			//IList<ITextPosition> textpos = new List<ITextPosition>() {
 			//	new TextPosition (pokename,@spritebaseX+8,6,false,base_,shadow)
 			//};
@@ -295,8 +295,8 @@ namespace PokemonUnity.Stadium
 				//gender.gameObject.SetActive(false);
 				gender.text = string.Empty;
 			}
-			//pbDrawTextPositions(this.bitmap,textpos);
-			//pbSetSmallFont(this.bitmap);
+			//DrawTextPositions(this.bitmap,textpos);
+			//SetSmallFont(this.bitmap);
 			//textpos = new List<ITextPosition>() {
 			//	new TextPosition (Game._INTL("Lv{1}",@battler.Level),@spritebaseX+202,8,true,base_,shadow)
 			//};
@@ -311,7 +311,7 @@ namespace PokemonUnity.Stadium
 				currentHP.text	= @battler.TotalHP.ToString();	//sliderHP.value.ToString();	//Set text under hp to match slider currentHealth
 				//HPValue.SetText($"{this.HP}/{@battler.TotalHP}"); //($"{sliderHP.value}/{sliderHP.maxValue}");
 			}
-			//pbDrawTextPositions(this.bitmap,textpos);
+			//DrawTextPositions(this.bitmap,textpos);
 			//IList<ITextPosition> imagepos = new List<ITextPosition>();
 			//ToDo: Uncomment below if UI is setup for generation features/gimmick
 			//if (@battler.IsShiny)
@@ -352,7 +352,7 @@ namespace PokemonUnity.Stadium
 					spriteCaught?.gameObject.SetActive(true); //gameObject.transform.Find("Caught").gameObject.SetActive(true);
 				}
 			}
-			//pbDrawImagePositions(this.bitmap,imagepos);
+			//DrawImagePositions(this.bitmap,imagepos);
 			//switch (@battler.Status)
 			//{
 			//	case PokemonUnity.Status.SLEEP:
@@ -490,7 +490,7 @@ namespace PokemonUnity.Stadium
 					{
 						if (@expflash == 0)
 						{
-							//(AudioHandler as IGameAudioPlay).pbSEPlay("expfull");
+							//(AudioHandler as IGameAudioPlay).SEPlay("expfull");
 							this.flash(spriteFillExp, new SeriColor(64, 200, 248), 8); //this.flash(new SeriColor(64, 200, 248), 8);
 							//spriteFillExp.color = new Color(64, 200, 248);
 							@expflash = 8;
@@ -685,13 +685,13 @@ namespace PokemonUnity.Stadium
 			
 			//this.bitmap.clear();
 			//this.bitmap.blt(0, 0, @databox.bitmap, new Rect(0, 0, @databox.width, @databox.height));
-			//pbSetSystemFont(this.bitmap);
+			//SetSystemFont(this.bitmap);
 			IList<ITextPosition> textpos = new List<ITextPosition>();
 			IColor base_ = PokeBattle_SceneConstants.BOXTEXTBASECOLOR;
 			IColor shadow = PokeBattle_SceneConstants.BOXTEXTSHADOWCOLOR;
 			textpos.Add(new TextPosition(Game._INTL("Safari Balls"), 30, 8, false, base_, shadow));
 			textpos.Add(new TextPosition(Game._INTL("Left: {1}", (@battle as ISafariZone_Scene).ballCount), 30, 38, false, base_, shadow));
-			//pbDrawTextPositions(this.bitmap, textpos);
+			//DrawTextPositions(this.bitmap, textpos);
 		}
 				
 		public override void update()

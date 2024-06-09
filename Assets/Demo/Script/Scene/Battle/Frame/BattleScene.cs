@@ -3,13 +3,14 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using PokemonUnity;
-using PokemonUnity.UX;
+using PokemonUnity.Attack;
 using PokemonUnity.Attack.Data;
 using PokemonUnity.Combat;
 using PokemonUnity.Inventory;
+using PokemonUnity.Interface;
+using PokemonUnity.Stadium;
 using PokemonUnity.Monster;
 using PokemonUnity.Overworld;
-using PokemonUnity.Stadium;
 using PokemonUnity.Utility;
 using PokemonEssentials;
 using PokemonEssentials.Interface;
@@ -22,7 +23,7 @@ using PokemonEssentials.Interface.PokeBattle.Effects;
 
 namespace PokemonUnity.Stadium
 {
-	public partial class BattleScene : UnityEngine.MonoBehaviour, IPokeBattle_SceneIE//, IScene
+	public partial class BattleScene : global::UnityEngine.MonoBehaviour, IPokeBattle_SceneIE//, IScene
 	{
 		#region Variable Property
 		const int BLANK = 0;
@@ -128,7 +129,7 @@ namespace PokemonUnity.Stadium
 		private float foeyoffset;
 		private float traineryoffset;
 		#endregion
-		#region Unity's MonoBehavior Variables	
+		#region Unity's MonoBehavior Variables
 		/*#region Pokemon HUD
 		public UnityEngine.GameObject _fadeanim;
 		public UnityEngine.GameObject _sendout;
@@ -222,7 +223,7 @@ namespace PokemonUnity.Stadium
 
 		private void Start()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			GameDebug.Log("######################################");
 			GameDebug.Log("# Hello - Welcome to Unity Battle! #");
 			GameDebug.Log("######################################");
@@ -265,12 +266,12 @@ namespace PokemonUnity.Stadium
 
 			battle.weather = PokemonUnity.Combat.Weather.SUNNYDAY;
 
-			battle.pbStartBattle(true);
+			battle.StartBattle(true);
 		}
 
 		public IPokeBattle_SceneIE initialize()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			battle = null;
 			lastcmd = new MenuCommands[] { 0, 0, 0, 0 };
@@ -314,38 +315,38 @@ namespace PokemonUnity.Stadium
 
 		IPokeBattle_Scene IPokeBattle_Scene.initialize()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-				
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			return (IPokeBattle_Scene)initialize();
 		}
 
-		public void pbUpdate()
+		public void Update()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			partyAnimationUpdate();
-			//if (sprites["battlebg"] is GameObject g) g.pbUpdate();
+			//if (sprites["battlebg"] is GameObject g) g.Update();
 		}
 
-		public void pbGraphicsUpdate()
+		public void GraphicsUpdate()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			partyAnimationUpdate();
-			//if (sprites["battlebg"] is GameObject g) g.pbUpdate();
+			//if (sprites["battlebg"] is GameObject g) g.Update();
 			//(Game.GameData as Game).Graphics.Update();
 		}
 
-		public void pbInputUpdate()
+		public void InputUpdate()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			PokemonUnity.Input.update();
 			//ToDo: Use GameFramework Input manager instead of Unity
-			if (UnityEngine.Input.GetButtonDown("Select") && abortable && !aborted)
+			if (global::UnityEngine.Input.GetButtonDown("Select") && abortable && !aborted)
 			{
 				aborted = true;
-				battle.pbAbort();
+				battle.Abort();
 			}
 		}
 
@@ -353,9 +354,9 @@ namespace PokemonUnity.Stadium
 		/// Sets the UI component to visible, in scene
 		/// </summary>
 		/// <param name="windowtype"></param>
-		public void pbShowWindow(int windowtype)
+		public void ShowWindow(int windowtype)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//ToDo: Uncomment below after debugging...
 			//@sprites["messagebox"].visible = (windowtype == MESSAGEBOX ||
@@ -367,9 +368,9 @@ namespace PokemonUnity.Stadium
 			(@sprites["fightwindow"] as IFightMenuDisplay).visible = (windowtype == FIGHTBOX);
 		}
 
-		public void pbSetMessageMode(bool mode)
+		public void SetMessageMode(bool mode)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			@messagemode = mode;
 			IWindow_AdvancedTextPokemon msgwindow = @sprites["messagewindow"] as IWindow_AdvancedTextPokemon;
@@ -382,9 +383,9 @@ namespace PokemonUnity.Stadium
 				msgwindow.width = (Game.GameData as Game).Graphics.width;
 				msgwindow.height = 96;
 				msgwindow.y = (Game.GameData as Game).Graphics.height - msgwindow.height + 2;
-		
+
 			}
-			else 
+			else
 			{
 				msgwindow.baseColor = PokeBattle_SceneConstants.MESSAGEBASECOLOR;
 				msgwindow.shadowColor = PokeBattle_SceneConstants.MESSAGESHADOWCOLOR;
@@ -396,21 +397,21 @@ namespace PokemonUnity.Stadium
 			}*/
 		}
 
-		public IEnumerator pbWaitMessage()
+		public IEnumerator WaitMessage()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (@briefmessage)
 			{
-				pbShowWindow(MESSAGEBOX);
+				ShowWindow(MESSAGEBOX);
 				//IWindow_AdvancedTextPokemon cw = @sprites["messagewindow"].GetComponent<IWindow_AdvancedTextPokemon>();
 				IWindow_AdvancedTextPokemon cw = @sprites["messagewindow"] as IWindow_AdvancedTextPokemon;
 				int i = 0;
 				do
 				{
-					pbGraphicsUpdate();
-					pbInputUpdate();
-					pbFrameUpdate(cw as IGameObject);
+					GraphicsUpdate();
+					InputUpdate();
+					FrameUpdate(cw as IGameObject);
 					i++;
 					yield return null;
 				} while (i < 60);
@@ -420,48 +421,48 @@ namespace PokemonUnity.Stadium
 			}
 		}
 
-		void IPokeBattle_Scene.pbWaitMessage() { }
+		void IPokeBattle_Scene.WaitMessage() { }
 
-		public IEnumerator pbDisplay(string msg, bool brief)
+		public IEnumerator Display(string msg, bool brief)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			return pbDisplayMessage(msg, brief);
+			return DisplayMessage(msg, brief);
 		}
 
-		void IPokeBattle_Scene.pbDisplay(string msg, bool brief)
+		void IPokeBattle_Scene.Display(string msg, bool brief)
 		{
 		}
 
-		public IEnumerator pbDisplay(string v)
+		public IEnumerator Display(string v)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			return pbDisplay(v, false);
+			return Display(v, false);
 		}
 
-		void IHasDisplayMessage.pbDisplay(string v)
+		void IHasDisplayMessage.Display(string v)
 		{
-			pbDisplay(v);
+			Display(v);
 		}
 
-		public IEnumerator pbDisplayMessage(string msg, bool brief)
+		public IEnumerator DisplayMessage(string msg, bool brief)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			GameDebug.Log("Display Message: \"{0}\"", msg);
-			/*pbWaitMessage();
-			pbRefresh();
-			pbShowWindow(MESSAGEBOX);
+			GameDebug.Log(message: "Display Message: \"{0}\"", msg);
+			/*WaitMessage();
+			Refresh();
+			ShowWindow(MESSAGEBOX);
 			IWindow_AdvancedTextPokemon cw = @sprites["messagewindow"] as IWindow_AdvancedTextPokemon;
 			cw.text = msg;
 			int i = 0;
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //begin coroutine
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(cw);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(cw);
 				if (i == 40)
 				{
 					//end dialog window, after 40 ticks.
@@ -476,7 +477,7 @@ namespace PokemonUnity.Stadium
 				{
 					if (cw.pause)
 					{
-						if (!abortable) (AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						if (!abortable) (AudioHandler as IGameAudioPlay).PlayDecisionSE();
 						cw.resume();
 					}
 				}
@@ -493,22 +494,22 @@ namespace PokemonUnity.Stadium
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbDisplayMessage(string msg, bool brief)
+		void IPokeBattle_DebugSceneNoGraphics.DisplayMessage(string msg, bool brief)
 		{
-			pbDisplayMessage(msg, brief);
+			DisplayMessage(msg, brief);
 		}
 
-		public IEnumerator pbDisplayPausedMessage(string msg)
+		public IEnumerator DisplayPausedMessage(string msg)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			GameDebug.Log("Display Message: \"{0}\"", msg);
-			/*pbWaitMessage();
-			pbRefresh();
-			pbShowWindow(MESSAGEBOX);
+			GameDebug.Log(message: "Display Message: \"{0}\"", msg);
+			/*WaitMessage();
+			Refresh();
+			ShowWindow(MESSAGEBOX);
 			if (@messagemode)
 			{
-				@switchscreen.pbDisplay(msg);
+				@switchscreen.Display(msg);
 				return;
 			}
 			IWindow_AdvancedTextPokemon cw = @sprites["messagewindow"] as IWindow_AdvancedTextPokemon;
@@ -516,20 +517,20 @@ namespace PokemonUnity.Stadium
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(cw);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(cw);
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.B) || @abortable)
 				{
 					if (cw.busy)
 					{
-						if (cw.pausing && !@abortable) (AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						if (cw.pausing && !@abortable) (AudioHandler as IGameAudioPlay).PlayDecisionSE();
 						cw.resume();
 					}
 					else if (!inPartyAnimation)
 					{
 						cw.text = "";
-						(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 						if (@messagemode) cw.visible = false;
 						return;
 					}
@@ -539,51 +540,51 @@ namespace PokemonUnity.Stadium
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbDisplayPausedMessage(string msg)
+		void IPokeBattle_DebugSceneNoGraphics.DisplayPausedMessage(string msg)
 		{
-			pbDisplayPausedMessage(msg);
+			DisplayPausedMessage(msg);
 		}
 
-		public IEnumerator pbDisplayConfirmMessage(string msg, System.Action<bool> result)
+		public IEnumerator DisplayConfirmMessage(string msg, System.Action<bool> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int value = 0;
-			yield return pbShowCommands(msg, new string[] { Game._INTL("Yes"), Game._INTL("No") }, 1, result: r => value = r);
+			yield return ShowCommands(msg, new string[] { Game._INTL("Yes"), Game._INTL("No") }, 1, result: r => value = r);
 			result?.Invoke(value == 0);
-			//yield return pbShowCommands(msg, new string[] { Game._INTL("Yes"), Game._INTL("No") }, 1) == 0;
+			//yield return ShowCommands(msg, new string[] { Game._INTL("Yes"), Game._INTL("No") }, 1) == 0;
 		}
 
-		bool IPokeBattle_DebugSceneNoGraphics.pbDisplayConfirmMessage(string msg)
+		bool IPokeBattle_DebugSceneNoGraphics.DisplayConfirmMessage(string msg)
 		{
 			bool r = false;
-			pbDisplayConfirmMessage(msg, result: value => r = value);
+			DisplayConfirmMessage(msg, result: value => r = value);
 			return r;
 		}
 
-		IEnumerator IHasDisplayMessageIE.pbDisplayConfirm(string v, Action<bool> result)
+		IEnumerator IHasDisplayMessageIE.DisplayConfirm(string v, Action<bool> result)
 		{
-			yield return pbDisplayConfirmMessage(v, result);
+			yield return DisplayConfirmMessage(v, result);
 		}
 
-		bool IPokeBattle_DebugSceneNoGraphics.pbShowCommands(string msg, string[] commands, bool defaultValue)
+		bool IPokeBattle_DebugSceneNoGraphics.ShowCommands(string msg, string[] commands, bool defaultValue)
 		{
 			throw new NotImplementedException();
 		}
 
-		int IPokeBattle_DebugSceneNoGraphics.pbShowCommands(string msg, string[] commands, int defaultValue)
+		int IPokeBattle_DebugSceneNoGraphics.ShowCommands(string msg, string[] commands, int defaultValue)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IEnumerator pbShowCommands(string msg, string[] commands, int defaultValue, System.Action<int> result)
+		public IEnumerator ShowCommands(string msg, string[] commands, int defaultValue, System.Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			GameDebug.Log("Display Message: \"{0}\"", msg);
-			pbWaitMessage();
-			pbRefresh();
-			pbShowWindow(MESSAGEBOX);
+			GameDebug.Log(message: "Display Message: \"{0}\"", msg);
+			WaitMessage();
+			Refresh();
+			ShowWindow(MESSAGEBOX);
 			IWindow_AdvancedTextPokemon dw = @sprites["messagewindow"] as IWindow_AdvancedTextPokemon;
 			dw.text = msg;
 			//IWindow_CommandPokemon cw = new Window_CommandPokemon(commands);
@@ -592,20 +593,20 @@ namespace PokemonUnity.Stadium
 			//cw.y = (Game.GameData as Game).Graphics.height - cw.height - dw.height;
 			cw.index = 0;
 			cw.viewport = @viewport;
-			pbRefresh();
+			Refresh();
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //;loop
 			{
 				cw.visible = !dw.busy;
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(cw as IGameObject);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(cw as IGameObject);
 				dw.update();
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.B) && defaultValue >= 0)
 				{
 					if (dw.busy)
 					{
-						if (dw.pausing) (AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						if (dw.pausing) (AudioHandler as IGameAudioPlay).PlayDecisionSE();
 						dw.resume();
 					}
 					else
@@ -620,7 +621,7 @@ namespace PokemonUnity.Stadium
 				{
 					if (dw.busy)
 					{
-						if (dw.pausing) (AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						if (dw.pausing) (AudioHandler as IGameAudioPlay).PlayDecisionSE();
 						dw.resume();
 					}
 					else
@@ -636,55 +637,55 @@ namespace PokemonUnity.Stadium
 			//return 0;
 		}
 
-		//public void pbFrameUpdate(IFightMenuDisplay cw)
+		//public void FrameUpdate(IFightMenuDisplay cw)
 		//{
 		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
-		//	pbFrameUpdate();
+		//	FrameUpdate();
 		//}
 		//
-		//public void pbFrameUpdate(ICommandMenuDisplay cw)
+		//public void FrameUpdate(ICommandMenuDisplay cw)
 		//{
 		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
-		//	pbFrameUpdate();
+		//	FrameUpdate();
 		//}
 		//
-		//public void pbFrameUpdate(IWindow_CommandPokemon cw)
+		//public void FrameUpdate(IWindow_CommandPokemon cw)
 		//{
 		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
-		//	pbFrameUpdate();
+		//	FrameUpdate();
 		//}
 		//
-		//public void pbFrameUpdate(IWindow_AdvancedTextPokemon cw)
+		//public void FrameUpdate(IWindow_AdvancedTextPokemon cw)
 		//{
 		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
-		//	pbFrameUpdate();
+		//	FrameUpdate();
 		//}
 
-		public void pbFrameUpdate(IGameObject cw)
+		public void FrameUpdate(IGameObject cw)
 		{
 			//GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (cw != null) cw.update();
-			pbFrameUpdate();
+			FrameUpdate();
 		}
 
-		void IPokeBattle_DebugScene.pbFrameUpdate(IViewport cw)
+		void IPokeBattle_DebugScene.FrameUpdate(IViewport cw)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (cw != null) cw.update();
-			pbFrameUpdate();
+			FrameUpdate();
 		}
 
-		public void pbFrameUpdate()
+		public void FrameUpdate()
 		{
 			//GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
@@ -702,7 +703,7 @@ namespace PokemonUnity.Stadium
 			}
 		}
 
-		public void pbRefresh()
+		public void Refresh()
 		{
 			//GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
@@ -713,7 +714,7 @@ namespace PokemonUnity.Stadium
 					(@sprites[$"battlebox{i}"] as IPokemonDataBox).refresh();
 				}
 			}
-			UnityEngine.Canvas.ForceUpdateCanvases();
+			global::UnityEngine.Canvas.ForceUpdateCanvases();
 			StartCoroutine(ForceFrameRefresh());
 		}
 
@@ -725,9 +726,9 @@ namespace PokemonUnity.Stadium
 		/// <param name="y"></param>
 		/// <param name="filename"></param>
 		/// <param name="viewport"></param>
-		public IIconSprite pbAddSprite(string id, float x, float y, string filename, IViewport viewport)
+		public IIconSprite AddSprite(string id, float x, float y, string filename, IViewport viewport)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//IIconSprite sprite = new IconSprite(x, y, viewport);
 			IIconSprite sprite = null; //UnityEngine.GameObject.Instantiate<IIconSprite>().initialize((float)x, (float)y, viewport);
@@ -739,9 +740,9 @@ namespace PokemonUnity.Stadium
 			return sprite;
 		}
 
-		public void pbAddPlane(string id, string filename, IViewport viewport)
+		public void AddPlane(string id, string filename, IViewport viewport)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//IAnimatedPlane sprite = new AnimatedPlane(viewport);
 			//if (!string.IsNullOrEmpty(filename))
@@ -752,16 +753,16 @@ namespace PokemonUnity.Stadium
 			//return sprite;
 		}
 
-		public void pbDisposeSprites()
+		public void DisposeSprites()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			//pbDisposeSpriteHash(@sprites); //Clears list of GameObjects in scene?...
+			//DisposeSpriteHash(@sprites); //Clears list of GameObjects in scene?...
 		}
 
-		public void pbBeginCommandPhase()
+		public void BeginCommandPhase()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//  Called whenever a new round begins.
 			@battlestart = false;
@@ -771,27 +772,27 @@ namespace PokemonUnity.Stadium
 		/// Tween sprite on-screen over 20 frames
 		/// </summary>
 		/// <param name="index"></param>
-		public IEnumerator pbShowOpponent(int index)
+		public IEnumerator ShowOpponent(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			string trainerfile = string.Empty;
 			if (@battle.opponent != null)
 			{
 				if (@battle.opponent.Length > 1) //(@battle.opponent is Array)
 				{
-					trainerfile = pbTrainerSpriteFile(@battle.opponent[index].trainertype);
+					trainerfile = TrainerSpriteFile(@battle.opponent[index].trainertype);
 				}
 				else
 				{
-					trainerfile = pbTrainerSpriteFile(@battle.opponent[0].trainertype);
+					trainerfile = TrainerSpriteFile(@battle.opponent[0].trainertype);
 				}
 			}
 			else
 			{
 				trainerfile = "Graphics/Characters/trfront";
 			}
-			pbAddSprite("trainer", (Game.GameData as Game).Graphics.width, PokeBattle_SceneConstants.FOETRAINER_Y,
+			AddSprite("trainer", (Game.GameData as Game).Graphics.width, PokeBattle_SceneConstants.FOETRAINER_Y,
 			   trainerfile, @viewport);
 			if (@sprites["trainer"].bitmap != null)
 			{
@@ -801,41 +802,41 @@ namespace PokemonUnity.Stadium
 			int i = 0;
 			do //20.times ;
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				(@sprites["trainer"] as IGameObject).x -= 6;
 				i++;
 				yield return null;
 			} while (i < 20);
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbShowOpponent(int opp) { }
+		void IPokeBattle_DebugSceneNoGraphics.ShowOpponent(int opp) { }
 
 		/// <summary>
 		/// Tween sprite off-screen over 20 frames
 		/// </summary>
-		public IEnumerator pbHideOpponent()
+		public IEnumerator HideOpponent()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int i = 0;
 			do //20.times ;
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				(@sprites["trainer"] as IGameObject).x += 6;
 				i++;
 				yield return null;
 			} while (i < 20);
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbHideOpponent() { }
+		void IPokeBattle_DebugSceneNoGraphics.HideOpponent() { }
 
-		public void pbShowHelp(string text)
+		public void ShowHelp(string text)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).resizeToFit(text, (Game.GameData as Game).Graphics.width);
 			(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).y = 0;
@@ -844,16 +845,16 @@ namespace PokemonUnity.Stadium
 			(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).visible = true;
 		}
 
-		public void pbHideHelp()
+		public void HideHelp()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).visible = false;
 		}
 
-		public void pbBackdrop()
+		public void Backdrop()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			PokemonUnity.Overworld.Environments environ = @battle.environment;
 			//  Choose backdrop
@@ -876,14 +877,14 @@ namespace PokemonUnity.Stadium
 			}
 			else
 			{
-				if (Game.GameData.GameMap == null || (Game.GameData is PokemonEssentials.Interface.Field.IGameMetadataMisc e && !e.pbGetMetadata(Game.GameData.GameMap.map_id).Map.Outdoor)) //!pbGetMetadata(Game.GameData.GameMap.map_id, MetadataOutdoor))
+				if (Game.GameData.GameMap == null || (Game.GameData is PokemonEssentials.Interface.Field.IGameMetadataMisc e && !e.GetMetadata(Game.GameData.GameMap.map_id).Map.Outdoor)) //!GetMetadata(Game.GameData.GameMap.map_id, MetadataOutdoor))
 				{
 					backdrop = "IndoorA";
 				}
 			}
 			if (Game.GameData.GameMap != null && Game.GameData is PokemonEssentials.Interface.Field.IGameMetadataMisc m1)
 			{
-				string back = m1.pbGetMetadata(Game.GameData.GameMap.map_id).Map.BattleBack;
+				string back = m1.GetMetadata(Game.GameData.GameMap.map_id).Map.BattleBack;
 				if (back != null && back != "")
 				{
 					backdrop = back;
@@ -908,7 +909,7 @@ namespace PokemonUnity.Stadium
 			{
 				trialname = "Water";
 			}
-			if (pbResolveBitmap(string.Format("Graphics/Battlebacks/playerbase" + backdrop + trialname)))
+			if (ResolveBitmap(string.Format("Graphics/Battlebacks/playerbase" + backdrop + trialname)))
 			{
 				_base = trialname;
 			}
@@ -917,16 +918,16 @@ namespace PokemonUnity.Stadium
 			if (Core.ENABLESHADING)
 			{
 				trialname = "";
-				DateTime timenow = pbGetTimeNow();
-				if (Game.PBDayNight.isNight(timenow))
+				DateTime timenow = GetTimeNow();
+				if (Game.DayNight.isNight(timenow))
 				{
 					trialname = "Night";
 				}
-				else if (Game.PBDayNight.isEvening(timenow))
+				else if (Game.DayNight.isEvening(timenow))
 				{
 					trialname = "Eve";
 				}
-				if (pbResolveBitmap(string.Format("Graphics/Battlebacks/battlebg" + backdrop + trialname)))
+				if (ResolveBitmap(string.Format("Graphics/Battlebacks/battlebg" + backdrop + trialname)))
 				{
 					time = trialname;
 				}
@@ -935,13 +936,13 @@ namespace PokemonUnity.Stadium
 			string battlebg = "Graphics/Battlebacks/battlebg" + backdrop + time;
 			string enemybase = "Graphics/Battlebacks/enemybase" + backdrop + _base + time;
 			string playerbase = "Graphics/Battlebacks/playerbase" + backdrop + _base + time;
-			pbAddPlane("battlebg", battlebg, @viewport);
-			pbAddSprite("playerbase",
+			AddPlane("battlebg", battlebg, @viewport);
+			AddSprite("playerbase",
 			   PokeBattle_SceneConstants.PLAYERBASEX,
 			   PokeBattle_SceneConstants.PLAYERBASEY, playerbase, @viewport);
 			if (@sprites["playerbase"].bitmap != null) @sprites["playerbase"].x -= @sprites["playerbase"].bitmap.width / 2;
 			if (@sprites["playerbase"].bitmap != null) @sprites["playerbase"].y -= @sprites["playerbase"].bitmap.height;
-			pbAddSprite("enemybase",
+			AddSprite("enemybase",
 			   PokeBattle_SceneConstants.FOEBASEX,
 			   PokeBattle_SceneConstants.FOEBASEY, enemybase, @viewport);
 			if (@sprites["enemybase"].bitmap != null) @sprites["enemybase"].x -= @sprites["enemybase"].bitmap.width / 2;
@@ -958,8 +959,8 @@ namespace PokemonUnity.Stadium
 		///Can also be a void: while(true) { if frame == index, then move sprite to x/y position }?
 		public IEnumerator partyAnimationUpdate()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			if (!inPartyAnimation) yield break;
 			/*int ballmovedist = 16; // How far a ball moves each frame
 			//  Bar slides on
@@ -1006,7 +1007,7 @@ namespace PokemonUnity.Stadium
 							ballgraphic = "Graphics/Pictures/ballnormal";
 						}
 					}
-					pbAddSprite($"player{i}", //Instantiate player GameObject, then adds to dictionary for tracking...
+					AddSprite($"player{i}", //Instantiate player GameObject, then adds to dictionary for tracking...
 					   @xposplayer + i * ballmovedist * 6, PokeBattle_SceneConstants.PLAYERPARTYBALL1_Y,
 					   ballgraphic, @viewport);
 					@sprites[$"player{i}"].z = 41;
@@ -1015,7 +1016,7 @@ namespace PokemonUnity.Stadium
 					int enemyindex = i;
 					if (@battle.doublebattle && i >= 3)
 					{
-						enemyindex = (i % 3) + @battle.pbSecondPartyBegin(1);
+						enemyindex = (i % 3) + @battle.SecondPartyBegin(1);
 					}
 					if (enemyindex < @battle.party2.Length && @battle.party2[enemyindex].IsNotNullOrNone())
 					{
@@ -1032,7 +1033,7 @@ namespace PokemonUnity.Stadium
 							ballgraphic = "Graphics/Pictures/ballnormal";
 						}
 					}
-					pbAddSprite($"enemy{i}",
+					AddSprite($"enemy{i}",
 					   @xposenemy - i * ballmovedist * 6, PokeBattle_SceneConstants.FOEPARTYBALL1_Y,
 					   ballgraphic, @viewport);
 					@sprites[$"enemy{i}"].z = 41;
@@ -1067,9 +1068,9 @@ namespace PokemonUnity.Stadium
 
 		void IPokeBattle_Scene.partyAnimationUpdate() { }
 
-		public IEnumerator pbStartBattle(IBattleIE battle)
+		public IEnumerator StartBattle(IBattleIE battle)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			GameDebug.Log("Start of the battle");
 			GameDebug.Log("Play animation of pokemons coming to scene before player can control actions");
 
@@ -1086,15 +1087,15 @@ namespace PokemonUnity.Stadium
 			/* ToDo: Create coroutine animation for the below sprite changes
 			@traineryoffset = ((Game.GameData as Game).Graphics.height - 320); // Adjust player's side for screen size
 			@foeyoffset = (float)Math.Floor(@traineryoffset * 3f / 4f);  // Adjust foe's side for screen size
-			pbBackdrop();
-			pbAddSprite("partybarfoe",
-			   PokeBattle_SceneConstants.FOEPARTYBAR_X,
-			   PokeBattle_SceneConstants.FOEPARTYBAR_Y,
-			   "Graphics/Pictures/battleLineup", @viewport);
-			pbAddSprite("partybarplayer",
-			   PokeBattle_SceneConstants.PLAYERPARTYBAR_X,
-			   PokeBattle_SceneConstants.PLAYERPARTYBAR_Y,
-			   "Graphics/Pictures/battleLineup", @viewport);
+			Backdrop();
+			AddSprite("partybarfoe",
+				PokeBattle_SceneConstants.FOEPARTYBAR_X,
+				PokeBattle_SceneConstants.FOEPARTYBAR_Y,
+				"Graphics/Pictures/battleLineup", @viewport);
+			AddSprite("partybarplayer",
+				PokeBattle_SceneConstants.PLAYERPARTYBAR_X,
+				PokeBattle_SceneConstants.PLAYERPARTYBAR_Y,
+				"Graphics/Pictures/battleLineup", @viewport);
 			@sprites["partybarfoe"].x -= @sprites["partybarfoe"].bitmap.width;
 			@sprites["partybarplayer"].mirror = true;
 			@sprites["partybarfoe"].z = 40;
@@ -1104,12 +1105,12 @@ namespace PokemonUnity.Stadium
 			string trainerfile = string.Empty;
 			if (@battle.player.Length > 1) //(@battle.player is Array)
 			{
-				trainerfile = pbPlayerSpriteBackFile(@battle.player[0].trainertype);
-				pbAddSprite("player",
+				trainerfile = PlayerSpriteBackFile(@battle.player[0].trainertype);
+				AddSprite("player",
 					 PokeBattle_SceneConstants.PLAYERTRAINERD1_X,
 					 PokeBattle_SceneConstants.PLAYERTRAINERD1_Y, trainerfile, @viewport);
-				trainerfile = pbTrainerSpriteBackFile(@battle.player[1].trainertype);
-				pbAddSprite("playerB",
+				trainerfile = TrainerSpriteBackFile(@battle.player[1].trainertype);
+				AddSprite("playerB",
 					 PokeBattle_SceneConstants.PLAYERTRAINERD2_X,
 					 PokeBattle_SceneConstants.PLAYERTRAINERD2_Y, trainerfile, @viewport);
 				if (@sprites["player"].bitmap != null)
@@ -1137,8 +1138,8 @@ namespace PokemonUnity.Stadium
 			}
 			else
 			{
-				trainerfile = pbPlayerSpriteBackFile(@battle.player[0].trainertype);
-				pbAddSprite("player",
+				trainerfile = PlayerSpriteBackFile(@battle.player[0].trainertype);
+				AddSprite("player",
 					 PokeBattle_SceneConstants.PLAYERTRAINER_X,
 					 PokeBattle_SceneConstants.PLAYERTRAINER_Y, trainerfile, @viewport);
 				if (@sprites["player"].bitmap != null)
@@ -1157,29 +1158,29 @@ namespace PokemonUnity.Stadium
 			{
 				if (@battle.opponent.Length > 1) //(@battle.opponent is Array)
 				{
-					trainerfile = pbTrainerSpriteFile(@battle.opponent[1].trainertype);
-					pbAddSprite("trainer2",
-					   PokeBattle_SceneConstants.FOETRAINERD2_X,
-					   PokeBattle_SceneConstants.FOETRAINERD2_Y, trainerfile, @viewport);
-					trainerfile = pbTrainerSpriteFile(@battle.opponent[0].trainertype);
-					pbAddSprite("trainer",
-					   PokeBattle_SceneConstants.FOETRAINERD1_X,
-					   PokeBattle_SceneConstants.FOETRAINERD1_Y, trainerfile, @viewport);
+					trainerfile = TrainerSpriteFile(@battle.opponent[1].trainertype);
+					AddSprite("trainer2",
+						PokeBattle_SceneConstants.FOETRAINERD2_X,
+						PokeBattle_SceneConstants.FOETRAINERD2_Y, trainerfile, @viewport);
+					trainerfile = TrainerSpriteFile(@battle.opponent[0].trainertype);
+					AddSprite("trainer",
+						PokeBattle_SceneConstants.FOETRAINERD1_X,
+						PokeBattle_SceneConstants.FOETRAINERD1_Y, trainerfile, @viewport);
 				}
 				else
 				{
-					trainerfile = pbTrainerSpriteFile(@battle.opponent.trainertype);
-					pbAddSprite("trainer",
-					   PokeBattle_SceneConstants.FOETRAINER_X,
-					   PokeBattle_SceneConstants.FOETRAINER_Y, trainerfile, @viewport);
+					trainerfile = TrainerSpriteFile(@battle.opponent.trainertype);
+					AddSprite("trainer",
+						PokeBattle_SceneConstants.FOETRAINER_X,
+						PokeBattle_SceneConstants.FOETRAINER_Y, trainerfile, @viewport);
 				}
 			}
 			else
 			{
 				trainerfile = "Graphics/Characters/trfront";
-				pbAddSprite("trainer",
-					 PokeBattle_SceneConstants.FOETRAINER_X,
-					 PokeBattle_SceneConstants.FOETRAINER_Y, trainerfile, @viewport);
+				AddSprite("trainer",
+					PokeBattle_SceneConstants.FOETRAINER_X,
+					PokeBattle_SceneConstants.FOETRAINER_Y, trainerfile, @viewport);
 			}
 			if (@sprites["trainer"].bitmap != null)
 			{
@@ -1196,7 +1197,7 @@ namespace PokemonUnity.Stadium
 			//@sprites["shadow0"] = new IconSprite(0, 0, @viewport);
 			(@sprites["shadow0"] as IIconSprite).initialize(0, 0, @viewport);
 			(@sprites["shadow0"] as IIconSprite).z = 3;
-			pbAddSprite("shadow1", 0, 0, "Graphics/Pictures/battleShadow", @viewport);
+			AddSprite("shadow1", 0, 0, "Graphics/Pictures/battleShadow", @viewport);
 			(@sprites["shadow1"] as IIconSprite).z = 3;
 			(@sprites["shadow1"] as IIconSprite).visible = false;
 			//@sprites["pokemon0"] = new PokemonBattlerSprite(battle.doublebattle, 0, @viewport);
@@ -1210,7 +1211,7 @@ namespace PokemonUnity.Stadium
 				//@sprites["shadow2"] = new IconSprite(0, 0, @viewport);
 				(@sprites["shadow2"] as IIconSprite).initialize(0, 0, @viewport);
 				(@sprites["shadow2"] as IIconSprite).z = 3;
-				pbAddSprite("shadow3", 0, 0, "Graphics/Pictures/battleShadow", @viewport);
+				AddSprite("shadow3", 0, 0, "Graphics/Pictures/battleShadow", @viewport);
 				(@sprites["shadow3"] as IIconSprite).z = 3;
 				(@sprites["shadow3"] as IIconSprite).visible = false;
 				//@sprites["pokemon2"] = new PokemonBattlerSprite(battle.doublebattle, 2, @viewport);
@@ -1231,7 +1232,7 @@ namespace PokemonUnity.Stadium
 				(@sprites["battlebox2"] as IPokemonDataBox).initialize(battle.battlers[2], battle.doublebattle, @viewport);
 				(@sprites["battlebox3"] as IPokemonDataBox).initialize(battle.battlers[3], battle.doublebattle, @viewport);
 			}
-			/*pbAddSprite("messagebox", 0, (Game.GameData as Game).Graphics.height - 96, "Graphics/Pictures/battleMessage", @viewport);
+			/*AddSprite("messagebox", 0, (Game.GameData as Game).Graphics.height - 96, "Graphics/Pictures/battleMessage", @viewport);
 			@sprites["messagebox"].z = 90;
 			//@sprites["helpwindow"] = new Window_UnformattedTextPokemon().WithSize("", 0, 0, 32, 32, @viewport);
 			(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).initialize().WithSize("", 0, 0, 32, 32, @viewport);
@@ -1248,8 +1249,8 @@ namespace PokemonUnity.Stadium
 			//@sprites["fightwindow"] = new FightMenuDisplay(null, @viewport);
 			(@sprites["fightwindow"] as IFightMenuDisplay).initialize(null, @viewport);
 			(@sprites["fightwindow"] as IFightMenuDisplay).z = 100;
-			pbShowWindow(MESSAGEBOX);
-			pbSetMessageMode(false);
+			ShowWindow(MESSAGEBOX);
+			SetMessageMode(false);
 			IPokemonBattlerSprite trainersprite1 = @sprites["trainer"] as IPokemonBattlerSprite;
 			IPokemonBattlerSprite trainersprite2 = @sprites["trainer2"] as IPokemonBattlerSprite;
 			if (@battle.opponent == null)
@@ -1275,7 +1276,7 @@ namespace PokemonUnity.Stadium
 						(@sprites["shadow1"] as IIconSprite).visible = showShadow(species);
 						trainersprite1 = @sprites["pokemon1"] as IPokemonBattlerSprite;
 					}
-					else if (@battle.party2.Length == 2) //Double Battle 
+					else if (@battle.party2.Length == 2) //Double Battle
 					{
 						species = @battle.party2[0].Species;
 						(@sprites["pokemon1"] as IPokemonBattlerSprite).setPokemonBitmap(@battle.party2[0], false);
@@ -1394,9 +1395,9 @@ namespace PokemonUnity.Stadium
 					(@sprites["shadow3"] as IIconSprite).x += appearspeed; tobreak = false;
 					if ((@sprites["shadow3"] as IIconSprite).x > oldx[7]) (@sprites["shadow3"] as IIconSprite).x = oldx[7];
 				}
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if (tobreak) break; n++;
 			} while (n < (1 + (Game.GameData as Game).Graphics.width / appearspeed));
 			// ################
@@ -1407,14 +1408,14 @@ namespace PokemonUnity.Stadium
 				@sprites["partybarplayer"].visible=true;
 			} else
 			{
-				pbPlayCry(@battle.party2[0]);   // Play cry for wild Pokémon
+				PlayCry(@battle.party2[0]);   // Play cry for wild Pokémon
 				(@sprites["battlebox1"] as IPokemonDataBox).appear();
 				if (@battle.party2.Length == 2) (@sprites["battlebox3"] as IPokemonDataBox).appear();
 				bool appearing = true;
 				do { //begin;
-					pbGraphicsUpdate();
-					pbInputUpdate();
-					pbFrameUpdate();
+					GraphicsUpdate();
+					InputUpdate();
+					FrameUpdate();
 					if ((@sprites["pokemon1"] as IPokemonBattlerSprite).tone.red < 0)		(@sprites["pokemon1"] as IPokemonBattlerSprite).tone.red += 8;
 					if ((@sprites["pokemon1"] as IPokemonBattlerSprite).tone.blue < 0)		(@sprites["pokemon1"] as IPokemonBattlerSprite).tone.blue += 8;
 					if ((@sprites["pokemon1"] as IPokemonBattlerSprite).tone.green < 0)		(@sprites["pokemon1"] as IPokemonBattlerSprite).tone.green += 8;
@@ -1432,48 +1433,48 @@ namespace PokemonUnity.Stadium
 				//  Show shiny animation for wild Pokémon
 				if (@battle.battlers[1].IsShiny && @battle.battlescene)
 				{
-					pbCommonAnimation("Shiny", @battle.battlers[1], null);
+					CommonAnimation("Shiny", @battle.battlers[1], null);
 				}
 				if (@battle.party2.Length == 2)
 				{
 					if (@battle.battlers[3].IsShiny && @battle.battlescene)
 					{
-						pbCommonAnimation("Shiny", @battle.battlers[3], null);
+						CommonAnimation("Shiny", @battle.battlers[3], null);
 					}
 				}
 			}*/
 			yield return null;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbStartBattle(IBattle battle) { }
+		void IPokeBattle_DebugSceneNoGraphics.StartBattle(IBattle battle) { }
 
-		public IEnumerator pbEndBattle(BattleResults result)
+		public IEnumerator EndBattle(BattleResults result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			GameDebug.Log($"End of the battle. Result: {result}");
 
 			@abortable = false;
-			pbShowWindow(BLANK);
+			ShowWindow(BLANK);
 			//  Fade out all sprites
-			(AudioHandler as IGameAudioPlay).pbBGMFade(1.0f);
-			//pbFadeOutAndHide(@sprites);
-			pbDisposeSprites();
+			(AudioHandler as IGameAudioPlay).BGMFade(1.0f);
+			//FadeOutAndHide(@sprites);
+			DisposeSprites();
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbEndBattle(BattleResults result) { }
+		void IPokeBattle_DebugSceneNoGraphics.EndBattle(BattleResults result) { }
 
 		/// <summary>
 		/// Animates the pokemon leaving the battle and returning back to party/pokeball
 		/// </summary>
 		/// <param name="battlerindex"></param>
-		public IEnumerator pbRecall(int battlerindex)
+		public IEnumerator Recall(int battlerindex)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
 			float origin = 0;
-			if (@battle.pbIsOpposing(battlerindex))
+			if (@battle.IsOpposing(battlerindex))
 			{
 				origin = PokeBattle_SceneConstants.FOEBATTLER_Y;
 				if (@battle.doublebattle)
@@ -1504,7 +1505,7 @@ namespace PokemonUnity.Stadium
 			//Tween animation types for values below...
 			picturePoke.moveTone(10, 1, new Tone(248, 248, 248, 248));
 			int delay = picturePoke.totalDuration;
-			picturePoke.moveSE(delay, "Audio/SE/recall");
+			picturePoke.moveSE(delay, "AudioManager/SE/recall");
 			picturePoke.moveZoom(15, delay, 0);
 			picturePoke.moveXY(15, delay, center[0], origin);
 			picturePoke.moveVisible(picturePoke.totalDuration, false);
@@ -1515,20 +1516,20 @@ namespace PokemonUnity.Stadium
 			{
 				picturePoke.update();
 				setPictureSprite(spritePoke, picturePoke);
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if (!picturePoke.running) break;
 				yield return null;
 			} while (true);*/
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbRecall(int battlerindex) { }
+		void IPokeBattle_DebugSceneNoGraphics.Recall(int battlerindex) { }
 
-		public IEnumerator pbTrainerSendOut(int battlerindex, IPokemon pkmn)
+		public IEnumerator TrainerSendOut(int battlerindex, IPokemon pkmn)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*TODO show opponent's pokemon
 			IPokemon illusionpoke=@battle.battlers[battlerindex].effects.Illusion;
 			@briefmessage=false;
@@ -1556,29 +1557,29 @@ namespace PokemonUnity.Stadium
 				if (frame >= 10) {
 					sendout.update();
 				}
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if ((fadeanim == null || fadeanim.animdone) && sendout.animdone &&
 					!(@sprites[$"battlebox{battlerindex}"] as IPokemonDataBox).appearing) break;
 			} while (true);
 			if (@battle.battlers[battlerindex].IsShiny && @battle.battlescene) {
-				pbCommonAnimation("Shiny",@battle.battlers[battlerindex],null);
+				CommonAnimation("Shiny",@battle.battlers[battlerindex],null);
 			}
 			sendout.Dispose();
 			if (@showingenemy) {
 				@showingenemy=false;
-				pbDisposeSprite(@sprites,"trainer");
-				pbDisposeSprite(@sprites,"partybarfoe");
+				DisposeSprite(@sprites,"trainer");
+				DisposeSprite(@sprites,"partybarfoe");
 				for (int i = 0; i < 6; i++) {
-					pbDisposeSprite(@sprites,$"enemy{i}");
+					DisposeSprite(@sprites,$"enemy{i}");
 				}
 			}
-			pbRefresh();*/
+			Refresh();*/
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbTrainerSendOut(int battlerindex, IPokemon pkmn)
+		void IPokeBattle_Scene.TrainerSendOut(int battlerindex, IPokemon pkmn)
 		{
 		}
 
@@ -1587,10 +1588,10 @@ namespace PokemonUnity.Stadium
 		/// </summary>
 		/// <param name="battlerindex"></param>
 		/// <param name="pkmn"></param>
-		public IEnumerator pbSendOut(int battlerindex, IPokemon pkmn)
+		public IEnumerator SendOut(int battlerindex, IPokemon pkmn)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			//TODO show player's pokemon
 			/*while (inPartyAnimation){ } //ToDo: Uncomment, and ensure that logic has an exit
 			IPokemon illusionpoke=@battle.battlers[battlerindex].effects.Illusion;
@@ -1603,10 +1604,10 @@ namespace PokemonUnity.Stadium
 			pictureBall.moveName(delay,ballbitmap);
 			pictureBall.moveOrigin(delay,PictureOrigin.nenter);
 			//  Setting the ball's movement path
-			int[][] path=new int[][] { new int[] {0,   146}, new int[] {10,  134}, new int[] {21,  122}, new int[] {30,  112}, 
-					new int[] {39,  104}, new int[] {46,   99}, new int[] {53,   95}, new int[] {61,   93}, 
-					new int[] {68,   93}, new int[] {75,   96}, new int[] {82,  102}, new int[] {89,  111}, 
-					new int[] {94,  121}, new int[] {100, 134}, new int[] {106, 150}, new int[] {111, 166}, 
+			int[][] path=new int[][] { new int[] {0,   146}, new int[] {10,  134}, new int[] {21,  122}, new int[] {30,  112},
+					new int[] {39,  104}, new int[] {46,   99}, new int[] {53,   95}, new int[] {61,   93},
+					new int[] {68,   93}, new int[] {75,   96}, new int[] {82,  102}, new int[] {89,  111},
+					new int[] {94,  121}, new int[] {100, 134}, new int[] {106, 150}, new int[] {111, 166},
 					new int[] {116, 183}, new int[] {120, 199}, new int[] {124, 216}, new int[] {127, 238} };
 			IIconSprite spriteBall=new IconSprite(0,0,@viewport);
 			spriteBall.visible=false;
@@ -1614,7 +1615,7 @@ namespace PokemonUnity.Stadium
 			decimal multiplier=1.0m;
 			if (@battle.doublebattle) {
 				multiplier=(battlerindex==0) ? 0.7m : 1.3m;
-			}		
+			}
 			//animate ball throw curve
 			foreach (int[] coord in path) { //ToDo: replace with coroutine
 				delay=pictureBall.totalDuration;
@@ -1653,63 +1654,63 @@ namespace PokemonUnity.Stadium
 					pictureBall.update();
 					setPictureIconSprite(spriteBall, pictureBall);
 				}
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if ((fadeanim == null || fadeanim.animdone) && sendout.animdone &&
 					!(@sprites[$"battlebox{battlerindex}"] as IPokemonDataBox).appearing) break;
 			} while (true);
 			spriteBall.Dispose();
 			sendout.Dispose();
 			if (@battle.battlers[battlerindex].IsShiny && @battle.battlescene) {
-				pbCommonAnimation("Shiny",@battle.battlers[battlerindex],null);
+				CommonAnimation("Shiny",@battle.battlers[battlerindex],null);
 			}
 			if (@showingplayer) {
 				@showingplayer=false;
-				pbDisposeSprite(@sprites,"player");
-				pbDisposeSprite(@sprites,"partybarplayer");
+				DisposeSprite(@sprites,"player");
+				DisposeSprite(@sprites,"partybarplayer");
 				for (int i = 0; i < 6; i++) {
-					pbDisposeSprite(@sprites,$"player{i}");
+					DisposeSprite(@sprites,$"player{i}");
 				}
 			}*/
-			pbRefresh();
+			Refresh();
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbSendOut(int battlerindex, IPokemon pkmn)
+		void IPokeBattle_Scene.SendOut(int battlerindex, IPokemon pkmn)
 		{
 		}
 
-		public IEnumerator pbTrainerWithdraw(IBattle battle, IBattlerIE pkmn)
+		public IEnumerator TrainerWithdraw(IBattle battle, IBattlerIE pkmn)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//TODO hide opponent's pokemon
-			pbRefresh();
+			Refresh();
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbTrainerWithdraw(IBattle battle, IBattler pkmn)
+		void IPokeBattle_DebugSceneNoGraphics.TrainerWithdraw(IBattle battle, IBattler pkmn)
 		{
 		}
 
-		public IEnumerator pbWithdraw(IBattle battle, IBattlerIE pkmn)
+		public IEnumerator Withdraw(IBattle battle, IBattlerIE pkmn)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//TODO hide player's pokemon
-			pbRefresh();
+			Refresh();
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbWithdraw(IBattle battle, IBattler pkmn)
+		void IPokeBattle_DebugSceneNoGraphics.Withdraw(IBattle battle, IBattler pkmn)
 		{
 			throw new NotImplementedException();
 		}
 
-		public string pbMoveString(IBattleMove move)
+		public string MoveString(IBattleMove move)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			string ret = Game._INTL("{1}", move.Name);
 			string typename = move.Type.ToString(TextScripts.Name);
@@ -1720,20 +1721,20 @@ namespace PokemonUnity.Stadium
 			return ret;
 		}
 
-		public IEnumerator pbBeginAttackPhase()
+		public IEnumerator BeginAttackPhase()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			pbSelectBattler(-1, 0); //pbSelectBattler(-1);
-			pbGraphicsUpdate();
+			SelectBattler(-1, 0); //SelectBattler(-1);
+			GraphicsUpdate();
 			yield return null;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbBeginAttackPhase() { }
+		void IPokeBattle_DebugSceneNoGraphics.BeginAttackPhase() { }
 
-		public IEnumerator pbSafariStart()
+		public IEnumerator SafariStart()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			@briefmessage = false;
 			//@sprites["battlebox0"] = new SafariDataBox(@battle, @viewport);
@@ -1742,52 +1743,53 @@ namespace PokemonUnity.Stadium
 			do //;loop
 			{
 				(@sprites["battlebox0"] as ISafariDataBox).update();
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if (!(@sprites["battlebox0"] as ISafariDataBox).appearing) break;
 				yield return null;
 			} while (true);
-			pbRefresh();
+			Refresh();
 		}
 
-		void IPokeBattle_Scene.pbSafariStart() { }
+		void IPokeBattle_Scene.SafariStart() { }
 
-		public void pbResetCommandIndices()
+		public void ResetCommandIndices()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//reset the frontend command indices to 0;
 			@lastcmd = new MenuCommands[] { 0, 0, 0, 0 };
 		}
 
-		public void pbResetMoveIndex(int index)
+		public void ResetMoveIndex(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//reset the frontend move index to 0;
 			@lastmove[index] = 0;
 		}
 
-		public IEnumerator pbSafariCommandMenu(int index, System.Action<int> result)
+		public IEnumerator SafariCommandMenu(int index, System.Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			yield return pbCommandMenuEx(index,new string[] {
-				Game._INTL("What will\n{1} throw?", @battle.pbPlayer().name),
+			yield return CommandMenuEx(index,new string[] {
+				Game._INTL("What will\n{1} throw?", @battle.Player().name),
 				Game._INTL("Ball"),
 				Game._INTL("Bait"),
 				Game._INTL("Rock"),
 				Game._INTL("Run")
 			},2,result); //result: value => result?.Invoke(value)
+			GameDebug.Log($"Action Selected: {result}");
 		}
 
-		int IPokeBattle_Scene.pbSafariCommandMenu(int index)
+		int IPokeBattle_Scene.SafariCommandMenu(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			return pbCommandMenuEx(index,new string[] {
-				Game._INTL("What will\n{1} throw?", @battle.pbPlayer().name),
+			return CommandMenuEx(index,new string[] {
+				Game._INTL("What will\n{1} throw?", @battle.Player().name),
 				Game._INTL("Ball"),
 				Game._INTL("Bait"),
 				Game._INTL("Rock"),
@@ -1800,13 +1802,14 @@ namespace PokemonUnity.Stadium
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns>Return values: 0=Fight, 1=Bag, 2=Pokémon, 3=Run, 4=Call</returns>
-		public IEnumerator pbCommandMenu(int index, System.Action<MenuCommands> result)
+		public IEnumerator CommandMenu(int index, System.Action<MenuCommands> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			bool shadowTrainer = (@battle.opponent != null); //hasConst(PBTypes,:SHADOW) && 
+			bool shadowTrainer = (@battle.opponent != null); //hasConst(Types,:SHADOW) &&
 			int ret = -1;
-			yield return pbCommandMenuEx(index,new string[] {
+			GameDebug.Log("Choose Action: [FIGHT=0] [BAG=1] [POKEMON=2] [RUN=3] [CALL=4]");
+			yield return CommandMenuEx(index,new string[] {
 				Game._INTL("What will\n{1} do?", @battle.battlers[index].Name),
 				Game._INTL("Fight"),//MenuCommands.FIGHT=0
 				Game._INTL("Bag"),//MenuCommands.BAG=1
@@ -1814,15 +1817,17 @@ namespace PokemonUnity.Stadium
 				shadowTrainer ? Game._INTL("Call") : Game._INTL("Run") //MenuCommands.CALL=4|MenuCommands.RUN=3
 			},shadowTrainer ? 1 : 0, result: value => ret = value);
 			if (ret == 3 && shadowTrainer) ret = 4; // Convert "Run" to "Call"
+			GameDebug.Log($"Action Selected: {ret}");
 			result?.Invoke((MenuCommands)ret);
 		}
 
-		int IPokeBattle_SceneNonInteractive.pbCommandMenu(int index)
+		int IPokeBattle_SceneNonInteractive.CommandMenu(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			bool shadowTrainer = (@battle.opponent != null); //hasConst(PBTypes,:SHADOW) && 
-			int ret = pbCommandMenuEx(index,new string[] {
+			bool shadowTrainer = (@battle.opponent != null); //hasConst(Types,:SHADOW) &&
+			GameDebug.Log("Choose Action: [FIGHT=0] [BAG=1] [POKEMON=2] [RUN=3] [CALL=4]");
+			int ret = CommandMenuEx(index,new string[] {
 				Game._INTL("What will\n{1} do?", @battle.battlers[index].Name),
 				Game._INTL("Fight"),
 				Game._INTL("Bag"),
@@ -1830,15 +1835,16 @@ namespace PokemonUnity.Stadium
 				shadowTrainer ? Game._INTL("Call") : Game._INTL("Run")
 			},shadowTrainer ? 1 : 0);
 			if (ret == 3 && shadowTrainer) ret = 4; // Convert "Run" to "Call"
+			GameDebug.Log($"Action Selected: {ret}");
 			return ret;
 		}
 
-		int IPokeBattle_DebugSceneNoGraphics.pbCommandMenu(int index)
+		int IPokeBattle_DebugSceneNoGraphics.CommandMenu(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			bool shadowTrainer = (@battle.opponent != null); //hasConst(PBTypes,:SHADOW) && 
-			int ret = pbCommandMenuEx(index,new string[] {
+			bool shadowTrainer = (@battle.opponent != null); //hasConst(Types,:SHADOW) &&
+			int ret = CommandMenuEx(index,new string[] {
 				Game._INTL("What will\n{1} do?", @battle.battlers[index].Name),
 				Game._INTL("Fight"),
 				Game._INTL("Bag"),
@@ -1846,6 +1852,7 @@ namespace PokemonUnity.Stadium
 				shadowTrainer ? Game._INTL("Call") : Game._INTL("Run")
 			},shadowTrainer ? 1 : 0);
 			if (ret == 3 && shadowTrainer) ret = 4; // Convert "Run" to "Call"
+			GameDebug.Log($"Action Selected: {ret}");
 			return ret;
 		}
 
@@ -1860,59 +1867,59 @@ namespace PokemonUnity.Stadium
 		///       3 - Bug Catching Contest
 		/// </param>
 		/// <returns></returns>
-		public IEnumerator pbCommandMenuEx(int index, string[] texts, int mode, System.Action<int> result)
+		public IEnumerator CommandMenuEx(int index, string[] texts, int mode, System.Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-			pbShowWindow(COMMANDBOX);
-			ICommandMenuDisplay cw = @sprites["commandwindow"] as ICommandMenuDisplay;               
-			cw.setTexts(texts);                         
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			ShowWindow(COMMANDBOX);
+			ICommandMenuDisplay cw = @sprites["commandwindow"] as ICommandMenuDisplay;
+			cw.setTexts(texts);
 			cw.index = (int)@lastcmd[index];
 			cw.mode = mode;
-			pbSelectBattler(index, mode); //pbSelectBattler(index);
-			pbRefresh();
+			SelectBattler(index, mode); //SelectBattler(index);
+			Refresh();
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(cw);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(cw);
 				//  Update selected command
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 1;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 1;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 2;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 2;
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))	// Confirm choice
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					int ret = cw.index;
 					@lastcmd[index] = (MenuCommands)ret;
 					return ret;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B) && index == 2 && @lastcmd[0] != (MenuCommands)2)	// Cancel
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					return -1;
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbCommandMenuIE");
-			yield return StartCoroutine(pbCommandMenuIE(index, texts, mode, cw, r => _coroutineValue = r));
+			StopCoroutine("CommandMenuIE");
+			yield return StartCoroutine(CommandMenuIE(index, texts, mode, cw, r => _coroutineValue = r));
 			result?.Invoke(_coroutineValue);
 		}
 
@@ -1927,130 +1934,130 @@ namespace PokemonUnity.Stadium
 		///       3 - Bug Catching Contest
 		/// </param>
 		/// <returns></returns>
-		private int pbCommandMenuEx(int index, string[] texts, int mode)
+		private int CommandMenuEx(int index, string[] texts, int mode)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-			pbShowWindow(COMMANDBOX);
-			ICommandMenuDisplay cw = @sprites["commandwindow"] as ICommandMenuDisplay;               
-			cw.setTexts(texts);                         
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			ShowWindow(COMMANDBOX);
+			ICommandMenuDisplay cw = @sprites["commandwindow"] as ICommandMenuDisplay;
+			cw.setTexts(texts);
 			cw.index = (int)@lastcmd[index];
 			cw.mode = mode;
-			pbSelectBattler(index, mode); //pbSelectBattler(index);
-			pbRefresh();
+			SelectBattler(index, mode); //SelectBattler(index);
+			Refresh();
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(cw);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(cw);
 				//  Update selected command
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 1;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 1;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 2;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 2;
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))	// Confirm choice
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					int ret = cw.index;
 					@lastcmd[index] = (MenuCommands)ret;
 					return ret;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B) && index == 2 && @lastcmd[0] != (MenuCommands)2)	// Cancel
 				{
-					(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					return -1;
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbCommandMenuIE");
-			StartCoroutine(pbCommandMenuIE(index, texts, mode, cw, r => _coroutineValue = r));
+			StopCoroutine("CommandMenuIE");
+			StartCoroutine(CommandMenuIE(index, texts, mode, cw, r => _coroutineValue = r));
 			return (int)_coroutineValue;
 		}
 
-		private IEnumerator pbCommandMenuIE(int index, string[] texts, int mode, ICommandMenuDisplay cw, System.Action<int> result)
+		private IEnumerator CommandMenuIE(int index, string[] texts, int mode, ICommandMenuDisplay cw, System.Action<int> result)
 		{
 			do //;loop
 			{
-				//pbGraphicsUpdate();
-				//pbInputUpdate();
-				pbFrameUpdate(cw as IGameObject);
+				//GraphicsUpdate();
+				//InputUpdate();
+				FrameUpdate(cw as IGameObject);
 				//  Update selected command
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
-				if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.LeftArrow) && (cw.index & 1) == 1)
+				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.LeftArrow) && (cw.index & 1) == 1)
 				{
 					GameDebug.Log("[CommandMenu] Going Left !");
-					//(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 1;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.RightArrow) && (cw.index & 1) == 0)
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.RightArrow) && (cw.index & 1) == 0)
 				{
 					GameDebug.Log("[CommandMenu] Going Right !");
-					//(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 1;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.UpArrow) && (cw.index & 2) == 2)
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.UpArrow) && (cw.index & 2) == 2)
 				{
 					GameDebug.Log("[CommandMenu] Going Up !");
-					//(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 2;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.DownArrow) && (cw.index & 2) == 0)
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.DownArrow) && (cw.index & 2) == 0)
 				{
 					GameDebug.Log("[CommandMenu] Going Down !");
-					//(AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 2;
 				}
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))   // Confirm choice
-				if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Space))   // Confirm choice
+				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Space))   // Confirm choice
 				{
 					GameDebug.Log("[CommandMenu] Select !");
-					//(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					//(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					int ret = cw.index;
 					@lastcmd[index] = (MenuCommands)ret;
 					//return ret;
 					result(ret); break;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B) && index == 2 && @lastcmd[0] != (MenuCommands)2)  // Cancel
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Escape) && index == 2 && @lastcmd[0] != (MenuCommands)2)  // Cancel
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Escape) && index == 2 && @lastcmd[0] != (MenuCommands)2)  // Cancel
 				{
 					GameDebug.Log("[CommandMenu] Cancel !");
-					//(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					//(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					//return -1;
 					result(-1); break;
 				}
 				yield return null;
 			} while (true);
 		}
-	
+
 		/// <summary>
 		/// Use this method to display the list of moves for a Pokémon
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>
-		public IEnumerator pbFightMenu(int index, Action<int> result)
+		public IEnumerator FightMenu(int index, Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			pbShowWindow(FIGHTBOX);
+			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
 			IBattlerIE battler = @battle.battlers[index];
 			cw.battler = battler;
@@ -2064,66 +2071,66 @@ namespace PokemonUnity.Stadium
 				cw.setIndex(0);
 			}
 			cw.megaButton = 0;
-			if (@battle.pbCanMegaEvolve(index)) cw.megaButton = 1;
-			pbSelectBattler(index, 0); //pbSelectBattler(index);
-			pbRefresh();
+			if (@battle.CanMegaEvolve(index)) cw.megaButton = 1;
+			SelectBattler(index, 0); //SelectBattler(index);
+			Refresh();
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(cw);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(cw);
 				//  Update selected command
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
 				{
-					if (cw.setIndex(cw.index - 1)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index - 1)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
 				{
-					if (cw.setIndex(cw.index + 1)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index + 1)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
 				{
-					if (cw.setIndex(cw.index - 2)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index - 2)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
 				{
-					if (cw.setIndex(cw.index + 2)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index + 2)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))       // Confirm choice
 				{
 					int ret = cw.index;
-					(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					@lastmove[index] = ret;
 					return ret;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.CTRL))       // Use Mega Evolution
 				{
-					if (@battle.pbCanMegaEvolve(index))
+					if (@battle.CanMegaEvolve(index))
 					{
-						@battle.pbRegisterMegaEvolution(index);
+						@battle.RegisterMegaEvolution(index);
 						cw.megaButton = 2;
-						(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					}
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B))       // Cancel fight menu
 				{
 					@lastmove[index] = cw.index;
-					(AudioHandler as IGameAudioPlay).pbPlayCancelSE();
+					(AudioHandler as IGameAudioPlay).PlayCancelSE();
 					return -1;
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbFightMenuIE");
-			yield return StartCoroutine(pbFightMenuIE(index, cw, r => _coroutineValue = r));
+			StopCoroutine("FightMenuIE");
+			yield return StartCoroutine(FightMenuIE(index, cw, r => _coroutineValue = r));
 			result?.Invoke(_coroutineValue);
 		}
 
-		public int pbFightMenu(int index)
+		public int FightMenu(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			pbShowWindow(FIGHTBOX);
+			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
 			IBattlerIE battler = @battle.battlers[index];
 			cw.battler = battler;
@@ -2137,58 +2144,58 @@ namespace PokemonUnity.Stadium
 				cw.setIndex(0);
 			}
 			cw.megaButton = 0;
-			if (@battle.pbCanMegaEvolve(index)) cw.megaButton = 1;
-			pbSelectBattler(index, 0); //pbSelectBattler(index);
-			pbRefresh();
+			if (@battle.CanMegaEvolve(index)) cw.megaButton = 1;
+			SelectBattler(index, 0); //SelectBattler(index);
+			Refresh();
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(cw);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(cw);
 				//  Update selected command
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
 				{
-					if (cw.setIndex(cw.index - 1)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index - 1)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
 				{
-					if (cw.setIndex(cw.index + 1)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index + 1)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
 				{
-					if (cw.setIndex(cw.index - 2)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index - 2)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
 				{
-					if (cw.setIndex(cw.index + 2)) (AudioHandler as IGameAudioPlay).pbPlayCursorSE();
+					if (cw.setIndex(cw.index + 2)) (AudioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))       // Confirm choice
 				{
 					int ret = cw.index;
-					(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					@lastmove[index] = ret;
 					return ret;
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.CTRL))       // Use Mega Evolution
 				{
-					if (@battle.pbCanMegaEvolve(index))
+					if (@battle.CanMegaEvolve(index))
 					{
-						@battle.pbRegisterMegaEvolution(index);
+						@battle.RegisterMegaEvolution(index);
 						cw.megaButton = 2;
-						(AudioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					}
 				}
 				else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B))       // Cancel fight menu
 				{
 					@lastmove[index] = cw.index;
-					(AudioHandler as IGameAudioPlay).pbPlayCancelSE();
+					(AudioHandler as IGameAudioPlay).PlayCancelSE();
 					return -1;
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbFightMenuIE");
-			StartCoroutine(pbFightMenuIE(index, cw, r => _coroutineValue = r));
+			StopCoroutine("FightMenuIE");
+			StartCoroutine(FightMenuIE(index, cw, r => _coroutineValue = r));
 			return (int)_coroutineValue;
 		}
 
@@ -2197,72 +2204,72 @@ namespace PokemonUnity.Stadium
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns>Callbacks an int</returns>
-		private IEnumerator pbFightMenuIE(int index, IFightMenuDisplay cw, System.Action<int> result)
+		private IEnumerator FightMenuIE(int index, IFightMenuDisplay cw, System.Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //;loop
 			{
-				//pbGraphicsUpdate();
-				//pbInputUpdate();
-				pbFrameUpdate(cw as IGameObject);
+				//GraphicsUpdate();
+				//InputUpdate();
+				FrameUpdate(cw as IGameObject);
 				//  Update selected command
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
-				if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.LeftArrow) && (cw.index & 1) == 1)
+				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.LeftArrow) && (cw.index & 1) == 1)
 				{
 					GameDebug.Log("[CommandMenu] Going Left !");
 					cw.setIndex(cw.index - 1);
-					//if (cw.setIndex(cw.index - 1)) (audioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//if (cw.setIndex(cw.index - 1)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.RightArrow) && (cw.index & 1) == 0)
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.RightArrow) && (cw.index & 1) == 0)
 				{
 					GameDebug.Log("[CommandMenu] Going Right !");
 					cw.setIndex(cw.index + 1);
-					//if (cw.setIndex(cw.index + 1)) (audioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//if (cw.setIndex(cw.index + 1)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.UpArrow) && (cw.index & 2) == 2)
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.UpArrow) && (cw.index & 2) == 2)
 				{
 					GameDebug.Log("[CommandMenu] Going Up !");
 					cw.setIndex(cw.index - 2);
-					//if (cw.setIndex(cw.index - 2)) (audioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//if (cw.setIndex(cw.index - 2)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.DownArrow) && (cw.index & 2) == 0)
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.DownArrow) && (cw.index & 2) == 0)
 				{
 					GameDebug.Log("[CommandMenu] Going Down !");
 					cw.setIndex(cw.index + 2);
-					//if (cw.setIndex(cw.index + 2)) (audioHandler as IGameAudioPlay).pbPlayCursorSE();
+					//if (cw.setIndex(cw.index + 2)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))				// Confirm choice
-				if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Space))		// Confirm choice
+				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Space))		// Confirm choice
 				{
 					GameDebug.Log("[CommandMenu] Select !");
 					int ret = cw.index;
-					// (audioHandler as IGameAudioPlay).pbPlayDecisionSE();
+					// (audioHandler as IGameAudioPlay).PlayDecisionSE();
 					@lastmove[index] = ret;
 					result(ret);
 					break;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.CTRL))		// Use Mega Evolution
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.RightControl))
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.RightControl))
 				{
 					GameDebug.Log("[CommandMenu] Mega !");
-					if (@battle.pbCanMegaEvolve(index))
+					if (@battle.CanMegaEvolve(index))
 					{
-						@battle.pbRegisterMegaEvolution(index);
+						@battle.RegisterMegaEvolution(index);
 						cw.megaButton = 2;
-						// (audioHandler as IGameAudioPlay).pbPlayDecisionSE();
+						// (audioHandler as IGameAudioPlay).PlayDecisionSE();
 					}
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B))			// Cancel fight menu
-				else if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.Escape))       
+				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Escape))
 				{
 					GameDebug.Log("[CommandMenu] Cancel !");
 					@lastmove[index] = cw.index;
-					// (audioHandler as IGameAudioPlay).pbPlayCancelSE();
+					// (audioHandler as IGameAudioPlay).PlayCancelSE();
 					result(-1);
 					break;
 				}
@@ -2271,22 +2278,22 @@ namespace PokemonUnity.Stadium
 			} while (true);
 		}
 
-		public IEnumerator pbItemMenu(int index, System.Action<Items> result)
+		public IEnumerator ItemMenu(int index, System.Action<Items> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			Items ret = Items.NONE;
 			//int retindex = -1;
 			//int pkmnid = -1;
 			bool endscene = true;
-			//oldsprites = pbFadeOutAndHide(@sprites); //Disable current Scene from view after fading to black
+			//oldsprites = FadeOutAndHide(@sprites); //Disable current Scene from view after fading to black
 			//IPokemonBagScene itemscene = new PokemonBag_Scene();
 			IBagScene itemscene = Game.GameData.Scenes.Bag.initialize();
-			itemscene.pbStartScene(Game.GameData.Bag);
+			itemscene.StartScene(Game.GameData.Bag);
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				Items item = itemscene.pbChooseItem();
+				Items item = itemscene.ChooseItem();
 				if (item == 0) break;
 				int usetype =$ItemData[item][ITEMBATTLEUSE];
 				int cmdUse = -1;
@@ -2305,7 +2312,7 @@ namespace PokemonUnity.Stadium
 					commands.Add(Game._INTL("Cancel"));
 				}
 				string itemname = item.ToString(TextScripts.Name);
-				int command = itemscene.pbShowCommands(Game._INTL("{1} is selected.", itemname), commands);
+				int command = itemscene.ShowCommands(Game._INTL("{1} is selected.", itemname), commands);
 				if (cmdUse >= 0 && command == cmdUse)
 				{
 					if (usetype == 1 || usetype == 3)
@@ -2319,20 +2326,20 @@ namespace PokemonUnity.Stadium
 						//pkmnscreen = new PokemonScreen(pkmnlist, modparty);
 						IPartyDisplayScene pkmnlist = Game.GameData.Scenes.Party.initialize();
 						IPartyDisplayScreen pkmnscreen = Game.GameData.Screens.Party.initialize(pkmnlist, modparty);
-						itemscene.pbEndScene();
-						pkmnscreen.pbStartScene(Game._INTL("Use on which Pokémon?"), @battle.doublebattle);
-						int activecmd = pkmnscreen.pbChoosePokemon();
+						itemscene.EndScene();
+						pkmnscreen.StartScene(Game._INTL("Use on which Pokémon?"), @battle.doublebattle);
+						int activecmd = pkmnscreen.ChoosePokemon();
 						pkmnid = @battle.party1order[activecmd];
 						if (activecmd >= 0 && pkmnid >= 0 && ItemHandlers.hasBattleUseOnPokemon(item))
 						{
-							pkmnlist.pbEndScene();
+							pkmnlist.EndScene();
 							ret = item;
 							retindex = pkmnid;
 							endscene = false;
 							break;
 						}
-						pkmnlist.pbEndScene();
-						itemscene.pbStartScene(Game.GameData.Bag);
+						pkmnlist.EndScene();
+						itemscene.StartScene(Game.GameData.Bag);
 					}
 					else if (usetype == 2 || usetype == 4)
 					{
@@ -2347,35 +2354,35 @@ namespace PokemonUnity.Stadium
 				yield return null;
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbItemMenuIE");
-			StartCoroutine(pbItemMenuIE(index, itemscene, (item, pokemon, sceneEnd) => { _coroutineValue = (int)item; endscene = sceneEnd; }));
+			StopCoroutine("ItemMenuIE");
+			StartCoroutine(ItemMenuIE(index, itemscene, (item, pokemon, sceneEnd) => { _coroutineValue = (int)item; endscene = sceneEnd; }));
 			ret = _coroutineValue > 0 ? (Items)_coroutineValue : ret;
 
-			if (ret > 0) (Game.GameData as Game).pbConsumeItemInBattle(Game.GameData.Bag, ret);
-			if (endscene) itemscene.pbEndScene();
-			//pbFadeInAndShow(@sprites, oldsprites); //Return previous scene, with all of the old data after fading from black
+			if (ret > 0) (Game.GameData as Game).ConsumeItemInBattle(Game.GameData.Bag, ret);
+			if (endscene) itemscene.EndScene();
+			//FadeInAndShow(@sprites, oldsprites); //Return previous scene, with all of the old data after fading from black
 			//return [ret, retindex];
 			//return new KeyValuePair<Items,int> (ret, retindex);
 			result?.Invoke(ret);
 			yield break;
 		}
 
-		public Items pbItemMenu(int index)
+		public Items ItemMenu(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			Items ret = Items.NONE;
 			//int retindex = -1;
 			//int pkmnid = -1;
 			bool endscene = true;
-			//oldsprites = pbFadeOutAndHide(@sprites); //Disable current Scene from view after fading to black
+			//oldsprites = FadeOutAndHide(@sprites); //Disable current Scene from view after fading to black
 			//IPokemonBagScene itemscene = new PokemonBag_Scene();
 			IBagScene itemscene = Game.GameData.Scenes.Bag.initialize();
-			itemscene.pbStartScene(Game.GameData.Bag);
+			itemscene.StartScene(Game.GameData.Bag);
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				Items item = itemscene.pbChooseItem();
+				Items item = itemscene.ChooseItem();
 				if (item == 0) break;
 				int usetype =$ItemData[item][ITEMBATTLEUSE];
 				int cmdUse = -1;
@@ -2394,7 +2401,7 @@ namespace PokemonUnity.Stadium
 					commands.Add(Game._INTL("Cancel"));
 				}
 				string itemname = item.ToString(TextScripts.Name);
-				int command = itemscene.pbShowCommands(Game._INTL("{1} is selected.", itemname), commands);
+				int command = itemscene.ShowCommands(Game._INTL("{1} is selected.", itemname), commands);
 				if (cmdUse >= 0 && command == cmdUse)
 				{
 					if (usetype == 1 || usetype == 3)
@@ -2408,20 +2415,20 @@ namespace PokemonUnity.Stadium
 						//pkmnscreen = new PokemonScreen(pkmnlist, modparty);
 						IPartyDisplayScene pkmnlist = Game.GameData.Scenes.Party.initialize();
 						IPartyDisplayScreen pkmnscreen = Game.GameData.Screens.Party.initialize(pkmnlist, modparty);
-						itemscene.pbEndScene();
-						pkmnscreen.pbStartScene(Game._INTL("Use on which Pokémon?"), @battle.doublebattle);
-						int activecmd = pkmnscreen.pbChoosePokemon();
+						itemscene.EndScene();
+						pkmnscreen.StartScene(Game._INTL("Use on which Pokémon?"), @battle.doublebattle);
+						int activecmd = pkmnscreen.ChoosePokemon();
 						pkmnid = @battle.party1order[activecmd];
 						if (activecmd >= 0 && pkmnid >= 0 && ItemHandlers.hasBattleUseOnPokemon(item))
 						{
-							pkmnlist.pbEndScene();
+							pkmnlist.EndScene();
 							ret = item;
 							retindex = pkmnid;
 							endscene = false;
 							break;
 						}
-						pkmnlist.pbEndScene();
-						itemscene.pbStartScene(Game.GameData.Bag);
+						pkmnlist.EndScene();
+						itemscene.StartScene(Game.GameData.Bag);
 					}
 					else if (usetype == 2 || usetype == 4)
 					{
@@ -2435,21 +2442,21 @@ namespace PokemonUnity.Stadium
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbItemMenuIE");
-			StartCoroutine(pbItemMenuIE(index, itemscene, (item, pokemon, sceneEnd) => { _coroutineValue = (int)item; endscene = sceneEnd; }));
+			StopCoroutine("ItemMenuIE");
+			StartCoroutine(ItemMenuIE(index, itemscene, (item, pokemon, sceneEnd) => { _coroutineValue = (int)item; endscene = sceneEnd; }));
 			ret = _coroutineValue > 0 ? (Items)_coroutineValue : ret;
 
-			if (ret > 0) (Game.GameData as Game).pbConsumeItemInBattle(Game.GameData.Bag, ret);
-			if (endscene) itemscene.pbEndScene();
-			//pbFadeInAndShow(@sprites, oldsprites); //Return previous scene, with all of the old data after fading from black
+			if (ret > 0) (Game.GameData as Game).ConsumeItemInBattle(Game.GameData.Bag, ret);
+			if (endscene) itemscene.EndScene();
+			//FadeInAndShow(@sprites, oldsprites); //Return previous scene, with all of the old data after fading from black
 			//return [ret, retindex];
 			//return new KeyValuePair<Items,int> (ret, retindex);
 			return ret;
 		}
 
-		private IEnumerator pbItemMenuIE(int index, IBagScene itemscene, System.Action<Items,int,bool> result)
+		private IEnumerator ItemMenuIE(int index, IBagScene itemscene, System.Action<Items,int,bool> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			Items ret = Items.NONE;
 			int retindex = -1;
@@ -2458,7 +2465,7 @@ namespace PokemonUnity.Stadium
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //;loop
 			{
-				Items item = itemscene.pbChooseItem();
+				Items item = itemscene.ChooseItem();
 				if (item == 0) break;
 				//int usetype =$ItemData[item][ITEMBATTLEUSE];
 				int cmdUse = -1;
@@ -2477,7 +2484,7 @@ namespace PokemonUnity.Stadium
 					commands.Add(Game._INTL("Cancel"));
 				}
 				string itemname = item.ToString(TextScripts.Name);
-				int command = itemscene.pbShowCommands(Game._INTL("{1} is selected.", itemname), commands);
+				int command = itemscene.ShowCommands(Game._INTL("{1} is selected.", itemname), commands);
 				if (cmdUse >= 0 && command == cmdUse)
 				{
 					if (Kernal.ItemData[item].Flags.Consumable || Kernal.ItemData[item].Flags.Useable_In_Battle) //(usetype == 1 || usetype == 3)
@@ -2491,20 +2498,20 @@ namespace PokemonUnity.Stadium
 						//pkmnscreen = new PokemonScreen(pkmnlist, modparty);
 						IPartyDisplayScene pkmnlist = Game.GameData.Scenes.Party;//.initialize();
 						IPartyDisplayScreen pkmnscreen = Game.GameData.Screens.Party.initialize(pkmnlist, modparty);
-						itemscene.pbEndScene();
-						pkmnscreen.pbStartScene(Game._INTL("Use on which Pokémon?"), @battle.doublebattle);
-						int activecmd = pkmnscreen.pbChoosePokemon();
+						itemscene.EndScene();
+						pkmnscreen.StartScene(Game._INTL("Use on which Pokémon?"), @battle.doublebattle);
+						int activecmd = pkmnscreen.ChoosePokemon();
 						pkmnid = @battle.party1order[activecmd];
 						if (activecmd >= 0 && pkmnid >= 0 && ItemHandlers.hasBattleUseOnPokemon(item))
 						{
-							pkmnlist.pbEndScene();
+							pkmnlist.EndScene();
 							ret = item;
 							retindex = pkmnid;
 							endscene = false;
 							result(ret, retindex, endscene); break;
 						}
-						pkmnlist.pbEndScene();
-						itemscene.pbStartScene(Game.GameData.Bag);
+						pkmnlist.EndScene();
+						itemscene.StartScene(Game.GameData.Bag);
 					}
 					else if (Kernal.ItemData[item].Flags.Useable_Overworld || !Kernal.ItemData[item].Flags.Countable) //(usetype == 2 || usetype == 4)
 					{
@@ -2520,33 +2527,33 @@ namespace PokemonUnity.Stadium
 			} while (true);
 		}
 
-		public IEnumerator pbForgetMove(IPokemon pokemon, Moves moveToLearn, System.Action<int> result)
+		public IEnumerator ForgetMove(IPokemon pokemon, Moves moveToLearn, System.Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
-			if (Game.GameData is IGameSpriteWindow g) g.pbFadeOutIn(99999, block: () => {
+			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
 				//IPokemonSummaryScene scene = new PokemonSummaryScene();
 				//IPokemonSummaryScreen screen = new PokemonSummary(scene);
 				IPokemonSummaryScene scene = Game.GameData.Scenes.Summary.initialize();
 				IPokemonSummaryScreen screen = Game.GameData.Screens.Summary.initialize(scene);
-				ret = screen.pbStartForgetScreen(pokemon,0,moveToLearn);
+				ret = screen.StartForgetScreen(pokemon,0,moveToLearn);
 			});
 			result?.Invoke(ret);
 			yield break;
 		}
 
-		public int pbForgetMove(IPokemon pokemon, Moves moveToLearn)
+		public int ForgetMove(IPokemon pokemon, Moves moveToLearn)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
-			if (Game.GameData is IGameSpriteWindow g) g.pbFadeOutIn(99999, block: () => {
+			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
 				//IPokemonSummaryScene scene = new PokemonSummaryScene();
 				//IPokemonSummaryScreen screen = new PokemonSummary(scene);
 				IPokemonSummaryScene scene = Game.GameData.Scenes.Summary.initialize();
 				IPokemonSummaryScreen screen = Game.GameData.Screens.Summary.initialize(scene);
-				ret = screen.pbStartForgetScreen(pokemon,0,moveToLearn);
+				ret = screen.StartForgetScreen(pokemon,0,moveToLearn);
 			});
 			return ret;
 		}
@@ -2557,57 +2564,57 @@ namespace PokemonUnity.Stadium
 		/// <param name="pokemon"></param>
 		/// <param name="message"></param>
 		/// <returns></returns>
-		public IEnumerator pbChooseMove(IPokemon pokemon, string message, Action<int> result)
+		public IEnumerator ChooseMove(IPokemon pokemon, string message, Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
-			if (Game.GameData is IGameSpriteWindow g) g.pbFadeOutIn(99999, block: () => {
+			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
 				//IPokemonSummaryScene scene = new PokemonSummaryScene();
 				//IPokemonSummaryScreen screen = new PokemonSummary(scene);
 				IPokemonSummaryScene scene = Game.GameData.Scenes.Summary.initialize();
 				IPokemonSummaryScreen screen = Game.GameData.Screens.Summary.initialize(scene);
-				ret = screen.pbStartChooseMoveScreen(pokemon,0,message);
+				ret = screen.StartChooseMoveScreen(pokemon,0,message);
 			});
 			result?.Invoke(ret);
 			yield break;
 		}
-	
-		public int pbChooseMove(IPokemon pokemon, string message)
+
+		public int ChooseMove(IPokemon pokemon, string message)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
-			if (Game.GameData is IGameSpriteWindow g) g.pbFadeOutIn(99999, block: () => {
+			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
 				//IPokemonSummaryScene scene = new PokemonSummaryScene();
 				//IPokemonSummaryScreen screen = new PokemonSummary(scene);
 				IPokemonSummaryScene scene = Game.GameData.Scenes.Summary.initialize();
 				IPokemonSummaryScreen screen = Game.GameData.Screens.Summary.initialize(scene);
-				ret = screen.pbStartChooseMoveScreen(pokemon,0,message);
+				ret = screen.StartChooseMoveScreen(pokemon,0,message);
 			});
 			return ret;
 		}
 
-		public IEnumerator pbNameEntry(string helptext, IPokemon pokemon, System.Action<string> result)
+		public IEnumerator NameEntry(string helptext, IPokemon pokemon, System.Action<string> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			//yield return pbEnterPokemonName(helptext, 0, 10, "", pokemon);
+			//yield return EnterPokemonName(helptext, 0, 10, "", pokemon);
 			result?.Invoke(pokemon.Name);
 			yield break;
 		}
 
-		public string pbNameEntry(string helptext, IPokemon pokemon)
+		public string NameEntry(string helptext, IPokemon pokemon)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			//return pbEnterPokemonName(helptext, 0, 10, "", pokemon);
+			//return EnterPokemonName(helptext, 0, 10, "", pokemon);
 			return pokemon.Name;
 		}
 
-		public void pbSelectBattler(int index, int selectmode)
+		public void SelectBattler(int index, int selectmode)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int numwindows = 1; //@battle.doublebattle ? 4 : 2;
 			for (int i = 0; i < numwindows; i++)
@@ -2619,9 +2626,9 @@ namespace PokemonUnity.Stadium
 			}
 		}
 
-		public int pbFirstTarget(int index, Targets targettype)
+		public int FirstTarget(int index, Targets targettype)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			switch (targettype)
 			{
@@ -2634,7 +2641,7 @@ namespace PokemonUnity.Stadium
 					for (int i = 0; i < 4; i++)
 					{
 						if (i != index && !@battle.battlers[i].isFainted() &&
-						   !@battle.battlers[index].pbIsOpposing(i)) //returns index of first ally pokemon
+						   !@battle.battlers[index].IsOpposing(i)) //returns index of first ally pokemon
 						{
 							return i;
 						}
@@ -2648,7 +2655,7 @@ namespace PokemonUnity.Stadium
 					for (int i = 0; i < 4; i++)
 					{
 						if (i != index && !@battle.battlers[i].isFainted() &&
-						   @battle.battlers[index].pbIsOpposing(i))
+						   @battle.battlers[index].IsOpposing(i))
 						{
 							return i;
 						}
@@ -2659,7 +2666,7 @@ namespace PokemonUnity.Stadium
 				//	for (int i = 0; i < 4; i++)
 				//	{
 				//		if (i != index && !@battle.battlers[i].isFainted() &&
-				//		   @battle.battlers[index].pbIsOpposing(i))
+				//		   @battle.battlers[index].IsOpposing(i))
 				//		{
 				//			return i;
 				//		}
@@ -2678,9 +2685,9 @@ namespace PokemonUnity.Stadium
 			return -1;
 		}
 
-		public void pbUpdateSelected(int index)
+		public void UpdateSelected(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int numwindows = @battle.doublebattle ? 4 : 2;
 			for (int i = 0; i < numwindows; i++)
@@ -2700,11 +2707,11 @@ namespace PokemonUnity.Stadium
 			}
 		}
 
-		public IEnumerator pbChooseTarget(int index, Targets targettype, System.Action<int> result)
+		public IEnumerator ChooseTarget(int index, Targets targettype, System.Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
-			pbShowWindow(FIGHTBOX);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
 			IBattlerIE battler = @battle.battlers[index];
 			cw.battler = battler;
@@ -2718,7 +2725,7 @@ namespace PokemonUnity.Stadium
 				cw.setIndex(0);
 			}
 
-			int curwindow = pbFirstTarget(index, targettype);
+			int curwindow = FirstTarget(index, targettype);
 			//int newcurwindow = -1;
 			if (curwindow == -1)
 			{
@@ -2728,18 +2735,18 @@ namespace PokemonUnity.Stadium
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
-				pbUpdateSelected(curwindow);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
+				UpdateSelected(curwindow);
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					return curwindow;
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					return -1;
 				}
 				if (curwindow >= 0)
@@ -2811,16 +2818,16 @@ namespace PokemonUnity.Stadium
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbChooseTargetIE");
-			yield return StartCoroutine(pbChooseTargetIE(index, targettype, curwindow, r => _coroutineValue = r));
+			StopCoroutine("ChooseTargetIE");
+			yield return StartCoroutine(ChooseTargetIE(index, targettype, curwindow, r => _coroutineValue = r));
 			result?.Invoke(_coroutineValue);
 		}
 
-		int IPokeBattle_SceneNonInteractive.pbChooseTarget(int index, Targets targettype)
+		int IPokeBattle_SceneNonInteractive.ChooseTarget(int index, Targets targettype)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
-			pbShowWindow(FIGHTBOX);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
 			IBattlerIE battler = @battle.battlers[index];
 			cw.battler = battler;
@@ -2834,7 +2841,7 @@ namespace PokemonUnity.Stadium
 				cw.setIndex(0);
 			}
 
-			int curwindow = pbFirstTarget(index, targettype);
+			int curwindow = FirstTarget(index, targettype);
 			//int newcurwindow = -1;
 			if (curwindow == -1)
 			{
@@ -2844,18 +2851,18 @@ namespace PokemonUnity.Stadium
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
-				pbUpdateSelected(curwindow);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
+				UpdateSelected(curwindow);
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					return curwindow;
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					return -1;
 				}
 				if (curwindow >= 0)
@@ -2927,16 +2934,16 @@ namespace PokemonUnity.Stadium
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbChooseTargetIE");
-			StartCoroutine(pbChooseTargetIE(index, targettype, curwindow, r => _coroutineValue = r));
+			StopCoroutine("ChooseTargetIE");
+			StartCoroutine(ChooseTargetIE(index, targettype, curwindow, r => _coroutineValue = r));
 			return (int)_coroutineValue;
 		}
 
-		int IPokeBattle_DebugSceneNoGraphics.pbChooseTarget(int index, Targets targettype)
+		int IPokeBattle_DebugSceneNoGraphics.ChooseTarget(int index, Targets targettype)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
-			pbShowWindow(FIGHTBOX);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
 			IBattlerIE battler = @battle.battlers[index];
 			cw.battler = battler;
@@ -2950,7 +2957,7 @@ namespace PokemonUnity.Stadium
 				cw.setIndex(0);
 			}
 
-			int curwindow = pbFirstTarget(index, targettype);
+			int curwindow = FirstTarget(index, targettype);
 			//int newcurwindow = -1;
 			if (curwindow == -1)
 			{
@@ -2960,18 +2967,18 @@ namespace PokemonUnity.Stadium
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
-				pbUpdateSelected(curwindow);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
+				UpdateSelected(curwindow);
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					return curwindow;
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					return -1;
 				}
 				if (curwindow >= 0)
@@ -3043,32 +3050,32 @@ namespace PokemonUnity.Stadium
 				}
 			} while (true);*/
 			int _coroutineValue = -1;
-			StopCoroutine("pbChooseTargetIE");
-			StartCoroutine(pbChooseTargetIE(index, targettype, curwindow, r => _coroutineValue = r));
+			StopCoroutine("ChooseTargetIE");
+			StartCoroutine(ChooseTargetIE(index, targettype, curwindow, r => _coroutineValue = r));
 			return (int)_coroutineValue;
 		}
-	
-		private IEnumerator pbChooseTargetIE(int index, Targets targettype, int curwindow, System.Action<int> result)
+
+		private IEnumerator ChooseTargetIE(int index, Targets targettype, int curwindow, System.Action<int> result)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			/*int newcurwindow = -1;
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //;loop
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
-				pbUpdateSelected(curwindow);
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
+				UpdateSelected(curwindow);
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					//return curwindow;
 					result(curwindow); break;
 				}
 				if (PokemonUnity.Input.trigger(PokemonUnity.Input.t))
 				{
-					pbUpdateSelected(-1);
+					UpdateSelected(-1);
 					//return -1;
 					result(-1); break;
 				}
@@ -3144,27 +3151,27 @@ namespace PokemonUnity.Stadium
 			yield return null;
 		}
 
-		public int pbSwitch(int index, bool lax, bool cancancel)
+		public int Switch(int index, bool lax, bool cancancel)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int _coroutineValue = -1;
-			StopCoroutine("pbSwitch");
-			StartCoroutine(pbSwitch(index, lax, cancancel, r => _coroutineValue = r));
+			StopCoroutine("Switch");
+			StartCoroutine(Switch(index, lax, cancancel, r => _coroutineValue = r));
 			return (int)_coroutineValue;
 		}
-	
-		public IEnumerator pbSwitch(int index, bool lax, bool cancancel, System.Action<int> result)
-		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			int ret = -1;		
-			IPokemon[] party = @battle.pbParty(index);
+		public IEnumerator Switch(int index, bool lax, bool cancancel, System.Action<int> result)
+		{
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			int ret = -1;
+			IPokemon[] party = @battle.Party(index);
 			IList<int> partypos = @battle.party1order;
 			//  Fade out and hide all sprites
-			/*visiblesprites = pbFadeOutAndHide(@sprites);
-			pbShowWindow(BLANK);
-			pbSetMessageMode(true);
+			/*visiblesprites = FadeOutAndHide(@sprites);
+			ShowWindow(BLANK);
+			SetMessageMode(true);
 			IList<IPokemon> modparty = new List<IPokemon>();
 			for (int i = 0; i < 6; i++)
 			{
@@ -3174,13 +3181,13 @@ namespace PokemonUnity.Stadium
 			//@switchscreen = new PokemonScreen(scene, modparty);
 			IPartyDisplayScene scene = Game.GameData.Scenes.Party.initialize();
 			@switchscreen = Game.GameData.Screens.Party.initialize(scene, modparty);
-			yield return @switchscreen.pbStartScene(Game._INTL("Choose a Pokémon."),
+			yield return @switchscreen.StartScene(Game._INTL("Choose a Pokémon."),
 			   @battle.doublebattle && !@battle.fullparty1);
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //;loop
 			{
-				scene.pbSetHelpText(Game._INTL("Choose a Pokémon."));
-				int activecmd = @switchscreen.pbChoosePokemon();
+				scene.SetHelpText(Game._INTL("Choose a Pokémon."));
+				int activecmd = @switchscreen.ChoosePokemon();
 				if (cancancel && activecmd == -1)
 				{
 					ret = -1;
@@ -3195,11 +3202,11 @@ namespace PokemonUnity.Stadium
 					if (!party[pkmnindex].isEgg) commands[cmdShift = commands.Count] = Game._INTL("Switch In");
 					commands[cmdSummary = commands.Count] = Game._INTL("Summary");
 					commands[commands.Count] = Game._INTL("Cancel");
-					int command = yield return scene.pbShowCommands(Game._INTL("Do what with {1}?", party[pkmnindex].Name), commands.ToArray());
+					int command = yield return scene.ShowCommands(Game._INTL("Do what with {1}?", party[pkmnindex].Name), commands.ToArray());
 					if (cmdShift >= 0 && command == cmdShift)
 					{
-						bool canswitch = lax ? @battle.pbCanSwitchLax(index, pkmnindex, true) :
-						   @battle.pbCanSwitch(index, pkmnindex, true);
+						bool canswitch = lax ? @battle.CanSwitchLax(index, pkmnindex, true) :
+						   @battle.CanSwitch(index, pkmnindex, true);
 						if (canswitch)
 						{
 							ret = pkmnindex;
@@ -3208,24 +3215,24 @@ namespace PokemonUnity.Stadium
 					}
 					else if (cmdSummary >= 0 && command == cmdSummary)
 					{
-						yield return scene.pbSummary(activecmd);
+						yield return scene.Summary(activecmd);
 					}
 				}
 				yield return null;
 			} while (true);
-			@switchscreen.pbEndScene();
+			@switchscreen.EndScene();
 			@switchscreen = null;
-			pbShowWindow(BLANK);
-			pbSetMessageMode(false);
+			ShowWindow(BLANK);
+			SetMessageMode(false);
 			//  back to main battle screen
-			pbFadeInAndShow(@sprites, visiblesprites);*/
+			FadeInAndShow(@sprites, visiblesprites);*/
 			result(ret);
 			yield return null;
 		}
 
-		public IEnumerator pbDamageAnimation(IBattlerIE pkmn, TypeEffective effectiveness)
+		public IEnumerator DamageAnimation(IBattlerIE pkmn, TypeEffective effectiveness)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			IPokemonBattlerSprite pkmnsprite = @sprites[$"pokemon{pkmn.Index}"] as IPokemonBattlerSprite;
 			IIconSprite shadowsprite = @sprites[$"shadow{pkmn.Index}"] as IIconSprite;
@@ -3236,21 +3243,21 @@ namespace PokemonUnity.Stadium
 			@briefmessage = false;
 			int i = 0; do //wait 6 frame ticks...
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				yield return null;
-			} while (i < 6); //6.times 
+			} while (i < 6); //6.times
 			switch (effectiveness)
 			{
 				case TypeEffective.NormalEffective: //0:
-					(AudioHandler as IGameAudioPlay).pbSEPlay("normaldamage");
+					(AudioHandler as IGameAudioPlay).SEPlay("normaldamage");
 					break;
 				case TypeEffective.NotVeryEffective: //1:
-					(AudioHandler as IGameAudioPlay).pbSEPlay("notverydamage");
+					(AudioHandler as IGameAudioPlay).SEPlay("notverydamage");
 					break;
 				case TypeEffective.SuperEffective: //2:
-					(AudioHandler as IGameAudioPlay).pbSEPlay("superdamage");
+					(AudioHandler as IGameAudioPlay).SEPlay("superdamage");
 					break;
 				//ToDo: Ineffective?
 			}
@@ -3263,18 +3270,18 @@ namespace PokemonUnity.Stadium
 				}
 				int j = 0; do
 				{
-					pbGraphicsUpdate();
-					pbInputUpdate();
-					pbFrameUpdate();
+					GraphicsUpdate();
+					InputUpdate();
+					FrameUpdate();
 					sprite.update(); j++;
 					yield return null;
-				} while (j < 4); i++;//4.times 
-			} while (i < 8); //8.times 
+				} while (j < 4); i++;//4.times
+			} while (i < 8); //8.times
 			sprite.selected = 0;
 			sprite.visible = oldvisible;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbDamageAnimation(IBattler pkmn, TypeEffective effectiveness) { }
+		void IPokeBattle_DebugSceneNoGraphics.DamageAnimation(IBattler pkmn, TypeEffective effectiveness) { }
 
 		/// <summary>
 		/// This method is called whenever a Pokémon's HP changes.
@@ -3283,9 +3290,9 @@ namespace PokemonUnity.Stadium
 		/// <param name="pkmn"></param>
 		/// <param name="oldhp"></param>
 		/// <param name="anim"></param>
-		public IEnumerator pbHPChanged(IBattlerIE pkmn, int oldhp, bool anim)
+		public IEnumerator HPChanged(IBattlerIE pkmn, int oldhp, bool anim)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			@briefmessage = false;
 			int hpchange = pkmn.HP - oldhp;
@@ -3302,42 +3309,42 @@ namespace PokemonUnity.Stadium
 			{
 				if (pkmn.HP > oldhp)
 				{
-					yield return pbCommonAnimation("HealthUp", pkmn, null);
+					yield return CommonAnimation("HealthUp", pkmn, null);
 				}
 				else if (pkmn.HP < oldhp)
 				{
-					yield return pbCommonAnimation("HealthDown", pkmn, null);
+					yield return CommonAnimation("HealthDown", pkmn, null);
 				}
 			}
 			IPokemonDataBox sprite = @sprites[$"battlebox{pkmn.Index}"] as IPokemonDataBox;
 			sprite.animateHP(oldhp, pkmn.HP);
 			while (sprite.animatingHP)
 			{
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				sprite.update();
 				yield return null;
 			}
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbHPChanged(IBattler pkmn, int oldhp, bool anim) { }
+		void IPokeBattle_DebugSceneNoGraphics.HPChanged(IBattler pkmn, int oldhp, bool anim) { }
 
 		/// <summary>
 		/// This method is called whenever a Pokémon faints.
 		/// </summary>
 		/// <param name="pkmn"></param>
-		public IEnumerator pbFainted(IBattlerIE pkmn)
+		public IEnumerator Fainted(IBattlerIE pkmn)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
-			/*int frames = pbCryFrameLength(pkmn.pokemon);
-			pbPlayCry(pkmn.pokemon);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			/*int frames = CryFrameLength(pkmn.pokemon);
+			PlayCry(pkmn.pokemon);
 			int i = 0; do {
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate(); i++;
-			} while (i < frames); //frames.times 
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate(); i++;
+			} while (i < frames); //frames.times
 			@sprites[$"shadow{pkmn.Index}"].visible=false;
 			IPokemonBattlerSprite pkmnsprite = @sprites[$"pokemon{pkmn.Index}"] as IPokemonBattlerSprite;
 			int ycoord=0;
@@ -3348,7 +3355,7 @@ namespace PokemonUnity.Stadium
 				if (pkmn.Index==3) ycoord=PokeBattle_SceneConstants.FOEBATTLERD2_Y;
 			} else
 			{
-				if (@battle.pbIsOpposing(pkmn.Index))
+				if (@battle.IsOpposing(pkmn.Index))
 				{
 					ycoord = PokeBattle_SceneConstants.FOEBATTLER_Y;
 				}
@@ -3357,7 +3364,7 @@ namespace PokemonUnity.Stadium
 					ycoord = PokeBattle_SceneConstants.PLAYERBATTLER_Y;
 				}
 			}
-			(AudioHandler as IGameAudioPlay).pbSEPlay("faint");
+			(AudioHandler as IGameAudioPlay).SEPlay("faint");
 			do //;loop
 			{
 				pkmnsprite.y += 8;
@@ -3365,9 +3372,9 @@ namespace PokemonUnity.Stadium
 				{
 					pkmnsprite.src_rect.height = ycoord - pkmnsprite.y + pkmnsprite.oy;
 				}
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if (pkmnsprite.y >= ycoord) break;
 			} while (true);
 
@@ -3375,16 +3382,16 @@ namespace PokemonUnity.Stadium
 			i = 0; do
 			{
 				(@sprites[$"battlebox{pkmn.Index}"] as IPokemonDataBox).opacity -= 32;
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
-			} while (i < 8); //8.times 
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
+			} while (i < 8); //8.times
 			(@sprites[$"battlebox{pkmn.Index}"] as IPokemonDataBox).visible = false;
-			pkmn.pbResetForm();*/
+			pkmn.ResetForm();*/
 			yield return null;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbFainted(IBattler pkmn)
+		void IPokeBattle_DebugSceneNoGraphics.Fainted(IBattler pkmn)
 		{
 		}
 
@@ -3392,11 +3399,11 @@ namespace PokemonUnity.Stadium
 		/// Use this method to choose a command for the enemy.
 		/// </summary>
 		/// <param name="index"></param>
-		public void pbChooseEnemyCommand(int index)
+		public void ChooseEnemyCommand(int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			if(@battle is IBattleAI b) b.pbDefaultChooseEnemyCommand(index);
+			if(@battle is IBattleAI b) b.DefaultChooseEnemyCommand(index);
 		}
 
 		/// <summary>
@@ -3406,38 +3413,38 @@ namespace PokemonUnity.Stadium
 		/// <param name="index"></param>
 		/// <param name="party"></param>
 		/// <returns></returns>
-		public int pbChooseNewEnemy(int index, IPokemon[] party)
+		public int ChooseNewEnemy(int index, IPokemon[] party)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			if (@battle is IBattleAI b) return b.pbDefaultChooseNewEnemy(index, party);
+			if (@battle is IBattleAI b) return b.DefaultChooseNewEnemy(index, party);
 			else GameDebug.LogError("Need to Configure Battle AI to Select Next Pokemon for Computer...");
 			return -1;
 		}
 
-		public IEnumerator pbWildBattleSuccess()
+		public IEnumerator WildBattleSuccess()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			//yield return (AudioHandler as IGameAudioPlay).pbBGMPlay(pbGetWildVictoryME());
+			//yield return (AudioHandler as IGameAudioPlay).BGMPlay(GetWildVictoryME());
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbWildBattleSuccess() { }
+		void IPokeBattle_DebugSceneNoGraphics.WildBattleSuccess() { }
 
-		public IEnumerator pbTrainerBattleSuccess()
+		public IEnumerator TrainerBattleSuccess()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			//yield retun (AudioHandler as IGameAudioPlay).pbBGMPlay(pbGetTrainerVictoryME(@battle.opponent));
+			//yield retun (AudioHandler as IGameAudioPlay).BGMPlay(GetTrainerVictoryME(@battle.opponent));
 			yield break;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbTrainerBattleSuccess() { }
+		void IPokeBattle_DebugSceneNoGraphics.TrainerBattleSuccess() { }
 
-		public IEnumerator pbEXPBar(IBattlerIE battler, IPokemon thispoke, int startexp, int endexp, int tempexp1, int tempexp2)
+		public IEnumerator EXPBar(IBattlerIE battler, IPokemon thispoke, int startexp, int endexp, int tempexp1, int tempexp2)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (battler != null)
 			{
@@ -3454,40 +3461,40 @@ namespace PokemonUnity.Stadium
 				(@sprites[$"battlebox{battler.Index}"] as IPokemonDataBox).animateEXP(startexp, endexp);
 				while ((@sprites[$"battlebox{battler.Index}"] as IPokemonDataBox).animatingEXP)
 				{
-					pbGraphicsUpdate();
-					pbInputUpdate();
-					pbFrameUpdate();
+					GraphicsUpdate();
+					InputUpdate();
+					FrameUpdate();
 					(@sprites[$"battlebox{battler.Index}"] as IPokemonDataBox).update();
 					yield return null;
 				}
 			}
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbEXPBar(IBattler battler, IPokemon thispoke, int startexp, int endexp, int tempexp1, int tempexp2) { }
+		void IPokeBattle_DebugSceneNoGraphics.EXPBar(IBattler battler, IPokemon thispoke, int startexp, int endexp, int tempexp1, int tempexp2) { }
 
-		public IEnumerator pbShowPokedex(Pokemons species, int form)
+		public IEnumerator ShowPokedex(Pokemons species, int form)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			if (Game.GameData is IGameSpriteWindow g) g.pbFadeOutIn(99999, block: () => {
+			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
 				//IPokemonPokedexScene scene = new PokemonPokedexScene();
 				//IPokemonPokedexScreen screen = new PokemonPokedex(scene);
 				IPokemonPokedexScene scene = Game.GameData.Scenes.PokedexScene.initialize();
 				IPokemonPokedexScreen screen = Game.GameData.Screens.PokedexScreen.initialize(scene);
-				screen.pbDexEntry(species);
+				screen.DexEntry(species);
 			});
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbShowPokedex(Pokemons species, int form) { }
+		void IPokeBattle_Scene.ShowPokedex(Pokemons species, int form) { }
 
-		/*public void pbChangeSpecies(IBattlerIE attacker, Pokemons species)
+		/*public void ChangeSpecies(IBattlerIE attacker, Pokemons species)
 		{
 			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			pkmn = @sprites[$"pokemon{attacker.Index}"];
 			shadow = @sprites[$"shadow{attacker.Index}"];
-			back = !@battle.pbIsOpposing(attacker.Index);
+			back = !@battle.IsOpposing(attacker.Index);
 			pkmn.setPokemonBitmapSpecies(attacker.pokemon, species, back);
 			pkmn.x = -pkmn.bitmap.width / 2;
 			pkmn.y = adjustBattleSpriteY(pkmn, species, attacker.Index);
@@ -3526,14 +3533,14 @@ namespace PokemonUnity.Stadium
 			}
 		}*/
 
-		public void pbChangePokemon(IBattler attacker, IPokemon pokemon)
+		public void ChangePokemon(IBattler attacker, IPokemon pokemon)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
 			/*IPokemonBattlerSprite pkmn = @sprites[$"pokemon{attacker.Index}"] as IPokemonBattlerSprite;
 			IIconSprite shadow = @sprites[$"shadow{attacker.Index}"] as IIconSprite;
-			bool back = !@battle.pbIsOpposing(attacker.Index);
-			pkmn.setPokemonBitmap(pokemon, back); //set pokemon battle sprite to current form 
+			bool back = !@battle.IsOpposing(attacker.Index);
+			pkmn.setPokemonBitmap(pokemon, back); //set pokemon battle sprite to current form
 			pkmn.x = -pkmn.bitmap.width / 2;
 			pkmn.y = adjustBattleSpriteY(pkmn, pokemon.Species, attacker.Index); //grab sprite information for new form
 			if (@battle.doublebattle)
@@ -3573,13 +3580,13 @@ namespace PokemonUnity.Stadium
 
 		public void ChangePokemon()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 		}
 
-		//public void pbSaveShadows()
-		public void pbSaveShadows(Action action = null)
+		//public void SaveShadows()
+		public void SaveShadows(Action action = null)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			IList<bool> shadows = new List<bool>();
 			IIconSprite s = null;
@@ -3597,9 +3604,9 @@ namespace PokemonUnity.Stadium
 			}
 		}
 
-		public KeyValuePair<string, bool>? pbFindAnimation(Moves moveid, int userIndex, int hitnum)
+		public KeyValuePair<string, bool>? FindAnimation(Moves moveid, int userIndex, int hitnum)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			try //begin;
 			{
@@ -3617,7 +3624,7 @@ namespace PokemonUnity.Stadium
 				}
 				if (anim != null) return [anim + hitnum, noflip];
 				//  Actual animation not found, get the default animation for the move's type
-				//IMove move = new PBMoveData(moveid);
+				//IMove move = new MoveData(moveid);
 				PokemonUnity.Attack.Data.MoveData move = Kernal.MoveData[moveid];
 				Types type = move.Type;
 				KeyValuePair<Types, Moves>[] typedefaultanim = new KeyValuePair<Types, Moves>[] {
@@ -3642,20 +3649,20 @@ namespace PokemonUnity.Stadium
 				};
 				foreach (KeyValuePair<Types, Moves> i in typedefaultanim)
 				{
-					//if (isConst(type, PBTypes, i[0]) && hasConst(PBMoves, i[1]))
+					//if (isConst(type, Types, i[0]) && hasConst(Moves, i[1]))
 					//{
 						noflip = false;
 						if ((userIndex & 1) == 0)       // On player's side
 						{
-							//anim = move2anim[0][getConst(PBMoves, i[1])];
+							//anim = move2anim[0][getConst(Moves, i[1])];
 							anim = move2anim[0][i.Value];
 						}
 						else                  // On opposing side
 						{
-							//anim = move2anim[1][getConst(PBMoves, i[1])];
+							//anim = move2anim[1][getConst(Moves, i[1])];
 							anim = move2anim[1][i.Value];
 							if (anim) noflip = true;
-							//if (!anim) anim = move2anim[0][getConst(PBMoves, i[1])];
+							//if (!anim) anim = move2anim[0][getConst(Moves, i[1])];
 							if (!anim) anim = move2anim[0][i.Value];
 						}
 						if (anim != null) return new KeyValuePair<string,bool>(anim, noflip);
@@ -3663,7 +3670,7 @@ namespace PokemonUnity.Stadium
 					//}
 				}
 				//  Default animation for the move's type not found, use Tackle's animation
-				//if (hasConst(PBMoves,:TACKLE))
+				//if (hasConst(Moves,:TACKLE))
 				//{
 					anim = move2anim[0][Moves.TACKLE];
 					if (anim != null) return new KeyValuePair<string,bool>(anim, false);
@@ -3676,95 +3683,95 @@ namespace PokemonUnity.Stadium
 			return null;
 		}
 
-		public IEnumerator pbCommonAnimation(string animname, IBattlerIE user, IBattlerIE target, int hitnum = 0)
+		public IEnumerator CommonAnimation(string animname, IBattlerIE user, IBattlerIE target, int hitnum = 0)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*animations = load_data("Data/PkmnAnimations.rxdata");
 			for (int i = 0; i < animations.Length; i++)
 			{
 				if (animations[i] && animations[i].name == "Common:" + animname)
 				{
-					yield return pbAnimationCore(animations[i], user, (target != null) ? target : user);
+					yield return AnimationCore(animations[i], user, (target != null) ? target : user);
 					yield break;
 				}
 			}*/
 			yield break;
 		}
 
-		public void pbCommonAnimation(string animname, IBattler user, IBattler target, int hitnum)
+		public void CommonAnimation(string animname, IBattler user, IBattler target, int hitnum)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*animations = load_data("Data/PkmnAnimations.rxdata");
 			for (int i = 0; i < animations.Length; i++)
 			{
 				if (animations[i] && animations[i].name == "Common:" + animname)
 				{
-					pbAnimationCore(animations[i], user, (target != null) ? target : user);
+					AnimationCore(animations[i], user, (target != null) ? target : user);
 					return;
 				}
 			}*/
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbCommonAnimation(Moves moveid, IBattler attacker, IBattler opponent, int hitnum) { }
+		void IPokeBattle_DebugSceneNoGraphics.CommonAnimation(Moves moveid, IBattler attacker, IBattler opponent, int hitnum) { }
 
-		public IEnumerator pbAnimation(Moves moveid, IBattlerIE user, IBattlerIE target, int hitnum)
+		public IEnumerator Animation(Moves moveid, IBattlerIE user, IBattlerIE target, int hitnum)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			/*KeyValuePair<string,bool>? animid = pbFindAnimation(moveid, user.Index, hitnum);
+			/*KeyValuePair<string,bool>? animid = FindAnimation(moveid, user.Index, hitnum);
 			if (animid==null) yield break;
 			string anim = animid.Value.Key;
 			IDictionary<string,string> animations = load_data("Data/PkmnAnimations.rxdata");
-			pbSaveShadows(() =>
+			SaveShadows(() =>
 			{
 				if (animid.Value.Value)       // On opposing side and using OppMove animation
 				{
-					yield return pbAnimationCore(animations[anim], target, user, true);
+					yield return AnimationCore(animations[anim], target, user, true);
 				}
 				else         // On player's side, and/or using Move animation
 				{
-					yield return pbAnimationCore(animations[anim], user, target);
+					yield return AnimationCore(animations[anim], user, target);
 				}
 			});
-			if (new PBMoveData(moveid).function == 0x69 && user != null && target != null)      // Transform
-			{ 
+			if (new MoveData(moveid).function == 0x69 && user != null && target != null)      // Transform
+			{
 				//  Change form to transformed version
-				pbChangePokemon(user, target.pokemon);
+				ChangePokemon(user, target.pokemon);
 			}*/
 			yield break;
 		}
-	
-		void IPokeBattle_DebugSceneNoGraphics.pbAnimation(Moves moveid, IBattler user, IBattler target, int hitnum)
+
+		void IPokeBattle_DebugSceneNoGraphics.Animation(Moves moveid, IBattler user, IBattler target, int hitnum)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
-			int animid = pbFindAnimation(moveid, user.Index, hitnum);
+			int animid = FindAnimation(moveid, user.Index, hitnum);
 			if (!animid) return;
 			anim = animid[0];
 			animations = load_data("Data/PkmnAnimations.rxdata");
-			pbSaveShadows(() =>
+			SaveShadows(() =>
 			{
 				if (animid[1])       // On opposing side and using OppMove animation
 				{
-					pbAnimationCore(animations[anim], target, user, true);
+					AnimationCore(animations[anim], target, user, true);
 				}
 				else         // On player's side, and/or using Move animation
 				{
-					pbAnimationCore(animations[anim], user, target);
+					AnimationCore(animations[anim], user, target);
 				}
 			});
-			if (new PBMoveData(moveid).function == 0x69 && user != null && target != null)      // Transform
-			{ 
+			if (new MoveData(moveid).function == 0x69 && user != null && target != null)      // Transform
+			{
 				//  Change form to transformed version
-				pbChangePokemon(user, target.pokemon);
+				ChangePokemon(user, target.pokemon);
 			}*/
 		}
 
-		public IEnumerator pbAnimationCore(string animation, IBattlerIE user, IBattlerIE target, bool oppmove)
+		public IEnumerator AnimationCore(string animation, IBattlerIE user, IBattlerIE target, bool oppmove)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*if (!animation) yield break;
 			@briefmessage = false;
@@ -3777,7 +3784,7 @@ namespace PokemonUnity.Stadium
 			if (!targetsprite)
 			{
 				if (!target) target = user;
-				animplayer = new PBAnimationPlayerX(animation, user, target, self, oppmove);
+				animplayer = new AnimationPlayerX(animation, user, target, self, oppmove);
 				userwidth = (!usersprite || !usersprite.bitmap || usersprite.bitmap.disposed ?) ? 128 : usersprite.bitmap.width;
 				userheight = (!usersprite || !usersprite.bitmap || usersprite.bitmap.disposed ?) ? 128 : usersprite.bitmap.height;
 				animplayer.setLineTransform(
@@ -3788,7 +3795,7 @@ namespace PokemonUnity.Stadium
 			}
 			else
 			{
-				animplayer = new PBAnimationPlayerX(animation, user, target, self, oppmove);
+				animplayer = new AnimationPlayerX(animation, user, target, self, oppmove);
 				userwidth = (!usersprite || !usersprite.bitmap || usersprite.bitmap.disposed ?) ? 128 : usersprite.bitmap.width;
 				userheight = (!usersprite || !usersprite.bitmap || usersprite.bitmap.disposed ?) ? 128 : usersprite.bitmap.height;
 				targetwidth = (!targetsprite.bitmap || targetsprite.bitmap.disposed ?) ? 128 : targetsprite.bitmap.width;
@@ -3803,9 +3810,9 @@ namespace PokemonUnity.Stadium
 			while (animplayer.playing)
 			{
 				animplayer.update();
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				yield return null;
 			}
 			if (usersprite) usersprite.ox = 0;
@@ -3820,32 +3827,32 @@ namespace PokemonUnity.Stadium
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbAnimationCore(string animation, IBattler user, IBattler target, bool oppmove) { }
+		void IPokeBattle_Scene.AnimationCore(string animation, IBattler user, IBattler target, bool oppmove) { }
 
-		public IEnumerator pbLevelUp(IBattlerIE battler, IPokemon pokemon, int oldtotalhp, int oldattack, int olddefense, int oldspeed, int oldspatk, int oldspdef)
+		public IEnumerator LevelUp(IBattlerIE battler, IPokemon pokemon, int oldtotalhp, int oldattack, int olddefense, int oldspeed, int oldspatk, int oldspdef)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
-		
-			/*pbTopRightWindow(Game._INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+
+			/*TopRightWindow(Game._INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
 			   pokemon.TotalHP - oldtotalhp,
 			   pokemon.ATK - oldattack,
 			   pokemon.DEF - olddefense,
 			   pokemon.SPA - oldspatk,
 			   pokemon.SPD - oldspdef,
 			   pokemon.SPE - oldspeed));
-			pbTopRightWindow(Game._INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
+			TopRightWindow(Game._INTL("Max. HP<r>{1}\r\nAttack<r>{2}\r\nDefense<r>{3}\r\nSp. Atk<r>{4}\r\nSp. Def<r>{5}\r\nSpeed<r>{6}",
 			   pokemon.TotalHP, pokemon.ATK, pokemon.DEF, pokemon.SPA, pokemon.SPD, pokemon.SPE));*/
 			yield return null;
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbLevelUp(IBattler battler, IPokemon pokemon, int oldtotalhp, int oldattack, int olddefense, int oldspeed, int oldspatk, int oldspdef) { }
+		void IPokeBattle_DebugSceneNoGraphics.LevelUp(IBattler battler, IPokemon pokemon, int oldtotalhp, int oldattack, int olddefense, int oldspeed, int oldspatk, int oldspdef) { }
 
-		public IEnumerator pbThrowAndDeflect(Items ball, int targetBattler)
+		public IEnumerator ThrowAndDeflect(Items ball, int targetBattler)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
-			balltype = pbGetBallType(ball);
+			balltype = GetBallType(ball);
 			ball = string.Format("Graphics/Pictures/ball%02d", balltype);
 			//  sprite
 			IIconSprite spriteBall = new IconSprite(0, 0, @viewport);
@@ -3859,20 +3866,20 @@ namespace PokemonUnity.Stadium
 			pictureBall.moveOrigin(1, PictureOrigin.nenter);
 			pictureBall.moveXY(0, 1, 10, 180);
 			//  directives
-			pictureBall.moveSE(1, "Audio/SE/throw");
+			pictureBall.moveSE(1, "AudioManager/SE/throw");
 			pictureBall.moveCurve(30, 1, 150, 70, 30 + (Game.GameData as Game).Graphics.width / 2, 10, center[0], center[1]);
 			pictureBall.moveAngle(30, 1, -1080);
 			pictureBall.moveAngle(0, pictureBall.totalDuration, 0);
 			delay = pictureBall.totalDuration;
-			pictureBall.moveSE(delay, "Audio/SE/balldrop");
+			pictureBall.moveSE(delay, "AudioManager/SE/balldrop");
 			pictureBall.moveXY(20, delay, 0, (Game.GameData as Game).Graphics.height);
 			do //;loop
 			{
 				pictureBall.update();
 				setPictureIconSprite(spriteBall, pictureBall);
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if (!pictureBall.running) break;
 				yield return null;
 			} while (true);
@@ -3881,11 +3888,11 @@ namespace PokemonUnity.Stadium
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbThrowAndDeflect(Items ball, int targetBattler) { }
+		void IPokeBattle_Scene.ThrowAndDeflect(Items ball, int targetBattler) { }
 
-		public IEnumerator pbThrow(Items ball, int shakes, bool critical, int targetBattler, bool showplayer)
+		public IEnumerator Throw(Items ball, int shakes, bool critical, int targetBattler, bool showplayer)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
 			int burst = -1;
@@ -3910,33 +3917,33 @@ namespace PokemonUnity.Stadium
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbThrow(Items ball, int shakes, bool critical, int targetBattler, bool showplayer) { }
+		void IPokeBattle_Scene.Throw(Items ball, int shakes, bool critical, int targetBattler, bool showplayer) { }
 
-		public IEnumerator pbThrowSuccess()
+		public IEnumerator ThrowSuccess()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//if wild pokemon...
 			if (@battle.opponent == null) {
 				@briefmessage=false;
-				(AudioHandler as IGameAudioPlay).pbMEPlay("Jingle - HMTM");
+				(AudioHandler as IGameAudioPlay).MEPlay("Jingle - HMTM");
 				//All of this below should be a coroutine that returns the value selected in UI
 				int frames=(int)(3.5*(Game.GameData as Game).Graphics.frame_rate);
 				int i = 0; do {
-					pbGraphicsUpdate();
-					pbInputUpdate();
-					pbFrameUpdate(); i++;
+					GraphicsUpdate();
+					InputUpdate();
+					FrameUpdate(); i++;
 					yield return null;
-				} while (i < frames); //frames.times 
+				} while (i < frames); //frames.times
 			}
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbThrowSuccess() { }
+		void IPokeBattle_Scene.ThrowSuccess() { }
 
-		public IEnumerator pbHideCaptureBall()
+		public IEnumerator HideCaptureBall()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (@sprites["capture"] != null)
 			{
@@ -3944,19 +3951,19 @@ namespace PokemonUnity.Stadium
 				{
 					if ((@sprites["capture"] as IIconSprite).opacity <= 0) break;
 					(@sprites["capture"] as IIconSprite).opacity -= 12;
-					pbGraphicsUpdate();
-					pbInputUpdate();
-					pbFrameUpdate();
+					GraphicsUpdate();
+					InputUpdate();
+					FrameUpdate();
 					yield return null;
 				} while (true); //Should end after opacity is reached... maybe destroy after?
 			}
 		}
 
-		void IPokeBattle_Scene.pbHideCaptureBall() { }
+		void IPokeBattle_Scene.HideCaptureBall() { }
 
-		public IEnumerator pbThrowBait()
+		public IEnumerator ThrowBait()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
 			string ball = string.Format("Graphics/Pictures/battleBait");
@@ -3991,7 +3998,7 @@ namespace PokemonUnity.Stadium
 			picturePlayer.moveOrigin(1, PictureOrigin.TopLeft);
 			picturePlayer.moveXY(0, 1, playerpos[0], playerpos[1]);
 			//  directives
-			picturePoke.moveSE(1, "Audio/SE/throw");
+			picturePoke.moveSE(1, "AudioManager/SE/throw");
 			pictureBall.moveCurve(30, 1, 64, 256, (Game.GameData as Game).Graphics.width / 2, 48,
 								  PokeBattle_SceneConstants.FOEBATTLER_X - 48,
 								  PokeBattle_SceneConstants.FOEBATTLER_Y);
@@ -4011,11 +4018,11 @@ namespace PokemonUnity.Stadium
 				picturePlayer.moveXY(0, 40, playerpos[0], playerpos[1]);
 			}
 			//  Show Pokémon jumping before eating the bait
-			picturePoke.moveSE(50, "Audio/SE/jump");
+			picturePoke.moveSE(50, "AudioManager/SE/jump");
 			picturePoke.moveXY(8, 50, pokecenter[0], pokecenter[1] - 8);
 			picturePoke.moveXY(8, 58, pokecenter[0], pokecenter[1]);
 			pictureBall.moveVisible(66, false);
-			picturePoke.moveSE(66, "Audio/SE/jump");
+			picturePoke.moveSE(66, "AudioManager/SE/jump");
 			picturePoke.moveXY(8, 66, pokecenter[0], pokecenter[1] - 8);
 			picturePoke.moveXY(8, 74, pokecenter[0], pokecenter[1]);
 			//  TODO: Show Pokémon eating the bait (pivots at the bottom right corner)
@@ -4029,9 +4036,9 @@ namespace PokemonUnity.Stadium
 				setPictureIconSprite(spriteBall, pictureBall);
 				setPictureSprite(spritePoke, picturePoke);
 				setPictureIconSprite(spritePlayer, picturePlayer);
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if (!pictureBall.running && !picturePoke.running && !picturePlayer.running) break;
 				yield return null;
 			} while (true);
@@ -4040,11 +4047,11 @@ namespace PokemonUnity.Stadium
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbThrowBait() { }
+		void IPokeBattle_Scene.ThrowBait() { }
 
-		public IEnumerator pbThrowRock()
+		public IEnumerator ThrowRock()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage=false;
 			ball=string.Format("Graphics/Pictures/battleRock");
@@ -4087,11 +4094,11 @@ namespace PokemonUnity.Stadium
 			pictureAnger.moveOrigin(1,PictureOrigin.nenter);
 			pictureAnger.moveZoom(0,1,100);
 			//  directives
-			picturePoke.moveSE(1,"Audio/SE/throw");
+			picturePoke.moveSE(1,"AudioManager/SE/throw");
 			pictureBall.moveCurve(30,1,64,256,(Game.GameData as Game).Graphics.width/2,48,pokecenter[0],pokecenter[1]);
 			pictureBall.moveAngle(30,1,-720);
 			pictureBall.moveAngle(0,pictureBall.totalDuration,0);
-			pictureBall.moveSE(30,"Audio/SE/notverydamage");
+			pictureBall.moveSE(30,"AudioManager/SE/notverydamage");
 			if (armanim) {
 				picturePlayer.moveSrc(1,@sprites["player"].bitmap.height,0);
 				picturePlayer.moveXY(0,1,playerpos[0]-14,playerpos[1]);
@@ -4106,12 +4113,12 @@ namespace PokemonUnity.Stadium
 			}
 			pictureBall.moveVisible(40,false);
 			//  Show Pokémon being angry
-			pictureAnger.moveSE(48,"Audio/SE/jump");
+			pictureAnger.moveSE(48,"AudioManager/SE/jump");
 			pictureAnger.moveVisible(48,true);
 			pictureAnger.moveZoom(8,48,130);
 			pictureAnger.moveZoom(8,56,100);
 			pictureAnger.moveXY(0,64,pokecenter[0]+56,pokecenter[1]-64);
-			pictureAnger.moveSE(64,"Audio/SE/jump");
+			pictureAnger.moveSE(64,"AudioManager/SE/jump");
 			pictureAnger.moveZoom(8,64,130);
 			pictureAnger.moveZoom(8,72,100);
 			pictureAnger.moveVisible(80,false);
@@ -4127,9 +4134,9 @@ namespace PokemonUnity.Stadium
 				setPictureSprite(spritePoke,picturePoke);
 				setPictureIconSprite(spritePlayer,picturePlayer);
 				setPictureIconSprite(spriteAnger,pictureAnger);
-				pbGraphicsUpdate();
-				pbInputUpdate();
-				pbFrameUpdate();
+				GraphicsUpdate();
+				InputUpdate();
+				FrameUpdate();
 				if (!pictureBall.running && !picturePoke.running &&
 						!picturePlayer.running && !pictureAnger.running) break;
 				yield return null;
@@ -4138,16 +4145,16 @@ namespace PokemonUnity.Stadium
 			yield break;
 		}
 
-		void IPokeBattle_Scene.pbThrowRock() { }
+		void IPokeBattle_Scene.ThrowRock() { }
 
-		public void pbChatter(IBattler attacker, IBattler opponent) //ToDo: Make IEnumerator...
+		public void Chatter(IBattler attacker, IBattler opponent) //ToDo: Make IEnumerator...
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (attacker.pokemon != null)
 			{
 				//Plays audio sound...
-				if (Game.GameData is IGameUtility u) u.pbPlayCry(attacker.pokemon, 90, 100);
+				if (Game.GameData is IGameUtility u) u.PlayCry(attacker.pokemon, 90, 100);
 			}
 			//All of this below should be a coroutine that returns the value selected in UI
 			//int i = 0; do //Idle animation for 1 second...
@@ -4155,7 +4162,7 @@ namespace PokemonUnity.Stadium
 			//	(Game.GameData as Game).Graphics.update();
 			//	PokemonUnity.Input.update(); i++;
 			//	yield return null;
-			//} while (i < (Game.GameData as Game).Graphics.frame_rate); //Graphics.frame_rate.times 
+			//} while (i < (Game.GameData as Game).Graphics.frame_rate); //Graphics.frame_rate.times
 		}
 
 		private IEnumerator ForceFrameRefresh()
@@ -4166,74 +4173,74 @@ namespace PokemonUnity.Stadium
 
 		IPokeBattle_DebugSceneNoGraphics IPokeBattle_DebugSceneNoGraphics.initialize()
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbBattleArenaBattlers(IBattle b1, IBattle b2)
+		void IPokeBattle_DebugSceneNoGraphics.BattleArenaBattlers(IBattle b1, IBattle b2)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		void IPokeBattle_DebugSceneNoGraphics.pbBattleArenaJudgment(IBattle b1, IBattle b2, int[] r1, int[] r2)
+		void IPokeBattle_DebugSceneNoGraphics.BattleArenaJudgment(IBattle b1, IBattle b2, int[] r1, int[] r2)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		int IPokeBattle_DebugSceneNoGraphics.pbBlitz(int keys)
+		int IPokeBattle_DebugSceneNoGraphics.Blitz(int keys)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		public IEnumerator pbNextTarget(int cur, int index)
+		public IEnumerator NextTarget(int cur, int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		void IPokeBattle_DebugScene.pbNextTarget(int cur, int index)
+		void IPokeBattle_DebugScene.NextTarget(int cur, int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		void IPokeBattle_DebugScene.pbPokemonString(IPokemon pkmn)
+		void IPokeBattle_DebugScene.PokemonString(IPokemon pkmn)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		public IEnumerator pbPrevTarget(int cur, int index)
+		public IEnumerator PrevTarget(int cur, int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		void IPokeBattle_DebugScene.pbPrevTarget(int cur, int index)
+		void IPokeBattle_DebugScene.PrevTarget(int cur, int index)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
-		bool IHasDisplayMessage.pbDisplayConfirm(string v)
+		bool IHasDisplayMessage.DisplayConfirm(string v)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			bool value = false;
-			//return pbDisplayConfirmMessage(v);
-			pbDisplayConfirmMessage(v, result: r => value = r);
+			//return DisplayConfirmMessage(v);
+			DisplayConfirmMessage(v, result: r => value = r);
 			return value;
 		}
 	}

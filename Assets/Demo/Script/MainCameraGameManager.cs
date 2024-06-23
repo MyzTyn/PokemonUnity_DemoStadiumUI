@@ -103,7 +103,7 @@ namespace PokemonUnity.Stadium
 					//GameDebug.Log("2-" + System.IO.Path.GetFullPath("..\\..\\..\\veekun-pokedex.sqlite"));
 					//GameDebug.Log("3-" + System.IO.Path.GetFullPath("..\\..\\..\\..\\veekun-pokedex.sqlite"));
 					//GameDebug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
-					Game.DatabasePath = @"Data Source=.\veekun-pokedex.sqlite";
+					Game.DatabasePath = @"Data Source=veekun-pokedex.sqlite";
 					Game.con = (System.Data.IDbConnection)new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
 					Game.ResetSqlConnection(Game.DatabasePath);//@"Data\veekun-pokedex.sqlite"
 					GameDebug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
@@ -367,6 +367,7 @@ namespace PokemonUnity.Stadium
 		private void DisplayRentalPokemons()
 		{
 			Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
+			Debug.Assert(pokemonButton != null, "PokemonButton is null!!");
 			if (StoreButtonData.Count == 0)
 			{
 				Debug.Log("Creating 151 Pokemons");

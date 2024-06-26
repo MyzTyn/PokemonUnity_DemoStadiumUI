@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PokemonUnity.Stadium
+namespace PokemonUnity.Interface.UnityEngine
 {
 	/// <summary>
 	/// Used to display the command options in the command menu
@@ -26,6 +26,8 @@ namespace PokemonUnity.Stadium
 		{
 			rect = GetComponent<RectTransform>();
 			background = GetComponent<global::UnityEngine.UI.Image>();
+			if (Logo == null) Logo = GetComponentInChildren<global::UnityEngine.UI.Image>();
+			if (Text == null) Text = GetComponentInChildren<global::TMPro.TextMeshProUGUI>();
 		}
 	}
 }

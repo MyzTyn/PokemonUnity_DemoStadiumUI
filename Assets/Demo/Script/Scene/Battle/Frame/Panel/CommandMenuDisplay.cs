@@ -11,28 +11,32 @@ using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.PokeBattle.Effects;
 //using PokemonEssentials.Interface.PokeBattle.Rules;
 
-namespace PokemonUnity.Stadium
+namespace PokemonUnity.Interface.UnityEngine
 {
 	/// <summary>
 	/// Command menu (Fight/Pokémon/Bag/Run)
 	/// </summary>
-	//[RequireComponent(typeof())]
+	[RequireComponent(typeof(RectTransform))]
 	public partial class CommandMenuDisplay : MonoBehaviour, ICommandMenuDisplay, IViewport, IGameObject
 	{
-		[SerializeField] private CommandMenuButtons buttons;
-		private bool disposedValue;
+		protected global::UnityEngine.RectTransform rect;
+		[SerializeField] protected CommandMenuButtons buttons;
+		[SerializeField] protected CommandWindowText Window;
+		[SerializeField] protected WindowText messageBox;
+		protected bool disposedValue;
+		protected IRect _rect;
 		public int Index;
 		public int Mode;
 		public IIconSprite display;
-		//ToDo: a prefab of child button for the parent panel to instantiate custom/dynamic commands in game scene
-		public IWindow_CommandPokemon window;
-		public IWindow_UnformattedTextPokemon msgbox;
 		/// <summary>
-		/// Collection of sprites, used to contain the background/text for unity button image 
+		/// Collection of sprites, used to contain the background/text for unity button image
 		/// that represents the command issued to pokemon during player's turn
 		/// </summary>
 		/// Should represent master collection of sprites, is assigned to UI using functions
-		public UnityEngine.Sprite[] commandSpriteArray;
+		public global::UnityEngine.Sprite[] commandSpriteArray;
+		//ToDo: a prefab of child button for the parent panel to instantiate custom/dynamic commands in game scene
+		public IWindow_CommandPokemon window { get { return Window; } set { Window = value as CommandWindowText; } }
+		public IWindow_UnformattedTextPokemon msgbox { get { return messageBox; } set { messageBox = value as WindowText; } }
 
 		#region Property
 		public int mode { get { return Mode; } set { Mode = value; } }
@@ -106,7 +110,7 @@ namespace PokemonUnity.Stadium
 				//@msgbox.visible = value;
 				//if (@display != null) @display.visible = value;
 				if (@buttons != null) @buttons.visible = value;
-				//gameObject.SetActive(value); //set this unity go IsActive status to value 
+				gameObject.SetActive(value); //set this unity go IsActive status to value
 			}
 		}
 
@@ -130,48 +134,68 @@ namespace PokemonUnity.Stadium
 			set { Index = value; }
 		}
 
-		public bool disposed 
-		{ 
+		public bool disposed
+		{
 			get
 			{
 				return @msgbox.disposed || @window.disposed;
-			} 
+			}
 		}
 
-		IRect IViewport.rect { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-		#endregion
-
-		public ICommandMenuDisplay initialize(IViewport viewport= null)
+		IRect IViewport.rect
 		{
-			/*
+			get { return _rect; }
+			set
+			{
+				//rect = ((object)value as global::UnityEngine.GameObject).GetComponent<global::UnityEngine.RectTransform>();
+				rect.rect.Set(value.x, value.y, value.width, value.height);
+				_rect = value;
+			}
+		}
+		#endregion
+		private void Awake()
+		{
+			rect = GetComponent<RectTransform>();
+		}
+
+		public ICommandMenuDisplay initialize(IViewport viewport = null)
+		{
 			//@display = null; //set display to false
 			if (PokeBattle_SceneConstants.USECOMMANDBOX)
 			{
 				//set display to true
 				//@display = new IconSprite(0, (Game.GameData as Game).Graphics.height - 96, viewport);
-				@display.initialize(0, (Game.GameData as Game).Graphics.height - 96, viewport);
-				@display.setBitmap("Graphics/Pictures/battleCommand");
+				if (@window != null) {
+					@display.initialize(0, (Game.GameData as Game).Graphics.height - 96, viewport);
+					@display.setBitmap("Graphics/Pictures/battleCommand");
+				}
 			}
 			//@window = new Window_CommandPokemon().WithSize([],
 			//	(Game.GameData as Game).Graphics.width - 240,(Game.GameData as Game).Graphics.height - 96,240,96,viewport);
-			@window.WithSize(new string[0], (Game.GameData as Game).Graphics.width - 240,(Game.GameData as Game).Graphics.height - 96,240,96,viewport);
-			@window.columns = 2;
-			@window.columnSpacing = 4;
-			@window.ignore_input = true;
+			if (@window != null) {
+				@window.WithSize(new string[0], (Game.GameData as Game).Graphics.width - 240, (Game.GameData as Game).Graphics.height - 96, 240, 96, viewport);
+				@window.columns = 2;
+				@window.columnSpacing = 4;
+				@window.ignore_input = true;
+			}
 			//@msgbox = new Window_UnformattedTextPokemon()WithSize(
 			//	 "", 16, (Game.GameData as Game).Graphics.height - 96 + 2, 220, 96, viewport);
-			@msgbox.WithSize("", 16, (Game.GameData as Game).Graphics.height - 96 + 2, 220, 96, viewport);
-			@msgbox.baseColor = PokeBattle_SceneConstants.MESSAGEBASECOLOR;
-			@msgbox.shadowColor = PokeBattle_SceneConstants.MESSAGESHADOWCOLOR;
-			@msgbox.windowskin = null;
-			@title = "";*/
+			if (@msgbox != null) {
+				@msgbox.WithSize("", 16, (Game.GameData as Game).Graphics.height - 96 + 2, 220, 96, viewport);
+				@msgbox.baseColor = PokeBattle_SceneConstants.MESSAGEBASECOLOR;
+				@msgbox.shadowColor = PokeBattle_SceneConstants.MESSAGESHADOWCOLOR;
+				@msgbox.windowskin = false; //Resources.Load<global::UnityEngine.Sprite>("null");
+			}
+			//@title = ""; //ToDo: no clue what this is for...
 			//@buttons = null; //set display to false
+			buttons.gameObject.SetActive(false);
 			if (PokeBattle_SceneConstants.USECOMMANDBOX)
 			{
 				//set display to true
 				@window.opacity = 0;
 				@window.x = (Game.GameData as Game).Graphics.width;
 				//@buttons = new CommandMenuButtons(this.index, this.mode, viewport);
+				buttons.gameObject.SetActive(true);
 				@buttons.initialize(this.index, this.mode, this);
 			}
 			return this;
@@ -179,17 +203,17 @@ namespace PokemonUnity.Stadium
 
 		public void setTexts(params string[] value)
 		{
-			return; //ToDo: remove this line from class...
-			@msgbox.text = value[0];
+			if (value == null || value.Length == 0) return;
+			if (@msgbox != null) @msgbox.text = value[0];
 			//if using sprites/images as menu option, may need to change logic below
 			IList<string> commands = new List<string>();
 			for (int i = 1; i < 4; i++)
 			{
-				//if (value[i] && value[i] != null) 
-				if (value.Length <= i && value[i] != null) 
+				//if (value[i] && value[i] != null)
+				if (value.Length <= i && value[i] != null)
 					commands.Add(value[i]);
 			}
-			@window.commands = commands.ToArray();
+			if (@window != null) @window.commands = commands.ToArray();
 		}
 
 		public void refresh()

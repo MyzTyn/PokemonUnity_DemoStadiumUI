@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// Used to display the moves in the FIGHT menu

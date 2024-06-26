@@ -11,7 +11,7 @@ using PokemonEssentials.Interface.PokeBattle.Effects;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// UI panel for displaying buttons under menu options: "FIGHT", "PARTY", "BAG", "RUN".

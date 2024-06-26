@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using PokemonEssentials.Interface;
 //using PokemonEssentials.Interface.PokeBattle.Rules;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// Used for detecting user input.

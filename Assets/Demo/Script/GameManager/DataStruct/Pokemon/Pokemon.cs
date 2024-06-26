@@ -15,7 +15,7 @@ using PokemonEssentials.Interface.Screen;
 using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.PokeBattle.Effects;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// A Pokemon placeholder class to be used while in-battle,

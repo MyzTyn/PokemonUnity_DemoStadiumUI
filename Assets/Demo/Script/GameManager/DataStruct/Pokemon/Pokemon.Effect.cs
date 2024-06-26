@@ -14,7 +14,7 @@ using PokemonEssentials.Interface.Screen;
 using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.PokeBattle.Effects;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	//ToDo: Add Coroutine Expression for Handling IEnumerator Functions...
 	public partial class Battler : IBattlerEffectIE

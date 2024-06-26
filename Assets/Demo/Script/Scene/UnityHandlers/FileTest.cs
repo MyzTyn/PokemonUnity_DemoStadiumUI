@@ -4,7 +4,7 @@ using System.Linq;
 using PokemonEssentials.Interface;
 using UnityEngine;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	[RequireComponent(typeof(AudioData))]
 	public class FileTest : MonoBehaviour, IFileTest//, IResources

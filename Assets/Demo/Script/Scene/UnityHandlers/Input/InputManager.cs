@@ -16,7 +16,7 @@ using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.PokeBattle.Effects;
 //using PokemonEssentials.Interface.PokeBattle.Rules;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// This class acts as a bridge between the Unity Input class and the PokemonUnity Input class.

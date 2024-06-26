@@ -5,7 +5,7 @@ using PokemonEssentials.Interface;
 using PokemonUnity;
 using UnityEngine;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// UnityEngine GraphicHandler Logic

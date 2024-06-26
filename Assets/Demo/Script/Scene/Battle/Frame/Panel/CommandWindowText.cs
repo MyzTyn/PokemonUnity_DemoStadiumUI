@@ -8,7 +8,7 @@ using PokemonEssentials.Interface;
 using PokemonUnity.Utility;
 using UnityEngine;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	/// <summary>
 	/// </summary>

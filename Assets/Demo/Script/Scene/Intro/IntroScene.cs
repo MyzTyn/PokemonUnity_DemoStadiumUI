@@ -12,7 +12,7 @@ using PokemonEssentials.Interface.Screen;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	public class IntroScene : EventScene, IIntroEventScene
 	{

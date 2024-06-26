@@ -1,7 +1,7 @@
 ﻿using System;
 using PokemonEssentials.Interface;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	public partial class GameSystem : IGameSystem
 	{

@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	//ToDo: Rename to TextEntry
 	public class TypingForm : IPokemonEntryScene, IPokemonEntryScene2

@@ -10,7 +10,7 @@ using PokemonEssentials.Interface.Screen;
 using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.PokeBattle.Effects;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 #pragma warning disable 0162 //Warning CS0162  Unreachable code detected
 	#region Shadow Moves

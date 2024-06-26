@@ -2,7 +2,7 @@
 using PokemonEssentials.Interface;
 using UnityEngine;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	[CreateAssetMenu(fileName = "AudioData", menuName = "Audio/Manager")]
 	public class AudioData : ScriptableObject, IResourcesAudio

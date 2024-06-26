@@ -8,7 +8,7 @@ using PokemonUnity.Attack.Data;
 using PokemonUnity.Combat;
 using PokemonUnity.Inventory;
 using PokemonUnity.Interface;
-using PokemonUnity.Interface.UnityEngine;
+using PokemonUnity.Stadium;
 using PokemonUnity.Monster;
 using PokemonUnity.Overworld;
 using PokemonUnity.Utility;
@@ -25,7 +25,7 @@ using UnityEngine;
 //using UnityEngine.UI;
 //using UnityEngine.Serialization;
 
-namespace PokemonUnity.Interface.UnityEngine
+namespace PokemonUnity.Stadium
 {
 	public partial class BattleScene : global::UnityEngine.MonoBehaviour, IPokeBattle_SceneIE//, IScene
 	{
@@ -51,7 +51,7 @@ namespace PokemonUnity.Interface.UnityEngine
 		public int[]							lastmove	{ get { return _lastmove; } set { _lastmove = value; } }
 		//public PokemonEssentials.Interface.PokeBattle.IBattle			battle	{ get { return _battle; } set { _battle = value; } }
 		//public PokemonUnity.Combat.Battle			battle	{ get { return _battle; } set { _battle = value; } }
-		public PokemonUnity.Interface.UnityEngine.IBattleIE			battle	{ get { return _battle; } set { _battle = value; } }
+		public PokemonUnity.Stadium.IBattleIE			battle	{ get { return _battle; } set { _battle = value; } }
 		public ITrainerFadeAnimation				fadeanim		{ get { return _fadeanim; } set { _fadeanim = value; } }
 		public IPokeballSendOutAnimation			sendout			{ get { return _sendout; } set { _sendout = value; } }
 		public IWindow_CommandPokemon				commandpokemon	{ get { return _commandPokemon; } set { _commandPokemon = value as CommandWindowText; } }

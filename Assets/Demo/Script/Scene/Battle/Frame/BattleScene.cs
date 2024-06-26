@@ -223,10 +223,10 @@ namespace PokemonUnity.Stadium
 
 		private void Start()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
-			GameDebug.Log("######################################");
-			GameDebug.Log("# Hello - Welcome to Unity Battle! #");
-			GameDebug.Log("######################################");
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.Log("######################################");
+			Core.Logger.Log("# Hello - Welcome to Unity Battle! #");
+			Core.Logger.Log("######################################");
 
 			//IPokeBattle_DebugSceneNoGraphics pokeBattle = new PokeBattleScene();
 			(this as IPokeBattle_SceneIE).initialize(); //pokeBattle.initialize();
@@ -271,7 +271,7 @@ namespace PokemonUnity.Stadium
 
 		public IPokeBattle_SceneIE initialize()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			battle = null;
 			lastcmd = new MenuCommands[] { 0, 0, 0, 0 };
@@ -315,14 +315,14 @@ namespace PokemonUnity.Stadium
 
 		IPokeBattle_Scene IPokeBattle_Scene.initialize()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			return (IPokeBattle_Scene)initialize();
 		}
 
 		public void Update()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			partyAnimationUpdate();
 			//if (sprites["battlebg"] is GameObject g) g.Update();
@@ -330,7 +330,7 @@ namespace PokemonUnity.Stadium
 
 		public void GraphicsUpdate()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			partyAnimationUpdate();
 			//if (sprites["battlebg"] is GameObject g) g.Update();
@@ -339,7 +339,7 @@ namespace PokemonUnity.Stadium
 
 		public void InputUpdate()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			PokemonUnity.Input.update();
 			//ToDo: Use GameFramework Input manager instead of Unity
@@ -356,7 +356,7 @@ namespace PokemonUnity.Stadium
 		/// <param name="windowtype"></param>
 		public void ShowWindow(int windowtype)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//ToDo: Uncomment below after debugging...
 			//@sprites["messagebox"].visible = (windowtype == MESSAGEBOX ||
@@ -370,7 +370,7 @@ namespace PokemonUnity.Stadium
 
 		public void SetMessageMode(bool mode)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			@messagemode = mode;
 			IWindow_AdvancedTextPokemon msgwindow = @sprites["messagewindow"] as IWindow_AdvancedTextPokemon;
@@ -399,7 +399,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator WaitMessage()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (@briefmessage)
 			{
@@ -425,7 +425,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator Display(string msg, bool brief)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			return DisplayMessage(msg, brief);
 		}
@@ -436,7 +436,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator Display(string v)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			return Display(v, false);
 		}
@@ -448,9 +448,9 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator DisplayMessage(string msg, bool brief)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			GameDebug.Log(message: "Display Message: \"{0}\"", msg);
+			Core.Logger.Log(message: "Display Message: \"{0}\"", msg);
 			/*WaitMessage();
 			Refresh();
 			ShowWindow(MESSAGEBOX);
@@ -501,9 +501,9 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator DisplayPausedMessage(string msg)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			GameDebug.Log(message: "Display Message: \"{0}\"", msg);
+			Core.Logger.Log(message: "Display Message: \"{0}\"", msg);
 			/*WaitMessage();
 			Refresh();
 			ShowWindow(MESSAGEBOX);
@@ -547,7 +547,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator DisplayConfirmMessage(string msg, System.Action<bool> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int value = 0;
 			yield return ShowCommands(msg, new string[] { Game._INTL("Yes"), Game._INTL("No") }, 1, result: r => value = r);
@@ -579,9 +579,9 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ShowCommands(string msg, string[] commands, int defaultValue, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
-			GameDebug.Log(message: "Display Message: \"{0}\"", msg);
+			Core.Logger.Log(message: "Display Message: \"{0}\"", msg);
 			WaitMessage();
 			Refresh();
 			ShowWindow(MESSAGEBOX);
@@ -639,7 +639,7 @@ namespace PokemonUnity.Stadium
 
 		//public void FrameUpdate(IFightMenuDisplay cw)
 		//{
-		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+		//	Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
 		//	FrameUpdate();
@@ -647,7 +647,7 @@ namespace PokemonUnity.Stadium
 		//
 		//public void FrameUpdate(ICommandMenuDisplay cw)
 		//{
-		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+		//	Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
 		//	FrameUpdate();
@@ -655,7 +655,7 @@ namespace PokemonUnity.Stadium
 		//
 		//public void FrameUpdate(IWindow_CommandPokemon cw)
 		//{
-		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+		//	Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
 		//	FrameUpdate();
@@ -663,7 +663,7 @@ namespace PokemonUnity.Stadium
 		//
 		//public void FrameUpdate(IWindow_AdvancedTextPokemon cw)
 		//{
-		//	GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+		//	Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 		//
 		//	if (cw != null) cw.update();
 		//	FrameUpdate();
@@ -671,7 +671,7 @@ namespace PokemonUnity.Stadium
 
 		public void FrameUpdate(IGameObject cw)
 		{
-			//GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			//Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (cw != null) cw.update();
 			FrameUpdate();
@@ -679,7 +679,7 @@ namespace PokemonUnity.Stadium
 
 		void IPokeBattle_DebugScene.FrameUpdate(IViewport cw)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (cw != null) cw.update();
 			FrameUpdate();
@@ -687,7 +687,7 @@ namespace PokemonUnity.Stadium
 
 		public void FrameUpdate()
 		{
-			//GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			//Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//if (cw != null) cw.update();
 			for (int i = 0; i < 4; i++)
@@ -705,7 +705,7 @@ namespace PokemonUnity.Stadium
 
 		public void Refresh()
 		{
-			//GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			//Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -728,7 +728,7 @@ namespace PokemonUnity.Stadium
 		/// <param name="viewport"></param>
 		public IIconSprite AddSprite(string id, float x, float y, string filename, IViewport viewport)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//IIconSprite sprite = new IconSprite(x, y, viewport);
 			IIconSprite sprite = null; //UnityEngine.GameObject.Instantiate<IIconSprite>().initialize((float)x, (float)y, viewport);
@@ -742,7 +742,7 @@ namespace PokemonUnity.Stadium
 
 		public void AddPlane(string id, string filename, IViewport viewport)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//IAnimatedPlane sprite = new AnimatedPlane(viewport);
 			//if (!string.IsNullOrEmpty(filename))
@@ -755,14 +755,14 @@ namespace PokemonUnity.Stadium
 
 		public void DisposeSprites()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//DisposeSpriteHash(@sprites); //Clears list of GameObjects in scene?...
 		}
 
 		public void BeginCommandPhase()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//  Called whenever a new round begins.
 			@battlestart = false;
@@ -774,7 +774,7 @@ namespace PokemonUnity.Stadium
 		/// <param name="index"></param>
 		public IEnumerator ShowOpponent(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			string trainerfile = string.Empty;
 			if (@battle.opponent != null)
@@ -818,7 +818,7 @@ namespace PokemonUnity.Stadium
 		/// </summary>
 		public IEnumerator HideOpponent()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int i = 0;
 			do //20.times ;
@@ -836,7 +836,7 @@ namespace PokemonUnity.Stadium
 
 		public void ShowHelp(string text)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).resizeToFit(text, (Game.GameData as Game).Graphics.width);
 			(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).y = 0;
@@ -847,14 +847,14 @@ namespace PokemonUnity.Stadium
 
 		public void HideHelp()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			(@sprites["helpwindow"] as IWindow_UnformattedTextPokemon).visible = false;
 		}
 
 		public void Backdrop()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			PokemonUnity.Overworld.Environments environ = @battle.environment;
 			//  Choose backdrop
@@ -959,7 +959,7 @@ namespace PokemonUnity.Stadium
 		///Can also be a void: while(true) { if frame == index, then move sprite to x/y position }?
 		public IEnumerator partyAnimationUpdate()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (!inPartyAnimation) yield break;
 			/*int ballmovedist = 16; // How far a ball moves each frame
@@ -1070,9 +1070,9 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator StartBattle(IBattleIE battle)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
-			GameDebug.Log("Start of the battle");
-			GameDebug.Log("Play animation of pokemons coming to scene before player can control actions");
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.Log("Start of the battle");
+			Core.Logger.Log("Play animation of pokemons coming to scene before player can control actions");
 
 			//  Called whenever the battle begins
 			this.battle = battle; //as Battle;
@@ -1450,8 +1450,8 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator EndBattle(BattleResults result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
-			GameDebug.Log($"End of the battle. Result: {result}");
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.Log($"End of the battle. Result: {result}");
 
 			@abortable = false;
 			ShowWindow(BLANK);
@@ -1470,7 +1470,7 @@ namespace PokemonUnity.Stadium
 		/// <param name="battlerindex"></param>
 		public IEnumerator Recall(int battlerindex)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
 			float origin = 0;
@@ -1529,7 +1529,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator TrainerSendOut(int battlerindex, IPokemon pkmn)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*TODO show opponent's pokemon
 			IPokemon illusionpoke=@battle.battlers[battlerindex].effects.Illusion;
 			@briefmessage=false;
@@ -1590,7 +1590,7 @@ namespace PokemonUnity.Stadium
 		/// <param name="pkmn"></param>
 		public IEnumerator SendOut(int battlerindex, IPokemon pkmn)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//TODO show player's pokemon
 			/*while (inPartyAnimation){ } //ToDo: Uncomment, and ensure that logic has an exit
@@ -1683,7 +1683,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator TrainerWithdraw(IBattle battle, IBattlerIE pkmn)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//TODO hide opponent's pokemon
 			Refresh();
@@ -1696,7 +1696,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator Withdraw(IBattle battle, IBattlerIE pkmn)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//TODO hide player's pokemon
 			Refresh();
@@ -1710,7 +1710,7 @@ namespace PokemonUnity.Stadium
 
 		public string MoveString(IBattleMove move)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			string ret = Game._INTL("{1}", move.Name);
 			string typename = move.Type.ToString(TextScripts.Name);
@@ -1723,7 +1723,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator BeginAttackPhase()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			SelectBattler(-1, 0); //SelectBattler(-1);
 			GraphicsUpdate();
@@ -1734,7 +1734,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator SafariStart()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			@briefmessage = false;
 			//@sprites["battlebox0"] = new SafariDataBox(@battle, @viewport);
@@ -1756,7 +1756,7 @@ namespace PokemonUnity.Stadium
 
 		public void ResetCommandIndices()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//reset the frontend command indices to 0;
 			@lastcmd = new MenuCommands[] { 0, 0, 0, 0 };
@@ -1764,7 +1764,7 @@ namespace PokemonUnity.Stadium
 
 		public void ResetMoveIndex(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//reset the frontend move index to 0;
 			@lastmove[index] = 0;
@@ -1772,7 +1772,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator SafariCommandMenu(int index, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			yield return CommandMenuEx(index,new string[] {
 				Game._INTL("What will\n{1} throw?", @battle.Player().name),
@@ -1781,12 +1781,12 @@ namespace PokemonUnity.Stadium
 				Game._INTL("Rock"),
 				Game._INTL("Run")
 			},2,result); //result: value => result?.Invoke(value)
-			GameDebug.Log($"Action Selected: {result}");
+			Core.Logger.Log($"Action Selected: {result}");
 		}
 
 		int IPokeBattle_Scene.SafariCommandMenu(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			return CommandMenuEx(index,new string[] {
 				Game._INTL("What will\n{1} throw?", @battle.Player().name),
@@ -1804,11 +1804,11 @@ namespace PokemonUnity.Stadium
 		/// <returns>Return values: 0=Fight, 1=Bag, 2=Pokémon, 3=Run, 4=Call</returns>
 		public IEnumerator CommandMenu(int index, System.Action<MenuCommands> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			bool shadowTrainer = (@battle.opponent != null); //hasConst(Types,:SHADOW) &&
 			int ret = -1;
-			GameDebug.Log("Choose Action: [FIGHT=0] [BAG=1] [POKEMON=2] [RUN=3] [CALL=4]");
+			Core.Logger.Log("Choose Action: [FIGHT=0] [BAG=1] [POKEMON=2] [RUN=3] [CALL=4]");
 			yield return CommandMenuEx(index,new string[] {
 				Game._INTL("What will\n{1} do?", @battle.battlers[index].Name),
 				Game._INTL("Fight"),//MenuCommands.FIGHT=0
@@ -1817,16 +1817,16 @@ namespace PokemonUnity.Stadium
 				shadowTrainer ? Game._INTL("Call") : Game._INTL("Run") //MenuCommands.CALL=4|MenuCommands.RUN=3
 			},shadowTrainer ? 1 : 0, result: value => ret = value);
 			if (ret == 3 && shadowTrainer) ret = 4; // Convert "Run" to "Call"
-			GameDebug.Log($"Action Selected: {ret}");
+			Core.Logger.Log($"Action Selected: {ret}");
 			result?.Invoke((MenuCommands)ret);
 		}
 
 		int IPokeBattle_SceneNonInteractive.CommandMenu(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			bool shadowTrainer = (@battle.opponent != null); //hasConst(Types,:SHADOW) &&
-			GameDebug.Log("Choose Action: [FIGHT=0] [BAG=1] [POKEMON=2] [RUN=3] [CALL=4]");
+			Core.Logger.Log("Choose Action: [FIGHT=0] [BAG=1] [POKEMON=2] [RUN=3] [CALL=4]");
 			int ret = CommandMenuEx(index,new string[] {
 				Game._INTL("What will\n{1} do?", @battle.battlers[index].Name),
 				Game._INTL("Fight"),
@@ -1835,13 +1835,13 @@ namespace PokemonUnity.Stadium
 				shadowTrainer ? Game._INTL("Call") : Game._INTL("Run")
 			},shadowTrainer ? 1 : 0);
 			if (ret == 3 && shadowTrainer) ret = 4; // Convert "Run" to "Call"
-			GameDebug.Log($"Action Selected: {ret}");
+			Core.Logger.Log($"Action Selected: {ret}");
 			return ret;
 		}
 
 		int IPokeBattle_DebugSceneNoGraphics.CommandMenu(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			bool shadowTrainer = (@battle.opponent != null); //hasConst(Types,:SHADOW) &&
 			int ret = CommandMenuEx(index,new string[] {
@@ -1852,7 +1852,7 @@ namespace PokemonUnity.Stadium
 				shadowTrainer ? Game._INTL("Call") : Game._INTL("Run")
 			},shadowTrainer ? 1 : 0);
 			if (ret == 3 && shadowTrainer) ret = 4; // Convert "Run" to "Call"
-			GameDebug.Log($"Action Selected: {ret}");
+			Core.Logger.Log($"Action Selected: {ret}");
 			return ret;
 		}
 
@@ -1869,7 +1869,7 @@ namespace PokemonUnity.Stadium
 		/// <returns></returns>
 		public IEnumerator CommandMenuEx(int index, string[] texts, int mode, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			ShowWindow(COMMANDBOX);
 			ICommandMenuDisplay cw = @sprites["commandwindow"] as ICommandMenuDisplay;
 			cw.setTexts(texts);
@@ -1936,7 +1936,7 @@ namespace PokemonUnity.Stadium
 		/// <returns></returns>
 		private int CommandMenuEx(int index, string[] texts, int mode)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			ShowWindow(COMMANDBOX);
 			ICommandMenuDisplay cw = @sprites["commandwindow"] as ICommandMenuDisplay;
 			cw.setTexts(texts);
@@ -2001,35 +2001,35 @@ namespace PokemonUnity.Stadium
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
 				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.LeftArrow) && (cw.index & 1) == 1)
 				{
-					GameDebug.Log("[CommandMenu] Going Left !");
+					Core.Logger.Log("[CommandMenu] Going Left !");
 					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 1;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.RightArrow) && (cw.index & 1) == 0)
 				{
-					GameDebug.Log("[CommandMenu] Going Right !");
+					Core.Logger.Log("[CommandMenu] Going Right !");
 					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 1;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.UpArrow) && (cw.index & 2) == 2)
 				{
-					GameDebug.Log("[CommandMenu] Going Up !");
+					Core.Logger.Log("[CommandMenu] Going Up !");
 					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index -= 2;
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.DownArrow) && (cw.index & 2) == 0)
 				{
-					GameDebug.Log("[CommandMenu] Going Down !");
+					Core.Logger.Log("[CommandMenu] Going Down !");
 					//(AudioHandler as IGameAudioPlay).PlayCursorSE();
 					cw.index += 2;
 				}
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))   // Confirm choice
 				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Space))   // Confirm choice
 				{
-					GameDebug.Log("[CommandMenu] Select !");
+					Core.Logger.Log("[CommandMenu] Select !");
 					//(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					int ret = cw.index;
 					@lastcmd[index] = (MenuCommands)ret;
@@ -2039,7 +2039,7 @@ namespace PokemonUnity.Stadium
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B) && index == 2 && @lastcmd[0] != (MenuCommands)2)  // Cancel
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Escape) && index == 2 && @lastcmd[0] != (MenuCommands)2)  // Cancel
 				{
-					GameDebug.Log("[CommandMenu] Cancel !");
+					Core.Logger.Log("[CommandMenu] Cancel !");
 					//(AudioHandler as IGameAudioPlay).PlayDecisionSE();
 					//return -1;
 					result(-1); break;
@@ -2055,7 +2055,7 @@ namespace PokemonUnity.Stadium
 		/// <returns></returns>
 		public IEnumerator FightMenu(int index, Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
@@ -2128,7 +2128,7 @@ namespace PokemonUnity.Stadium
 
 		public int FightMenu(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
@@ -2206,7 +2206,7 @@ namespace PokemonUnity.Stadium
 		/// <returns>Callbacks an int</returns>
 		private IEnumerator FightMenuIE(int index, IFightMenuDisplay cw, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//All of this below should be a coroutine that returns the value selected in UI
 			do //;loop
@@ -2218,35 +2218,35 @@ namespace PokemonUnity.Stadium
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.LEFT) && (cw.index & 1) == 1)
 				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.LeftArrow) && (cw.index & 1) == 1)
 				{
-					GameDebug.Log("[CommandMenu] Going Left !");
+					Core.Logger.Log("[CommandMenu] Going Left !");
 					cw.setIndex(cw.index - 1);
 					//if (cw.setIndex(cw.index - 1)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.RIGHT) && (cw.index & 1) == 0)
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.RightArrow) && (cw.index & 1) == 0)
 				{
-					GameDebug.Log("[CommandMenu] Going Right !");
+					Core.Logger.Log("[CommandMenu] Going Right !");
 					cw.setIndex(cw.index + 1);
 					//if (cw.setIndex(cw.index + 1)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.UP) && (cw.index & 2) == 2)
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.UpArrow) && (cw.index & 2) == 2)
 				{
-					GameDebug.Log("[CommandMenu] Going Up !");
+					Core.Logger.Log("[CommandMenu] Going Up !");
 					cw.setIndex(cw.index - 2);
 					//if (cw.setIndex(cw.index - 2)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.DOWN) && (cw.index & 2) == 0)
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.DownArrow) && (cw.index & 2) == 0)
 				{
-					GameDebug.Log("[CommandMenu] Going Down !");
+					Core.Logger.Log("[CommandMenu] Going Down !");
 					cw.setIndex(cw.index + 2);
 					//if (cw.setIndex(cw.index + 2)) (audioHandler as IGameAudioPlay).PlayCursorSE();
 				}
 				//if (PokemonUnity.Input.trigger(PokemonUnity.Input.A))				// Confirm choice
 				if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Space))		// Confirm choice
 				{
-					GameDebug.Log("[CommandMenu] Select !");
+					Core.Logger.Log("[CommandMenu] Select !");
 					int ret = cw.index;
 					// (audioHandler as IGameAudioPlay).PlayDecisionSE();
 					@lastmove[index] = ret;
@@ -2256,7 +2256,7 @@ namespace PokemonUnity.Stadium
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.CTRL))		// Use Mega Evolution
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.RightControl))
 				{
-					GameDebug.Log("[CommandMenu] Mega !");
+					Core.Logger.Log("[CommandMenu] Mega !");
 					if (@battle.CanMegaEvolve(index))
 					{
 						@battle.RegisterMegaEvolution(index);
@@ -2267,7 +2267,7 @@ namespace PokemonUnity.Stadium
 				//else if (PokemonUnity.Input.trigger(PokemonUnity.Input.B))			// Cancel fight menu
 				else if (global::UnityEngine.Input.GetKeyDown(global::UnityEngine.KeyCode.Escape))
 				{
-					GameDebug.Log("[CommandMenu] Cancel !");
+					Core.Logger.Log("[CommandMenu] Cancel !");
 					@lastmove[index] = cw.index;
 					// (audioHandler as IGameAudioPlay).PlayCancelSE();
 					result(-1);
@@ -2280,7 +2280,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ItemMenu(int index, System.Action<Items> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			Items ret = Items.NONE;
 			//int retindex = -1;
@@ -2369,7 +2369,7 @@ namespace PokemonUnity.Stadium
 
 		public Items ItemMenu(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			Items ret = Items.NONE;
 			//int retindex = -1;
@@ -2456,7 +2456,7 @@ namespace PokemonUnity.Stadium
 
 		private IEnumerator ItemMenuIE(int index, IBagScene itemscene, System.Action<Items,int,bool> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			Items ret = Items.NONE;
 			int retindex = -1;
@@ -2529,7 +2529,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ForgetMove(IPokemon pokemon, Moves moveToLearn, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
 			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
@@ -2545,7 +2545,7 @@ namespace PokemonUnity.Stadium
 
 		public int ForgetMove(IPokemon pokemon, Moves moveToLearn)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
 			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
@@ -2566,7 +2566,7 @@ namespace PokemonUnity.Stadium
 		/// <returns></returns>
 		public IEnumerator ChooseMove(IPokemon pokemon, string message, Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
 			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
@@ -2582,7 +2582,7 @@ namespace PokemonUnity.Stadium
 
 		public int ChooseMove(IPokemon pokemon, string message)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
 			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
@@ -2597,7 +2597,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator NameEntry(string helptext, IPokemon pokemon, System.Action<string> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//yield return EnterPokemonName(helptext, 0, 10, "", pokemon);
 			result?.Invoke(pokemon.Name);
@@ -2606,7 +2606,7 @@ namespace PokemonUnity.Stadium
 
 		public string NameEntry(string helptext, IPokemon pokemon)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//return EnterPokemonName(helptext, 0, 10, "", pokemon);
 			return pokemon.Name;
@@ -2614,7 +2614,7 @@ namespace PokemonUnity.Stadium
 
 		public void SelectBattler(int index, int selectmode)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int numwindows = 1; //@battle.doublebattle ? 4 : 2;
 			for (int i = 0; i < numwindows; i++)
@@ -2628,7 +2628,7 @@ namespace PokemonUnity.Stadium
 
 		public int FirstTarget(int index, Targets targettype)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			switch (targettype)
 			{
@@ -2687,7 +2687,7 @@ namespace PokemonUnity.Stadium
 
 		public void UpdateSelected(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int numwindows = @battle.doublebattle ? 4 : 2;
 			for (int i = 0; i < numwindows; i++)
@@ -2709,7 +2709,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ChooseTarget(int index, Targets targettype, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
@@ -2730,7 +2730,7 @@ namespace PokemonUnity.Stadium
 			if (curwindow == -1)
 			{
 				//throw new RuntimeError(Game._INTL("No targets somehow..."));
-				GameDebug.LogError(Game._INTL("No targets somehow..."));
+				Core.Logger.LogError(Game._INTL("No targets somehow..."));
 			}
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
@@ -2825,7 +2825,7 @@ namespace PokemonUnity.Stadium
 
 		int IPokeBattle_SceneNonInteractive.ChooseTarget(int index, Targets targettype)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
@@ -2846,7 +2846,7 @@ namespace PokemonUnity.Stadium
 			if (curwindow == -1)
 			{
 				//throw new RuntimeError(Game._INTL("No targets somehow..."));
-				GameDebug.LogError(Game._INTL("No targets somehow..."));
+				Core.Logger.LogError(Game._INTL("No targets somehow..."));
 			}
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
@@ -2941,7 +2941,7 @@ namespace PokemonUnity.Stadium
 
 		int IPokeBattle_DebugSceneNoGraphics.ChooseTarget(int index, Targets targettype)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			ShowWindow(FIGHTBOX);
 			IFightMenuDisplay cw = @sprites["fightwindow"] as IFightMenuDisplay;
@@ -2962,7 +2962,7 @@ namespace PokemonUnity.Stadium
 			if (curwindow == -1)
 			{
 				//throw new RuntimeError(Game._INTL("No targets somehow..."));
-				GameDebug.LogError(Game._INTL("No targets somehow..."));
+				Core.Logger.LogError(Game._INTL("No targets somehow..."));
 			}
 			//All of this below should be a coroutine that returns the value selected in UI
 			/*do //;loop
@@ -3057,7 +3057,7 @@ namespace PokemonUnity.Stadium
 
 		private IEnumerator ChooseTargetIE(int index, Targets targettype, int curwindow, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*int newcurwindow = -1;
 			//All of this below should be a coroutine that returns the value selected in UI
@@ -3153,7 +3153,7 @@ namespace PokemonUnity.Stadium
 
 		public int Switch(int index, bool lax, bool cancancel)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int _coroutineValue = -1;
 			StopCoroutine("Switch");
@@ -3163,7 +3163,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator Switch(int index, bool lax, bool cancancel, System.Action<int> result)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			int ret = -1;
 			IPokemon[] party = @battle.Party(index);
@@ -3232,7 +3232,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator DamageAnimation(IBattlerIE pkmn, TypeEffective effectiveness)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			IPokemonBattlerSprite pkmnsprite = @sprites[$"pokemon{pkmn.Index}"] as IPokemonBattlerSprite;
 			IIconSprite shadowsprite = @sprites[$"shadow{pkmn.Index}"] as IIconSprite;
@@ -3292,18 +3292,18 @@ namespace PokemonUnity.Stadium
 		/// <param name="anim"></param>
 		public IEnumerator HPChanged(IBattlerIE pkmn, int oldhp, bool anim)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			@briefmessage = false;
 			int hpchange = pkmn.HP - oldhp;
 			if (hpchange < 0)
 			{
 				hpchange = -hpchange;
-				GameDebug.Log($"[HP change] #{pkmn.ToString()} lost #{hpchange} HP (#{oldhp}=>#{pkmn.HP})");
+				Core.Logger.Log($"[HP change] #{pkmn.ToString()} lost #{hpchange} HP (#{oldhp}=>#{pkmn.HP})");
 			}
 			else
 			{
-				GameDebug.Log($"[HP change] #{pkmn.ToString()} gained #{hpchange} HP (#{oldhp}=>#{pkmn.HP})");
+				Core.Logger.Log($"[HP change] #{pkmn.ToString()} gained #{hpchange} HP (#{oldhp}=>#{pkmn.HP})");
 			}
 			if (anim && @battle.battlescene)
 			{
@@ -3336,7 +3336,7 @@ namespace PokemonUnity.Stadium
 		/// <param name="pkmn"></param>
 		public IEnumerator Fainted(IBattlerIE pkmn)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*int frames = CryFrameLength(pkmn.pokemon);
 			PlayCry(pkmn.pokemon);
@@ -3401,7 +3401,7 @@ namespace PokemonUnity.Stadium
 		/// <param name="index"></param>
 		public void ChooseEnemyCommand(int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if(@battle is IBattleAI b) b.DefaultChooseEnemyCommand(index);
 		}
@@ -3415,16 +3415,16 @@ namespace PokemonUnity.Stadium
 		/// <returns></returns>
 		public int ChooseNewEnemy(int index, IPokemon[] party)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (@battle is IBattleAI b) return b.DefaultChooseNewEnemy(index, party);
-			else GameDebug.LogError("Need to Configure Battle AI to Select Next Pokemon for Computer...");
+			else Core.Logger.LogError("Need to Configure Battle AI to Select Next Pokemon for Computer...");
 			return -1;
 		}
 
 		public IEnumerator WildBattleSuccess()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//yield return (AudioHandler as IGameAudioPlay).BGMPlay(GetWildVictoryME());
 			yield break;
@@ -3434,7 +3434,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator TrainerBattleSuccess()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//yield retun (AudioHandler as IGameAudioPlay).BGMPlay(GetTrainerVictoryME(@battle.opponent));
 			yield break;
@@ -3444,7 +3444,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator EXPBar(IBattlerIE battler, IPokemon thispoke, int startexp, int endexp, int tempexp1, int tempexp2)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (battler != null)
 			{
@@ -3474,7 +3474,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ShowPokedex(Pokemons species, int form)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (Game.GameData is IGameSpriteWindow g) g.FadeOutIn(99999, block: () => {
 				//IPokemonPokedexScene scene = new PokemonPokedexScene();
@@ -3490,7 +3490,7 @@ namespace PokemonUnity.Stadium
 
 		/*public void ChangeSpecies(IBattlerIE attacker, Pokemons species)
 		{
-			GameDebug.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.Log("Run: {0}", System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			pkmn = @sprites[$"pokemon{attacker.Index}"];
 			shadow = @sprites[$"shadow{attacker.Index}"];
@@ -3535,7 +3535,7 @@ namespace PokemonUnity.Stadium
 
 		public void ChangePokemon(IBattler attacker, IPokemon pokemon)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*IPokemonBattlerSprite pkmn = @sprites[$"pokemon{attacker.Index}"] as IPokemonBattlerSprite;
 			IIconSprite shadow = @sprites[$"shadow{attacker.Index}"] as IIconSprite;
@@ -3580,13 +3580,13 @@ namespace PokemonUnity.Stadium
 
 		public void ChangePokemon()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 		}
 
 		//public void SaveShadows()
 		public void SaveShadows(Action action = null)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			IList<bool> shadows = new List<bool>();
 			IIconSprite s = null;
@@ -3606,7 +3606,7 @@ namespace PokemonUnity.Stadium
 
 		public KeyValuePair<string, bool>? FindAnimation(Moves moveid, int userIndex, int hitnum)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			try //begin;
 			{
@@ -3685,7 +3685,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator CommonAnimation(string animname, IBattlerIE user, IBattlerIE target, int hitnum = 0)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*animations = load_data("Data/PkmnAnimations.rxdata");
 			for (int i = 0; i < animations.Length; i++)
@@ -3701,7 +3701,7 @@ namespace PokemonUnity.Stadium
 
 		public void CommonAnimation(string animname, IBattler user, IBattler target, int hitnum)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*animations = load_data("Data/PkmnAnimations.rxdata");
 			for (int i = 0; i < animations.Length; i++)
@@ -3718,7 +3718,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator Animation(Moves moveid, IBattlerIE user, IBattlerIE target, int hitnum)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*KeyValuePair<string,bool>? animid = FindAnimation(moveid, user.Index, hitnum);
 			if (animid==null) yield break;
@@ -3745,7 +3745,7 @@ namespace PokemonUnity.Stadium
 
 		void IPokeBattle_DebugSceneNoGraphics.Animation(Moves moveid, IBattler user, IBattler target, int hitnum)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			/*
 			int animid = FindAnimation(moveid, user.Index, hitnum);
 			if (!animid) return;
@@ -3771,7 +3771,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator AnimationCore(string animation, IBattlerIE user, IBattlerIE target, bool oppmove)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*if (!animation) yield break;
 			@briefmessage = false;
@@ -3831,7 +3831,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator LevelUp(IBattlerIE battler, IPokemon pokemon, int oldtotalhp, int oldattack, int olddefense, int oldspeed, int oldspatk, int oldspdef)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*TopRightWindow(Game._INTL("Max. HP<r>+{1}\r\nAttack<r>+{2}\r\nDefense<r>+{3}\r\nSp. Atk<r>+{4}\r\nSp. Def<r>+{5}\r\nSpeed<r>+{6}",
 			   pokemon.TotalHP - oldtotalhp,
@@ -3849,7 +3849,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ThrowAndDeflect(Items ball, int targetBattler)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
 			balltype = GetBallType(ball);
@@ -3892,7 +3892,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator Throw(Items ball, int shakes, bool critical, int targetBattler, bool showplayer)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
 			int burst = -1;
@@ -3921,7 +3921,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ThrowSuccess()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			//if wild pokemon...
 			if (@battle.opponent == null) {
@@ -3943,7 +3943,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator HideCaptureBall()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (@sprites["capture"] != null)
 			{
@@ -3963,7 +3963,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ThrowBait()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage = false;
 			string ball = string.Format("Graphics/Pictures/battleBait");
@@ -4051,7 +4051,7 @@ namespace PokemonUnity.Stadium
 
 		public IEnumerator ThrowRock()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			/*@briefmessage=false;
 			ball=string.Format("Graphics/Pictures/battleRock");
@@ -4149,7 +4149,7 @@ namespace PokemonUnity.Stadium
 
 		public void Chatter(IBattler attacker, IBattler opponent) //ToDo: Make IEnumerator...
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			if (attacker.pokemon != null)
 			{
@@ -4173,70 +4173,70 @@ namespace PokemonUnity.Stadium
 
 		IPokeBattle_DebugSceneNoGraphics IPokeBattle_DebugSceneNoGraphics.initialize()
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		void IPokeBattle_DebugSceneNoGraphics.BattleArenaBattlers(IBattle b1, IBattle b2)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		void IPokeBattle_DebugSceneNoGraphics.BattleArenaJudgment(IBattle b1, IBattle b2, int[] r1, int[] r2)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		int IPokeBattle_DebugSceneNoGraphics.Blitz(int keys)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		public IEnumerator NextTarget(int cur, int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		void IPokeBattle_DebugScene.NextTarget(int cur, int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		void IPokeBattle_DebugScene.PokemonString(IPokemon pkmn)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		public IEnumerator PrevTarget(int cur, int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		void IPokeBattle_DebugScene.PrevTarget(int cur, int index)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			throw new System.NotImplementedException();
 		}
 
 		bool IHasDisplayMessage.DisplayConfirm(string v)
 		{
-			GameDebug.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
+			Core.Logger.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 
 			bool value = false;
 			//return DisplayConfirmMessage(v);

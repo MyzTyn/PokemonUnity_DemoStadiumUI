@@ -5,6 +5,7 @@ using PokemonUnity;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using PokemonUnity.Application;
 
 namespace PokemonUnity.Stadium
 {
@@ -56,13 +57,14 @@ namespace PokemonUnity.Stadium
 		#region Methods
 		public void RefreshPartyDisplay()
 		{
-			for (int Id = 0; Id < ((Game)Game.GameData).Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
+			for (int Id = 0; Id < Feature.MAXPARTYSIZE && Id < Core.MAXPARTYSIZE; Id++)
 			{
 				currentSlot = Id;
 				party[Id].toggle.interactable = false;
 				//party[Id].IsSelected = true;
 				party[Id].toggle.Select();
-				if (((Game)Game.GameData).Features.LimitPokemonPartySize == Id && Game.GameData.Trainer.party[Id].IsNotNullOrNone())
+				
+				if (Feature.MAXPARTYSIZE == Id && Game.GameData.Trainer.party[Id].IsNotNullOrNone())
 				{
 					//party[Id].IsSelected = true;
 					party[Id].toggle.isOn = false;

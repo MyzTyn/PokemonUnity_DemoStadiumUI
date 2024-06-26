@@ -49,7 +49,7 @@ namespace PokemonUnity.Stadium
 
 		public virtual void OnTabSelected(TabButton tab)
 		{
-			GameDebug.Log($"TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
+			Core.Logger.Log($"TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
 			if (!tab.selectable.interactable) return;
 			if (selectedTab != null)
 				selectedTab.Deselect();

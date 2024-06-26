@@ -98,15 +98,17 @@ namespace PokemonUnity.Stadium
 			{
 				try
 				{
-					//GameDebug.Log("0-" + System.IO.Path.GetFullPath("..\\veekun-pokedex.sqlite"));
-					//GameDebug.Log("1-" + System.IO.Path.GetFullPath("..\\..\\veekun-pokedex.sqlite"));
-					//GameDebug.Log("2-" + System.IO.Path.GetFullPath("..\\..\\..\\veekun-pokedex.sqlite"));
-					//GameDebug.Log("3-" + System.IO.Path.GetFullPath("..\\..\\..\\..\\veekun-pokedex.sqlite"));
-					//GameDebug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
-					Game.DatabasePath = @"Data Source=veekun-pokedex.sqlite";
+                    Core.Logger = LogManager.Logger;
+                    //GameDebug.Log("0-" + System.IO.Path.GetFullPath("..\\veekun-pokedex.sqlite"));
+                    //GameDebug.Log("1-" + System.IO.Path.GetFullPath("..\\..\\veekun-pokedex.sqlite"));
+                    //GameDebug.Log("2-" + System.IO.Path.GetFullPath("..\\..\\..\\veekun-pokedex.sqlite"));
+                    //GameDebug.Log("3-" + System.IO.Path.GetFullPath("..\\..\\..\\..\\veekun-pokedex.sqlite"));
+                    //GameDebug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
+                    Game.DatabasePath = @"Data Source=veekun-pokedex.sqlite";
 					Game.con = (System.Data.IDbConnection)new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
+					//Game.con = new Mono.Data.Sqlite.SqliteConnection(Game.DatabasePath);
 					Game.ResetSqlConnection(Game.DatabasePath);//@"Data\veekun-pokedex.sqlite"
-					GameDebug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
+					Debug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
 					//Game.ResetAndOpenSql(@"Data\veekun-pokedex.sqlite");
 					//Game.ResetSqlConnection();
 					Game g = new Game();
@@ -368,7 +370,8 @@ namespace PokemonUnity.Stadium
 		{
 			Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
 			Debug.Assert(pokemonButton != null, "PokemonButton is null!!");
-			if (StoreButtonData.Count == 0)
+
+            if (StoreButtonData.Count == 0)
 			{
 				Debug.Log("Creating 151 Pokemons");
 

@@ -9,6 +9,7 @@ using PokemonEssentials.Interface;
 using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine;
 using UnityEngine.UI;
+using PokemonUnity.Application;
 
 namespace PokemonUnity.Stadium
 {
@@ -106,7 +107,7 @@ namespace PokemonUnity.Stadium
 		#region Party Roster UI
 		public void SetPartyButton()
 		{
-			for (int Id = 0; Id < ((Game)Game.GameData).Features.LimitPokemonPartySize && Id < Core.MAXPARTYSIZE; Id++)
+			for (int Id = 0; Id < Feature.MAXPARTYSIZE && Id < Core.MAXPARTYSIZE; Id++)
 			{
 				//if (Id == Core.MAXPARTYSIZE) break;
 				GameObject Button = Instantiate(partyEntryPrefab);

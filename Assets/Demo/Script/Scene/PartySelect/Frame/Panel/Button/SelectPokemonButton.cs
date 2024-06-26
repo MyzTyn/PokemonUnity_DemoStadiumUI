@@ -24,7 +24,8 @@ namespace PokemonUnity.Stadium
 		public PokemonSelect PokemonSelect;
 		public KeyValuePair<int?,int> Position;
 		private PokemonViewModal PokemonViewModal;
-		public bool IsRental { get { return pokemon.ot == null; } }
+		//public bool IsRental { get { return pokemon.ot == null; } }
+		public bool IsRental { get { return true; } }
 		//public int ID { get; private set; }
 
 		#region Unity Monobehavior
@@ -53,8 +54,9 @@ namespace PokemonUnity.Stadium
 		/// <param name="name"></param>
 		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, Pokemons species, bool isRental = true, int? page = null, bool selected = false)
 		{
-			//ToDo: Use battle rules to determine the constraints of the pokemon
-			IPokemon pokemon = new Pokemon(pkmn: species, level: PokemonSelect.LevelFixed);
+            //ToDo: Use battle rules to determine the constraints of the pokemon
+            //ToDo: PokemonSelect is null??
+            Pokemon pokemon = new Pokemon(pkmn: species, level: 50);
 			SetID(pokemonViewModal, pokemonSelect, id, pokemon, isRental, page, selected);
 		}
 
@@ -139,7 +141,7 @@ namespace PokemonUnity.Stadium
 					//Create new entry display for pokemon
 					//Level.text = "L" + PokemonSelect.LevelFixed;
 					Level.text = "L" + pokemon.Level;
-					Name.text = pokemon.Name;
+					Name.text = pokemon.Species.ToString();
 				}
 			}
 			else

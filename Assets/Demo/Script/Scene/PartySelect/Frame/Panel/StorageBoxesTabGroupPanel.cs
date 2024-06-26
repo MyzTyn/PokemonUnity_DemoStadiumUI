@@ -62,7 +62,7 @@ namespace PokemonUnity.Stadium
 				}
 				else if (i == 13)	//Rental
 				{
-					GameDebug.Log($"TabButton[{tabButton.name}].Text = R");
+					Core.Logger.Log($"TabButton[{tabButton.name}].Text = R");
 					tabButton.name = "tabR";
 					tabButton.label.text = "R";
 					//Assign Custom Color
@@ -71,7 +71,7 @@ namespace PokemonUnity.Stadium
 					{
 						t0.targetGraphic.color = new Color32(201, 67, 182, 255);
 						//Toggle t1 = tabButton.GetComponent<Toggle>();
-						//GameDebug.Log($"TabButton[{tabButton.name}].Toggle.Colors = " + t0.colors.normalColor);
+						//Core.Logger.Log($"TabButton[{tabButton.name}].Toggle.Colors = " + t0.colors.normalColor);
 						//t1.colors = new ColorBlock()
 						//{
 						//	normalColor = new Color32(201, 67, 182, 255),
@@ -79,7 +79,7 @@ namespace PokemonUnity.Stadium
 						//	pressedColor = new Color32(201, 67, 182, 255),
 						//	disabledColor = new Color32(164, 59, 144, 255)
 						//};
-						//GameDebug.Log($"TabButton[{tabButton.name}].Toggle.Colors = " + t0.colors.normalColor);
+						//Core.Logger.Log($"TabButton[{tabButton.name}].Toggle.Colors = " + t0.colors.normalColor);
 					}
 					//tabButton.tabTextActiveOverride = new Color32(255, 203, 249, 255);
 					//tabButton.tabActiveOverride = new Color32(205, 62, 186, 255);
@@ -99,18 +99,18 @@ namespace PokemonUnity.Stadium
 				}
 				//tabButton.Select(new UnityEngine.Events.UnityAction(() =>
 				//{
-				//	GameDebug.Log($"TabButton[{tabButton.name}].Select(UnityAction).Invoking...");
+				//	Core.Logger.Log($"TabButton[{tabButton.name}].Select(UnityAction).Invoking...");
 				//	var rect1 = selectedCursor.transform.GetComponent<RectTransform>();
 				//	var rect2 = tabButton.transform.GetComponent<RectTransform>();
-				//	GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
+				//	Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
 				//	rect1.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect2.rect.height);
-				//	GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
-				//	GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
+				//	Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
+				//	Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
 				//	rect1.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect2.rect.width);
-				//	GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
-				//	GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
+				//	Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
+				//	Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
 				//	selectedCursor.transform.position = tabButton.transform.position;
-				//	GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
+				//	Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
 				//	//LeanTween.move(selectedCursor, rect2, 1f);
 				//}));
 				//Add Prefab to pre-established Tab logic
@@ -122,7 +122,7 @@ namespace PokemonUnity.Stadium
 			ResetTabs();
 			//Debug.Log("Tab Count: " + tabButtons.Count);
 			//Canvas.ForceUpdateCanvases();
-			//GameDebug.Log($"TabButton[{tabButtons[13].name}].Rect.Height = {tabButtons[13].transform.GetComponent<RectTransform>().rect.height};");
+			//Core.Logger.Log($"TabButton[{tabButtons[13].name}].Rect.Height = {tabButtons[13].transform.GetComponent<RectTransform>().rect.height};");
 			OnTabSelected(selectedTab); //OnTabSelected(tabButtons[13]);
 			//tabButtons[13].OnPointerClick(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
 			//UnityEngine.EventSystems.ExecuteEvents.Execute(tabButtons[13].gameObject, 
@@ -145,7 +145,7 @@ namespace PokemonUnity.Stadium
 		//	if (refreshInUpdate && selectedTab != null)
 		//	{
 		//		Debug.LogWarning($"[WARN]: Update");
-		//		GameDebug.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{selectedTab.name}])");
+		//		Core.Logger.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{selectedTab.name}])");
 		//		MoveSelectorToCurrentItem(selectedTab);
 		//		refreshInUpdate=false;
 		//	}
@@ -156,7 +156,7 @@ namespace PokemonUnity.Stadium
 		//	if (refreshInUpdate && selectedTab != null)
 		//	{
 		//		Debug.LogWarning($"[WARN]: FixedUpdate");
-		//		GameDebug.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{selectedTab.name}])");
+		//		Core.Logger.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{selectedTab.name}])");
 		//		MoveSelectorToCurrentItem(selectedTab);
 		//		refreshInUpdate=false;
 		//	}
@@ -168,7 +168,7 @@ namespace PokemonUnity.Stadium
 		//	{
 		//		Canvas.ForceUpdateCanvases();
 		//		Debug.LogWarning($"[WARN]: LateUpdate");
-		//		GameDebug.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{selectedTab.name}])");
+		//		Core.Logger.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{selectedTab.name}])");
 		//		//MoveSelectorToCurrentItem(selectedTab);
 		//		refreshInUpdate=false;
 		//	}
@@ -177,7 +177,7 @@ namespace PokemonUnity.Stadium
 
 		public override void OnTabSelected(TabButton tab)
 		{
-			GameDebug.Log($"TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
+			Core.Logger.Log($"TabGroup[{name}].OnTabSelect(tab[{tab.name}]);");
 			if (!tab.selectable.interactable) return;
 			if (selectedTab != null)
 				selectedTab.Deselect();
@@ -244,21 +244,21 @@ namespace PokemonUnity.Stadium
 
 		//public void MoveSelectorToCurrentItem(TabButton tabButton)
 		//{
-		//	GameDebug.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{tabButton.name}]).Invoking...");
+		//	Core.Logger.Log($"TabGroup[{name}].MoveSelectorToCurrentItem([{tabButton.name}]).Invoking...");
 		//	//tabButton.Select(new UnityEngine.Events.UnityAction(() =>
 		//	//{
-		//		GameDebug.Log($"TabButton[{tabButton.name}].Select(UnityAction).Invoking...");
+		//		Core.Logger.Log($"TabButton[{tabButton.name}].Select(UnityAction).Invoking...");
 		//		var rect1 = selectedCursor.transform.GetComponent<RectTransform>();
 		//		var rect2 = tabButton.transform.GetComponent<RectTransform>();
-		//		GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
+		//		Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
 		//		rect1.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rect2.rect.height);
-		//		GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
-		//		GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
+		//		Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Height = {rect1.rect.height};");
+		//		Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
 		//		rect1.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, rect2.rect.width);
-		//		GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
-		//		GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
+		//		Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Rect.Width = {rect1.rect.width};");
+		//		Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
 		//		selectedCursor.transform.position = tabButton.transform.position;
-		//		GameDebug.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
+		//		Core.Logger.Log($"TabButton[{tabButton.name}].SelectedCursor.Position = ({selectedCursor.transform.position.x},{selectedCursor.transform.position.y});");
 		//		//LeanTween.move(selectedCursor, rect2, 1f);
 		//	//}));
 		//}

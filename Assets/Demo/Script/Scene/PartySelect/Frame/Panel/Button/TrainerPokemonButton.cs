@@ -55,23 +55,25 @@ namespace PokemonUnity.Stadium
 		/// <summary>
 		/// Shows pokemon text and sprite display for this pokemon
 		/// </summary>
-		public void SetDisplay()
+		public void SetDisplay(IPokemon pkmn = null)
 		{
-			IPokemon pkmn = Game.GameData.Trainer.party[partyIndex];
+			//IPokemon pkmn = Game.GameData.Trainer.party[partyIndex];
+			//IPokemon pkmn = PokemonSelect.TemporaryParty[partyIndex];
+			
 			if (!pkmn.IsNotNullOrNone())
 			{
 				ActivePokemonDisplay(false);
 				Clear();
+				return;
 			}
-			else
-			{
-				PokemonIcon.sprite = MainCameraGameManager.IconSprites[(int)pkmn.Species];
-				//Name.text = pkmn.ToString(TextScripts.Name);
-				Name.text = pkmn.Name;
-				Level.text = "L " + pkmn.Level;
-				ActivePokemonDisplay(true);
-			}
-		}
+
+            PokemonIcon.sprite = MainCameraGameManager.IconSprites[(int)pkmn.Species];
+            //Name.text = pkmn.ToString(TextScripts.Name);
+            //Name.text = pkmn.Name;
+            Name.text = pkmn.Species.ToString();
+            Level.text = "L " + pkmn.Level;
+            ActivePokemonDisplay(true);
+        }
 		public void ActivePokemonDisplay(bool active)
 		{
 			PokemonDisplay.SetActive(active);

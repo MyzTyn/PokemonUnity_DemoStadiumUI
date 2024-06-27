@@ -9,10 +9,6 @@ namespace PokemonUnity.Stadium
 	public class PokemonViewModal : MonoBehaviour
 	{
 		#region Variables
-		/// <summary>
-		/// </summary>
-		/// FIXME: What is this? What game object is this referring to?
-		[SerializeField] private GameObject MoveSetUIObject;
 		[SerializeField] private ViewPokemonData Data;
 		// ToDo: Fix this; Rename to: IsYesButtonPressed or IsPokemonSelected/Registered
 		[SerializeField] private Toggle yesButton; //Do we need two for a yes/no (true/false) bool?
@@ -41,7 +37,8 @@ namespace PokemonUnity.Stadium
 				// Fix this bad code
 				//PokemonSelect.CurrentSelectedPokemon = pokemon.Species;
 				//MainCameraGameManager.Instance.AddToParty();
-				PokemonSelect.RegisterSelectedPokemon();
+				PokemonSelect.RegisterSelectedPokemon(pokemon);
+				CloseDisplayModal();
 			});
 			// Close it
 			noButton.onValueChanged.AddListener(noButtonSelected_Event);
@@ -51,7 +48,7 @@ namespace PokemonUnity.Stadium
 		public void ActiveGameobject(bool active)
 		{
 			IsWindowActive = active;
-			MoveSetUIObject.SetActive(active);
+			gameObject.SetActive(active);
 		}
 
 		/// <summary>
@@ -61,6 +58,8 @@ namespace PokemonUnity.Stadium
 		/// ToDo: pokemon should be passed as a parameter for this method, and use the object to assign values to display
 		public void RefreshDisplay(IPokemon pkmn = null) //FIXME: Remove null overload
 		{
+			Debug.Assert(pkmn != null, "[PokemonViewModal] pkm is null!");
+            pokemon = pkmn;
 			if (PokemonSelect.IsRentalPokemon)
 			{
 				Pokemons species = Pokemons.NONE;
@@ -71,7 +70,10 @@ namespace PokemonUnity.Stadium
 						MainCameraGameManager.StorePokemon.Remove(species);
 				}
 				species = pkmn.Species;
-				if (!pkmn.IsNotNullOrNone()) species = PokemonSelect.CurrentSelectedPokemon.Species; //PokemonSelect.Species;
+
+				if (!pkmn.IsNotNullOrNone()) 
+					species = PokemonSelect.CurrentSelectedPokemon.Species; //PokemonSelect.Species;
+
 				//This is interesting game design logic, but not sure if it should go here...
 				if(MainCameraGameManager.ViewedRentalPokemon.Contains(species) &&
 					MainCameraGameManager.StorePokemon.ContainsKey(species))
@@ -80,8 +82,11 @@ namespace PokemonUnity.Stadium
 				}
 				else
 				{
-					if (pokemon.IsNotNullOrNone()) pokemon = pkmn; else //ToDo: if pokemon is not null then we can get rid of below
-					pokemon = new Pokemon(species, PokemonSelect.LevelFixed, isEgg: false);
+					if (pokemon.IsNotNullOrNone()) 
+						pokemon = pkmn; 
+					else //ToDo: if pokemon is not null then we can get rid of below
+						pokemon = new Pokemon(species, PokemonSelect.LevelFixed, isEgg: false);
+
 					MainCameraGameManager.StorePokemon.Add(species, pokemon);
 					MainCameraGameManager.ViewedRentalPokemon.Enqueue(species);
 				}
@@ -92,7 +97,8 @@ namespace PokemonUnity.Stadium
 		}
 		public void RefreshHeaderDisplay()
 		{
-			Data.PkmnName.text = pokemon.Name;
+			//Data.PkmnName.text = pokemon.Name;
+			Data.PkmnName.text = pokemon.Species.ToString();
 			Data.Level.text = "L " + pokemon.Level;
 			//Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonFormsData[pokemon.Species][(pokemon as Pokemon).FormId].Base); //Why are we using Form to lookup data?
 			//Data.PkmnID.text = "No." + string.Format("{0:000}", (int)Kernal.PokemonData[pokemon.Species].ID); //Refactored above; Why are we performing a lookup in dictionary for pokemon Id?
@@ -108,7 +114,7 @@ namespace PokemonUnity.Stadium
 			Data.Speed.text			= pokemon.SPE.ToString();
 			Data.SpecialAtk.text	= pokemon.SPA.ToString();
 			// Use Null handing? No, just dont display (leave unity inspector toggle to determine if used)
-			Data.SpecialDef.text	= pokemon.SPD.ToString();
+			//Data.SpecialDef.text	= pokemon.SPD.ToString();
 
 			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
 			if (pokemon.Type2 == PokemonUnity.Types.NONE)
@@ -154,7 +160,7 @@ namespace PokemonUnity.Stadium
 			Data.Defense.text = null;
 			Data.Speed.text = null;
 			Data.SpecialAtk.text = null;
-			Data.SpecialDef.text = null; //Logic can remain even if item isnt displayed
+			//Data.SpecialDef.text = null; //Logic can remain even if item isnt displayed
 			Data.Type1.sprite = null;
 			Data.Type2.sprite = null;
 

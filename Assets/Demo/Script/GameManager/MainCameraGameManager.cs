@@ -16,9 +16,6 @@ namespace PokemonUnity.Stadium
 	//[ExecuteInEditMode]
 	public class MainCameraGameManager : MonoBehaviour
 	{
-		// ToDo: Remove this code!!! Why, is a singleton needed for camera manager bad?
-		public static MainCameraGameManager Instance { get; private set; }
-
 		#region Variables
 		public float CurrentSrollPosition { get { return scrollBar.value; } set { scrollBar.value = value; } }
 		public PokemonSelect PokemonSelect;
@@ -71,9 +68,6 @@ namespace PokemonUnity.Stadium
 		#region Unity Monobehavior
 		void Awake()
 		{
-			if (Instance == null)
-				Instance = this;
-
 			Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
 			toggleGroup = GetComponent<ToggleGroup>();
 			Debug.Log("Create Dictionary for Player Party UI Mono");
@@ -166,9 +160,6 @@ namespace PokemonUnity.Stadium
 
 			}
 			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
-
-			// Pass the variables To Do: Fix this
-			//pokemonViewModal.PokemonSelect = PokemonSelect;
 		}
 
 		void Start()
@@ -190,6 +181,7 @@ namespace PokemonUnity.Stadium
 				partyPanel.SetTrainerID(Game.GameData.Trainer.publicID(), Game.GameData.Trainer.name);
 			}
 
+			partyPanel.Subscribe(PokemonSelect.TemporaryParty);
 			DisplayRentalPokemons();
 
 			// ToDo: Fix this; What is this for?
@@ -235,55 +227,7 @@ namespace PokemonUnity.Stadium
 		//	pokemonViewModal.ActiveGameobject(true);
 		//	pokemonViewModal.DisplayPkmnStats();
 		//}
-		public void AddToParty()
-		{
-			if (PokemonSelect.CurrentSelectedPokemon.IsNotNullOrNone())
-			{
-				Debug.LogWarning("Error. There is no Pokemon in display view, nothing to add!");
-			}
-			else
-			{
-				// ToDo: Fix this mess code
-				if (PokemonSelect.CurrentSelectedPartySlot >= 0 && PokemonSelect.CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
-				{
-					//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(true);
-					//Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = StorePokemon[PokemonSelect.Species]; //ToDo: Dont use GameData Trainer for Stadium party, it should remain immutable
-					//if (CurrentSelectedRosterPage != null)
-					//{
-					//	//Search for the pokemon in the rental list
-					//	PokemonSelect.TemporaryParty.Push(); //FIXME: Use roster collection that populates the rental list
-					//}
-					//else if (CurrentSelectedRosterPage == 0)
-					//{
-					//	//Search for the pokemon in the party list
-					//	PokemonSelect.TemporaryParty.Push(Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot]);
-					//}
-					//else if (CurrentSelectedRosterPage > 0)
-					//{
-					//	//Search for the pokemon in the trainer's PC storage box
-					//	PokemonSelect.TemporaryParty.Push(Game.GameData.PokemonStorage.boxes[PokemonSelect.CurrentSelectedRosterPage.Value][PokemonSelect.CurrentSelectedPartySlot]);
-					//}
 
-					bool canStart = PokemonSelect.RegisterSelectedPokemon();
-					//PartyViewer[CurrentOnParty].DisplayPartyButton();
-					PartyViewer[PokemonSelect.CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-					PartyViewer[PokemonSelect.CurrentSelectedPartySlot].ActivePokemonDisplay(true);
-					//PokemonSelect.CurrentSelectedPartySlot++;
-
-					// ToDo: Fix this code
-					StoreButtonData[PokemonSelect.PokemonPosition.Value].DisableOnClick(true);
-
-					//Ask player if they're done and wish to move on; but in another function...
-					if (canStart)
-					{
-						Debug.Log("Disable the Player from selecting more pokemons, and prompt if they're ready to move on...");
-						// RentalControlUI.ActiveRentalUI(false);
-					}
-				}
-
-				pokemonViewModal.CloseDisplayModal();
-			}
-		}
 		//public void PartyData(int id, TrainerPokemonButton partybutton)
 		//{
 		//	PartyViewer.Add(id, partybutton);
@@ -371,20 +315,20 @@ namespace PokemonUnity.Stadium
 			Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
 			Debug.Assert(pokemonButton != null, "PokemonButton is null!!");
 
-            if (StoreButtonData.Count == 0)
-			{
-				Debug.Log("Creating 151 Pokemons");
+			if (StoreButtonData.Count != 0)
+				return;
 
-				for (int i = 0; i < 151; i++)
-				{
-					SelectPokemonButton item = Instantiate(pokemonButton, pokemonListPanel);
-					item.gameObject.SetActive(true);
-					item.SetID(pokemonViewModal, PokemonSelect, i, (Pokemons)(i + 1));
-					item.PokemonSelect = PokemonSelect;
-					item.name = $"ID {i}";
-					StoreButtonData.Add(i, item);
-				}
-			}
-		}
+            Debug.Log("Creating 151 Pokemons");
+
+            for (int i = 0; i < 151; i++)
+            {
+                SelectPokemonButton item = Instantiate(pokemonButton, pokemonListPanel);
+                item.gameObject.SetActive(true);
+                item.SetID(pokemonViewModal, PokemonSelect, i, (Pokemons)(i + 1));
+                item.PokemonSelect = PokemonSelect;
+                item.name = $"ID {i}";
+                StoreButtonData.Add(i, item);
+            }
+        }
 	}
 }

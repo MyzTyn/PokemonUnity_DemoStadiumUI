@@ -82,8 +82,8 @@ namespace PokemonUnity.Stadium
 			//party.DisplayPartyUI();
 			//party.GetPartyButton();
 			SetPartyButton();
+
 			Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
-			//Use ID but I will leave 00000 as Example
 			partySelectionUI.SetTrainerID(Game.GameData.Trainer.publicID());
 		}
 		void OnDestroy()

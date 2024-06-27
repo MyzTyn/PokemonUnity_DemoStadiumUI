@@ -126,7 +126,9 @@ namespace PokemonUnity.Stadium
 			}
 			else
 			{
-				Debug.LogError($"Pokemon [{pokemon.Name}] Index #{(int)pokemon.Species}:{pokemon.Species} was outside the bounds of the array.");
+				//Debug.LogError($"Pokemon [{pokemon.Name}] Index #{(int)pokemon.Species}:{pokemon.Species} was outside the bounds of the array.");
+				// pokemon.Name caused null reference
+				Core.Logger?.LogError($"Pokemon [{pokemon.Species}] Index #{(int)pokemon.Species}:{pokemon.Species} was outside the bounds of the array.");
 			}
 
 			if (IsRental)
@@ -139,8 +141,8 @@ namespace PokemonUnity.Stadium
 				else
 				{
 					//Create new entry display for pokemon
-					//Level.text = "L" + PokemonSelect.LevelFixed;
 					Level.text = "L" + pokemon.Level;
+					// pokemon.Name caused null reference
 					Name.text = pokemon.Species.ToString();
 				}
 			}
@@ -157,7 +159,9 @@ namespace PokemonUnity.Stadium
 		public void Scene_onButtonSelected(bool arg)
 		{
 			IsSelected = arg;
-			Debug.Log($"Pokemon [{pokemon.Name}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
+			//Debug.Log($"Pokemon [{pokemon.Name}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
+			// pokemon.Name caused null reference
+			Core.Logger?.Log($"Pokemon [{pokemon.Species}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
 			//PokemonSelect.Species = pokemon.Species;
 			PokemonSelect.PokemonPosition = Position;
 			//if (arg) // If selected
@@ -165,7 +169,8 @@ namespace PokemonUnity.Stadium
 			PokemonSelect.IsRentalPokemon = IsRental;
 			PokemonSelect.EditPokemon = true;
 			PokemonViewModal.ActiveGameobject(true);
-			PokemonViewModal.RefreshDisplay(PokemonSelect.CurrentSelectedPokemon);
+			//PokemonViewModal.RefreshDisplay(PokemonSelect.CurrentSelectedPokemon);
+			PokemonViewModal.RefreshDisplay(pokemon);
 
 			//GameEvents.current.OnLoadLevel(1); //Change scene...
 		}

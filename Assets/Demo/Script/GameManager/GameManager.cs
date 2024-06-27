@@ -28,7 +28,7 @@ namespace PokemonUnity.Stadium
 	public partial class GameManager : MonoBehaviour
 	{
 		#region Variables
-		public static GameManager current;
+		public static GameManager current { get; private set; }
 		public InputManager InputManager;
 		public AudioManager AudioManager;
 		public FileTest FileTest;
@@ -84,16 +84,16 @@ namespace PokemonUnity.Stadium
 				//Core.Logger?.Log("1-" + System.IO.Path.GetFullPath("..\\..\\veekun-pokedex.sqlite"));
 				//Core.Logger?.Log("2-" + System.IO.Path.GetFullPath("..\\..\\..\\veekun-pokedex.sqlite"));
 				//Core.Logger?.Log("3-" + System.IO.Path.GetFullPath("..\\..\\..\\..\\veekun-pokedex.sqlite"));
-				Game.DatabasePath = "Data Source=..\\veekun-pokedex.sqlite";
+				Game.DatabasePath = "Data Source=veekun-pokedex.sqlite";
 				//Game.DatabasePath = "Data Source =" + UnityEngine.Application.dataPath + "/Data/veekun-pokedex.sqlite";
 				Core.Logger?.Log("ConnectionString Database Path: " + Game.DatabasePath);
 				//Game.DatabasePath = "Data Source =" + UnityEngine.Application.dataPath + "/Data/veekun-pokedex.sqlite";
-				//Game.con = (System.Data.IDbConnection)new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
-				Game.con = (System.Data.IDbConnection)new Mono.Data.Sqlite.SqliteConnection(Game.DatabasePath);
+				Game.con = (System.Data.IDbConnection)new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
+				//Game.con = (System.Data.IDbConnection)new Mono.Data.Sqlite.SqliteConnection(Game.DatabasePath);
 				Game.ResetSqlConnection(Game.DatabasePath);//@"Data\veekun-pokedex.sqlite"
 				Core.Logger?.Log("Framework Connected to Database...");
-				//Core.Logger?.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
-				Core.Logger?.Log("Path to DB: " + ((Mono.Data.Sqlite.SqliteConnection)Game.con).DataSource);
+				Core.Logger?.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
+				//Core.Logger?.Log("Path to DB: " + ((Mono.Data.Sqlite.SqliteConnection)Game.con).DataSource);
 				game = new Game();
 				Core.Logger?.Log("New Game Entity Successfully Instantiated!~");
 			}
@@ -101,12 +101,9 @@ namespace PokemonUnity.Stadium
 			catch (Exception e) { Core.Logger?.LogError(e.ToString()); }
 			finally
 			{
-				//Game.con.Open();
-
 				Core.Logger?.Log("Is Pokemon DB Null? " + (Kernal.PokemonData == null).ToString());
 				if (Kernal.PokemonData == null)
 				{
-					//Game.InitPokemons();
 					try
 					{
 						Game.InitTypes();
@@ -135,8 +132,12 @@ namespace PokemonUnity.Stadium
 				}
 			}
 
-			Core.Logger?.Log("Is Game Null? " + (Game.GameData == null).ToString());
-			Core.Logger?.Log("Is Player Null? " + (Game.GameData.Player == null).ToString());
+			//Core.Logger?.Log("Is Game Null? " + (Game.GameData == null).ToString());
+			Debug.Assert(Game.GameData != null, "Game is NULL!");
+			
+			//Core.Logger?.Log("Is Player Null? " + (Game.GameData.Player == null).ToString());
+			Debug.Assert(Game.GameData.Player != null, "Player is NULL!");
+
 			//if (Game.GameData.Player == null)
 			//{
 			//	Core.Logger?.Log("Create Player Object");

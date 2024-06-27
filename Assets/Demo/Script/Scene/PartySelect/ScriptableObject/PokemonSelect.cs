@@ -71,7 +71,7 @@ namespace PokemonUnity.Stadium
 		/// <summary>
 		/// Which pokemon slot is currently active for choice of player's decision
 		/// </summary>
-		public int CurrentSelectedPartySlot { get { return temporaryParty.Count; } }
+		public int CurrentSelectedPartySlot { get { return TemporaryParty.Count; } }
 		/// <summary>
 		/// </summary>
 		/// ToDo: Why is this a list of generations here; what is the variable used for?
@@ -112,8 +112,7 @@ namespace PokemonUnity.Stadium
 		/// <remarks>
 		/// First-In, Last-Out; Player can deselect their choice by removing their last choice
 		/// </remarks>
-		public Stack<IPokemon> TemporaryParty { get { return temporaryParty; } }
-		private Stack<IPokemon> temporaryParty;
+		public ObservableStack<IPokemon> TemporaryParty { get; private set; }
 		/// <summary>
 		/// Placeholder to store the source position of the selected pokemon in the party
 		/// </summary>
@@ -142,6 +141,7 @@ namespace PokemonUnity.Stadium
 			//SelectedPokemons = new HashSet<KeyValuePair<KeyValuePair<bool, int?>, int>>();
 			SelectedPokemons = new HashSet<IPokemon>();
 			SelectedPokemonPositions = new Stack<KeyValuePair<int?, int>>();
+			TemporaryParty = new ObservableStack<IPokemon>();
 		}
 
 		public void OnBeforeSerialize() { }
@@ -183,6 +183,7 @@ namespace PokemonUnity.Stadium
 					TemporaryParty.Push(CurrentSelectedPokemon);
 					SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage,CurrentSelectedPartySlot));
 
+					// ToDo: Signal the Party UI
 					//PartyViewer[CurrentOnParty].DisplayPartyButton();
 					//PartyViewer[CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
 					//PartyViewer[CurrentSelectedPartySlot].ActivePokemonDisplay(true);
@@ -193,7 +194,7 @@ namespace PokemonUnity.Stadium
 
 				//Ask player if they're done and wish to move on; but in another function...
 				//if (Game.GameData.Trainer.party[5].IsNotNullOrNone())
-				if (temporaryParty.Count() == Core.MAXPARTYSIZE)
+				if (TemporaryParty.Count == Core.MAXPARTYSIZE)
 				{
 					Debug.Log("Disable the UI");
 					// RentalControlUI.ActiveRentalUI(false);
@@ -204,11 +205,62 @@ namespace PokemonUnity.Stadium
 			return false;
 		}
 
-		/// <summary>
-		/// Removes the last pokemon added to the player's party,
-		/// and moves the cursor back to the unselected pokemon
-		/// </summary>
-		public void UnregisterPreviousPokemon()
+		// ToDo: Remove this
+        public bool RegisterSelectedPokemon(IPokemon pokemon)
+        {
+			if (!pokemon.IsNotNullOrNone())
+			{
+				Debug.LogWarning("[PokemonSelect] There no Pokemon!");
+				return false;
+			}
+
+            // ToDo: Fix this mess code
+            if (CurrentSelectedPartySlot >= 0 && CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
+            {
+                //if (CurrentSelectedRosterPage != null)
+                //{
+                //	//Search for the pokemon in the rental list
+                //	SelectedPokemonPositions.Push(CurrentSelectedPokemon); //FIXME: Use roster collection that populates the rental list
+                //}
+                //else if (CurrentSelectedRosterPage == 0)
+                //{
+                //	//Search for the pokemon in the party list
+                //	TemporaryParty.Push(Game.GameData.Trainer.party[CurrentSelectedPartySlot]);
+                //}
+                //else if (CurrentSelectedRosterPage > 0)
+                //{
+                //	//Search for the pokemon in the trainer's PC storage box
+                //	TemporaryParty.Push(Game.GameData.PokemonStorage.boxes[CurrentSelectedRosterPage.Value][CurrentSelectedPartySlot]);
+                //}
+                TemporaryParty.Push(pokemon);
+                SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage, CurrentSelectedPartySlot));
+
+                // ToDo: Signal the Party UI
+                //PartyViewer[CurrentOnParty].DisplayPartyButton();
+                //PartyViewer[CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
+                //PartyViewer[CurrentSelectedPartySlot].ActivePokemonDisplay(true);
+
+                // ToDo: Fix this code
+                //StoreButtonData[PokemonPosition.Value].DisableOnClick(true);
+            }
+
+            //Ask player if they're done and wish to move on; but in another function...
+            //if (Game.GameData.Trainer.party[5].IsNotNullOrNone())
+            if (TemporaryParty.Count == Core.MAXPARTYSIZE)
+            {
+                Debug.Log("Disable the UI");
+                // RentalControlUI.ActiveRentalUI(false);
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Removes the last pokemon added to the player's party,
+        /// and moves the cursor back to the unselected pokemon
+        /// </summary>
+        public void UnregisterPreviousPokemon()
 		{
 			if (CurrentSelectedPartySlot > 0)
 			{
@@ -220,7 +272,7 @@ namespace PokemonUnity.Stadium
 				//PartyViewer[CurrentSelectedPartySlot].ActivePokemonDisplay(false);
 				//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(false);
 
-				temporaryParty.Pop();
+				TemporaryParty.Pop();
 				//ToDo: Refresh the UI to update the party viewer
 				KeyValuePair<int?,int> position = SelectedPokemonPositions.Pop();
 				CurrentSelectedRosterPage = position.Key;

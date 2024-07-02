@@ -37,8 +37,10 @@ namespace PokemonUnity.Stadium
 				// Fix this bad code
 				//PokemonSelect.CurrentSelectedPokemon = pokemon.Species;
 				//MainCameraGameManager.Instance.AddToParty();
-				PokemonSelect.RegisterSelectedPokemon(pokemon);
+				bool result = PokemonSelect.RegisterSelectedPokemon(pokemon);
 				CloseDisplayModal();
+				if (result)
+					MainCameraGameManager.Instance.ShowVersusPartyUI();
 			});
 			// Close it
 			noButton.onValueChanged.AddListener(noButtonSelected_Event);

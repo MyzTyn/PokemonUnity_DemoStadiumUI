@@ -1,12 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using PokemonUnity;
-using PokemonUnity.Character;
-using PokemonUnity.Monster;
-using PokemonEssentials.Interface;
-using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine;
 using UnityEngine.UI;
 using PokemonUnity.Application;

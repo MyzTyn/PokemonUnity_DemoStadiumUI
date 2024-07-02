@@ -250,24 +250,28 @@ namespace PokemonUnity.Stadium
 			//IPokeBattle_DebugSceneNoGraphics pokeBattle = new PokeBattleScene();
 			(this as IPokeBattle_SceneIE).initialize(); //pokeBattle.initialize();
 
+			
+			// The data from PokemonSelect. ToDo: Fix this code and allow to generate pokemons for NPC
+			IPokemon[] p1 = MainCameraGameManager.Instance.PokemonSelect.TemporaryParty.Reverse().ToArray();
+			// ToDo: Fix the error (No double battle allow)
+			IPokemon[] p2 = MainCameraGameManager.Instance.PokemonSelect.TemporaryParty.Take(1).ToArray(); //, new PokemonUnity.Monster.Pokemon(Pokemons.SEEDOT) };
 
-			IPokemon[] p1 = new IPokemon[] { new PokemonUnity.Monster.Pokemon(Pokemons.ABRA), new PokemonUnity.Monster.Pokemon(Pokemons.EEVEE) };
-			IPokemon[] p2 = new IPokemon[] { new PokemonUnity.Monster.Pokemon(Pokemons.MONFERNO) }; //, new PokemonUnity.Monster.Pokemon(Pokemons.SEEDOT) };
+            //p2[1].moves[0] = new PokemonUnity.Attack.Move(Moves.POUND);
 
-			p1[0].moves[0] = new PokemonUnity.Attack.Move(Moves.POUND);
-			p1[1].moves[0] = new PokemonUnity.Attack.Move(Moves.POUND);
+            //PokemonUnity.Character.TrainerData trainerData = new PokemonUnity.Character.TrainerData("FlakTester", true, 120, 002);
+            //Game.GameData.Player = new PokemonUnity.Character.Player(trainerData, p1);
+            //Game.GameData.Trainer = new Trainer("FlakTester", true, 120, 002);
 
-			p2[0].moves[0] = new PokemonUnity.Attack.Move(Moves.POUND);
-			//p2[1].moves[0] = new PokemonUnity.Attack.Move(Moves.POUND);
+            //(p1[0] as PokemonUnity.Monster.Pokemon).SetNickname("Test1");
+			//(p1[1] as PokemonUnity.Monster.Pokemon).SetNickname("Test2");
 
-			//PokemonUnity.Character.TrainerData trainerData = new PokemonUnity.Character.TrainerData("FlakTester", true, 120, 002);
-			//Game.GameData.Player = new PokemonUnity.Character.Player(trainerData, p1);
-			//Game.GameData.Trainer = new Trainer("FlakTester", true, 120, 002);
+			foreach (var pokemon in p1)
+                (pokemon as PokemonUnity.Monster.Pokemon).SetNickname(pokemon.species.ToString());
 
-			(p1[0] as PokemonUnity.Monster.Pokemon).SetNickname("Test1");
-			(p1[1] as PokemonUnity.Monster.Pokemon).SetNickname("Test2");
+            foreach (var pokemon in p2)
+                (pokemon as PokemonUnity.Monster.Pokemon).SetNickname(pokemon.species.ToString());
 
-			(p2[0] as PokemonUnity.Monster.Pokemon).SetNickname("OppTest1");
+            //(p2[0] as PokemonUnity.Monster.Pokemon).SetNickname("OppTest1");
 			//(p2[1] as PokemonUnity.Monster.Pokemon).SetNickname("OppTest2");
 
 			//ITrainer player = new Trainer(Game.GameData.Trainer.name, TrainerTypes.PLAYER);

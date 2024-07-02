@@ -8,6 +8,8 @@ using PokemonUnity.Monster;
 using UnityEngine;
 using UnityEngine.UI;
 using PokemonEssentials.Interface.PokeBattle;
+using UnityEngine.SceneManagement;
+using System.Collections;
 
 namespace PokemonUnity.Stadium
 {
@@ -34,9 +36,20 @@ namespace PokemonUnity.Stadium
 		[SerializeField] private GameObject pageTabPrefab;
 		[SerializeField] private GameObject rosterEntryPrefab;
 		[SerializeField] private GameObject partyEntryPrefab;
+		//[SerializeField] private GameObject versusPartyPrefab;
 		[SerializeField] private Transform rosterGridContent;
 		[SerializeField] private Transform tabGridContent;
 		[SerializeField] private ToggleGroup toggleGroup;
+
+		// Versus Party Script Reference (ToDo: Clean the code)
+		[SerializeField] private VersusPartyModal VersusPartyTop;
+		[SerializeField] private VersusPartyModal VersusPartyBottom;
+		[SerializeField] private GameObject VersusPanel;
+		[SerializeField] private GameObject RosterPanel;
+		[SerializeField] private GameObject TabPanel;
+
+        // ToDo: Remove this Instance. Because it is unnecessary
+        public static MainCameraGameManager Instance { get; private set; }
 
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
@@ -68,6 +81,10 @@ namespace PokemonUnity.Stadium
 		#region Unity Monobehavior
 		void Awake()
 		{
+			// ToDo: Remove this pattern
+			if (Instance == null)
+				Instance = this;
+
 			Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
 			toggleGroup = GetComponent<ToggleGroup>();
 			Debug.Log("Create Dictionary for Player Party UI Mono");
@@ -308,9 +325,33 @@ namespace PokemonUnity.Stadium
 				}
 			}
 		}
-		#endregion
+        #endregion
 
-		private void DisplayRentalPokemons()
+        #region Versus Party UI
+		public void ShowVersusPartyUI()
+		{
+			Debug.Log("Called");
+			partyPanel.gameObject.SetActive(false);
+			RosterPanel.gameObject.SetActive(false);
+			TabPanel.gameObject.SetActive(false);
+
+            VersusPanel.gameObject.SetActive(true);
+
+            VersusPartyTop.RefreshDisplay(Game.GameData.Trainer.name, null, PokemonSelect.TemporaryParty.Reverse().ToArray());
+			VersusPartyBottom.RefreshDisplay("Biker", null, PokemonSelect.TemporaryParty.ToArray());
+
+			StartCoroutine(LoadBattleScene());
+		}
+
+        // Battle Scene ToDo: Fix the scene manager and name. This is rough code
+        public IEnumerator LoadBattleScene()
+		{
+			yield return new WaitForSeconds(3);
+			SceneManager.LoadScene(1);
+		}
+        #endregion
+
+        private void DisplayRentalPokemons()
 		{
 			Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
 			Debug.Assert(pokemonButton != null, "PokemonButton is null!!");

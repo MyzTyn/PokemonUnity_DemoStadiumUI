@@ -19,7 +19,7 @@ namespace PokemonUnity.Stadium
 	public class MainCameraGameManager : MonoBehaviour
 	{
 		#region Variables
-		public float CurrentSrollPosition { get { return scrollBar.value; } set { scrollBar.value = value; } }
+		public float CurrentScrollPosition { get { return scrollBar.value; } set { scrollBar.value = value; } }
 		public PokemonSelect PokemonSelect;
 		public Scrollbar scrollBar;
 		public GameObject cursorSelectedItem;
@@ -48,8 +48,8 @@ namespace PokemonUnity.Stadium
 		[SerializeField] private GameObject RosterPanel;
 		[SerializeField] private GameObject TabPanel;
 
-        // ToDo: Remove this Instance. Because it is unnecessary
-        public static MainCameraGameManager Instance { get; private set; }
+		// ToDo: Remove this Instance. Because it is unnecessary
+		public static MainCameraGameManager Instance { get; private set; }
 
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
@@ -57,10 +57,9 @@ namespace PokemonUnity.Stadium
 		//Sprite
 		public static UnityEngine.Sprite[] PkmnType { get; private set; }
 		public static UnityEngine.Sprite[] IconSprites { get; private set; }
-		public static Dictionary<Pokemons, IPokemon> StorePokemon { get; private set; } //FIXME: Why is this a key-value dictionary? Why not a hashset of pokemons to prevent duplicates? What is the Key for?
-		//ToDo: Move this to ScriptableObject?...
-		public static HashSet<KeyValuePair<KeyValuePair<bool,int?>, int>> SelectedPokemons { get; private set; }
-		public static Queue<Pokemons> ViewedRentalPokemon { get; private set; }
+		//public static Dictionary<Pokemons, IPokemon> StorePokemon { get; private set; } //FIXME: Why is this a key-value dictionary? Why not a hashset of pokemons to prevent duplicates? What is the Key for?
+		//[System.Obsolete("Use ScriptableObject.SelectPokemon")] public static HashSet<KeyValuePair<KeyValuePair<bool,int?>, int>> SelectedPokemons { get; private set; } //ToDo: Move this to ScriptableObject?...
+		//[System.Obsolete("Use ScriptableObject.SelectPokemon")] public static Queue<Pokemons> ViewedRentalPokemon { get; private set; } //ToDo: Use SelectPokemon Scriptable Object...
 		//public static int PkmnSelected { get; private set; }
 		//public Toggle Toggle { get { return toggleGroup.ActiveToggles().FirstOrDefault(); } }
 		//public int CurrentOnParty
@@ -89,16 +88,16 @@ namespace PokemonUnity.Stadium
 			toggleGroup = GetComponent<ToggleGroup>();
 			Debug.Log("Create Dictionary for Player Party UI Mono");
 			PartyViewer = new Dictionary<int, TrainerPokemonButton>();
-			Debug.Log("Create Dictionary for Temp Instantiated Pokemon Objects");
-			StorePokemon = new Dictionary<Pokemons, IPokemon>();
+			//Debug.Log("Create Dictionary for Temp Instantiated Pokemon Objects");
+			//StorePokemon = new Dictionary<Pokemons, IPokemon>();
 			Debug.Log("Create Dictionary for Roster Entry UI Mono");
 			StoreButtonData = new Dictionary<int, SelectPokemonButton>();
-			Debug.Log("Create Dictionary for Temp Viewed Pokemons");
-			ViewedRentalPokemon = new Queue<Pokemons>();
+			//Debug.Log("Create Dictionary for Temp Viewed Pokemons");
+			//ViewedRentalPokemon = new Queue<Pokemons>();
 			//Debug.Log("Create Dictionary for Pokemons Selected by Player");
 			//SelectedPokemons = new Dictionary<KeyValuePair<bool, int?>, int>();
-			Debug.Log("Create LookUp Table for Pokemons Selected by Player");
-			SelectedPokemons = new HashSet<KeyValuePair<KeyValuePair<bool, int?>, int>>();
+			//Debug.Log("Create LookUp Table for Pokemons Selected by Player");
+			//SelectedPokemons = new HashSet<KeyValuePair<KeyValuePair<bool, int?>, int>>();
 			//
 			Debug.Log("Load Assets for UI into Array");
 			IconSprites = Resources.LoadAll<UnityEngine.Sprite>("PokemonIcon");
@@ -109,13 +108,13 @@ namespace PokemonUnity.Stadium
 			{
 				try
 				{
-                    Core.Logger = LogManager.Logger;
-                    //GameDebug.Log("0-" + System.IO.Path.GetFullPath("..\\veekun-pokedex.sqlite"));
-                    //GameDebug.Log("1-" + System.IO.Path.GetFullPath("..\\..\\veekun-pokedex.sqlite"));
-                    //GameDebug.Log("2-" + System.IO.Path.GetFullPath("..\\..\\..\\veekun-pokedex.sqlite"));
-                    //GameDebug.Log("3-" + System.IO.Path.GetFullPath("..\\..\\..\\..\\veekun-pokedex.sqlite"));
-                    //GameDebug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
-                    Game.DatabasePath = @"Data Source=veekun-pokedex.sqlite";
+					Core.Logger = LogManager.Logger;
+					//GameDebug.Log("0-" + System.IO.Path.GetFullPath("..\\veekun-pokedex.sqlite"));
+					//GameDebug.Log("1-" + System.IO.Path.GetFullPath("..\\..\\veekun-pokedex.sqlite"));
+					//GameDebug.Log("2-" + System.IO.Path.GetFullPath("..\\..\\..\\veekun-pokedex.sqlite"));
+					//GameDebug.Log("3-" + System.IO.Path.GetFullPath("..\\..\\..\\..\\veekun-pokedex.sqlite"));
+					//GameDebug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
+					Game.DatabasePath = @"Data Source=veekun-pokedex.sqlite";
 					Game.con = (System.Data.IDbConnection)new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
 					//Game.con = new Mono.Data.Sqlite.SqliteConnection(Game.DatabasePath);
 					Game.ResetSqlConnection(Game.DatabasePath);//@"Data\veekun-pokedex.sqlite"
@@ -198,7 +197,7 @@ namespace PokemonUnity.Stadium
 				partyPanel.SetTrainerID(Game.GameData.Trainer.publicID(), Game.GameData.Trainer.name);
 			}
 
-			partyPanel.Subscribe(PokemonSelect.TemporaryParty);
+			//partyPanel.Subscribe(PokemonSelect.TemporaryParty);
 			DisplayRentalPokemons();
 
 			// ToDo: Fix this; What is this for?
@@ -241,7 +240,7 @@ namespace PokemonUnity.Stadium
 		//}
 		//void DisplayMoveSetUI()
 		//{
-		//	pokemonViewModal.ActiveGameobject(true);
+		//	pokemonViewModal.ActiveGameObject(true);
 		//	pokemonViewModal.DisplayPkmnStats();
 		//}
 
@@ -325,33 +324,33 @@ namespace PokemonUnity.Stadium
 				}
 			}
 		}
-        #endregion
+		#endregion
 
-        #region Versus Party UI
+		#region Versus Party UI
 		public void ShowVersusPartyUI()
 		{
-			Debug.Log("Called");
+			Debug.Log("ShowVersusPartyUI Called");
 			partyPanel.gameObject.SetActive(false);
 			RosterPanel.gameObject.SetActive(false);
 			TabPanel.gameObject.SetActive(false);
 
-            VersusPanel.gameObject.SetActive(true);
+			VersusPanel.gameObject.SetActive(true);
 
-            VersusPartyTop.RefreshDisplay(Game.GameData.Trainer.name, null, PokemonSelect.TemporaryParty.Reverse().ToArray());
+			VersusPartyTop.RefreshDisplay(Game.GameData.Trainer.name, null, PokemonSelect.TemporaryParty.Reverse().ToArray());
 			VersusPartyBottom.RefreshDisplay("Biker", null, PokemonSelect.TemporaryParty.ToArray());
 
 			StartCoroutine(LoadBattleScene());
 		}
 
-        // Battle Scene ToDo: Fix the scene manager and name. This is rough code
-        public IEnumerator LoadBattleScene()
+		// Battle Scene ToDo: Fix the scene manager and name. This is rough code
+		public IEnumerator LoadBattleScene()
 		{
 			yield return new WaitForSeconds(3);
 			SceneManager.LoadScene(1);
 		}
-        #endregion
+		#endregion
 
-        private void DisplayRentalPokemons()
+		private void DisplayRentalPokemons()
 		{
 			Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
 			Debug.Assert(pokemonButton != null, "PokemonButton is null!!");
@@ -359,17 +358,17 @@ namespace PokemonUnity.Stadium
 			if (StoreButtonData.Count != 0)
 				return;
 
-            Debug.Log("Creating 151 Pokemons");
+			Core.Logger.Log("Creating {0} Pokemons",Core.PokemonIndexLimit);
 
-            for (int i = 0; i < 151; i++)
-            {
-                SelectPokemonButton item = Instantiate(pokemonButton, pokemonListPanel);
-                item.gameObject.SetActive(true);
-                item.SetID(pokemonViewModal, PokemonSelect, i, (Pokemons)(i + 1));
-                item.PokemonSelect = PokemonSelect;
-                item.name = $"ID {i}";
-                StoreButtonData.Add(i, item);
-            }
-        }
+			for (int i = 0; i < Core.PokemonIndexLimit; i++)
+			{
+				SelectPokemonButton item = Instantiate(pokemonButton, pokemonListPanel);
+				item.gameObject.SetActive(true);
+				item.SetID(pokemonViewModal, PokemonSelect, i, (Pokemons)(i + 1));
+				item.PokemonSelect = PokemonSelect;
+				item.name = $"ID {i}";
+				StoreButtonData.Add(i, item);
+			}
+		}
 	}
 }

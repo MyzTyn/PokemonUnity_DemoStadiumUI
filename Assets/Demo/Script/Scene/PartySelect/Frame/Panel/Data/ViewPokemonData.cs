@@ -114,27 +114,27 @@ namespace PokemonUnity.Stadium
 				case PokemonUnity.Types.NORMAL:
 					return "N";
 				case PokemonUnity.Types.FIGHTING:
-					return "";
+					return "Fi";
 				case PokemonUnity.Types.FLYING:
 					return "Fl";
 				case PokemonUnity.Types.POISON:
 					return "Po";
 				case PokemonUnity.Types.GROUND:
-					return "";
+					return "Gr";
 				case PokemonUnity.Types.ROCK:
-					return "";
+					return "R";
 				case PokemonUnity.Types.BUG:
-					return "";
+					return "Bu";
 				case PokemonUnity.Types.GHOST:
-					return "";
+					return "Gh";
 				case PokemonUnity.Types.STEEL:
-					return "";
+					return "St";
 				case PokemonUnity.Types.FIRE:
-					return "";
+					return "F";
 				case PokemonUnity.Types.WATER:
 					return "W";
 				case PokemonUnity.Types.GRASS:
-					return "";
+					return "G";
 				case PokemonUnity.Types.ELECTRIC:
 					return "E";
 				case PokemonUnity.Types.PSYCHIC:
@@ -142,11 +142,11 @@ namespace PokemonUnity.Stadium
 				case PokemonUnity.Types.ICE:
 					return "I";
 				case PokemonUnity.Types.DRAGON:
-					return "";
+					return "Dr";
 				case PokemonUnity.Types.DARK:
-					return "";
+					return "Dk";
 				case PokemonUnity.Types.FAIRY:
-					return "";
+					return "Fa";
 				case PokemonUnity.Types.NONE:
 				case PokemonUnity.Types.UNKNOWN:
 				case PokemonUnity.Types.SHADOW:
@@ -163,18 +163,18 @@ namespace PokemonUnity.Stadium
 		/// <param name="s"></param>
 		/// <returns>Returns the First Letter of string</returns>
 		/// ToDo: Rename to ReturnMoveTypeLetter or ReturnFirstLetter...
-		[System.Obsolete("Use `ReturnTypeLetter` instead")]
-		public static string ReturnMoveFirstLetter(string s)
-		{
-			if (s == "NONE")
-			{
-				return string.Empty;
-			}
-			else
-			{
-				return s[0].ToString().ToUpper();
-			}
-		}
+		//[System.Obsolete("Use `ReturnTypeLetter` instead")]
+		//public static string ReturnMoveFirstLetter(string s)
+		//{
+		//	if (s == "NONE")
+		//	{
+		//		return string.Empty;
+		//	}
+		//	else
+		//	{
+		//		return s[0].ToString().ToUpper();
+		//	}
+		//}
 		#endregion
 	}
 }

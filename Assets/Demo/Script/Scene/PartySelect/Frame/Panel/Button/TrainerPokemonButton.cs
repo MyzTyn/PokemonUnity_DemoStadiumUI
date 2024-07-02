@@ -59,7 +59,7 @@ namespace PokemonUnity.Stadium
 		{
 			//IPokemon pkmn = Game.GameData.Trainer.party[partyIndex];
 			//IPokemon pkmn = PokemonSelect.TemporaryParty[partyIndex];
-			
+
 			if (!pkmn.IsNotNullOrNone())
 			{
 				ActivePokemonDisplay(false);
@@ -67,13 +67,13 @@ namespace PokemonUnity.Stadium
 				return;
 			}
 
-            PokemonIcon.sprite = MainCameraGameManager.IconSprites[(int)pkmn.Species];
-            //Name.text = pkmn.ToString(TextScripts.Name);
-            //Name.text = pkmn.Name;
-            Name.text = pkmn.Species.ToString();
-            Level.text = "L " + pkmn.Level;
-            ActivePokemonDisplay(true);
-        }
+			PokemonIcon.sprite = MainCameraGameManager.IconSprites[(int)pkmn.Species];
+			//Name.text = pkmn.ToString(TextScripts.Name);
+			//Name.text = pkmn.Name;
+			Name.text = pkmn.Species.ToString();
+			Level.text = "L " + pkmn.Level;
+			ActivePokemonDisplay(true);
+		}
 		public void ActivePokemonDisplay(bool active)
 		{
 			PokemonDisplay.SetActive(active);

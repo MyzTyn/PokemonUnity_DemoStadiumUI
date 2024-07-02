@@ -85,7 +85,7 @@ namespace PokemonUnity.Stadium
 		}
 		void DisplayMoveSetUI()
 		{
-			pokemonViewModal.ActiveGameobject(true);
+			pokemonViewModal.ActiveGameObject(true);
 			pokemonViewModal.DisplayPkmnStats();
 		}
 		public void AddToParty()

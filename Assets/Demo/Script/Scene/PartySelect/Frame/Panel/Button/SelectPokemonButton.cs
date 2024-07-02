@@ -24,8 +24,8 @@ namespace PokemonUnity.Stadium
 		public PokemonSelect PokemonSelect;
 		public KeyValuePair<int?,int> Position;
 		private PokemonViewModal PokemonViewModal;
-		//public bool IsRental { get { return pokemon.ot == null; } }
-		public bool IsRental { get { return true; } }
+		public bool IsRental { get { return pokemon?.ot == null; } } //If OriginalTrainer is Null, then it's a rental pokemon
+		//public bool IsRental { get { return true; } }
 		//public int ID { get; private set; }
 
 		#region Unity Monobehavior
@@ -54,9 +54,9 @@ namespace PokemonUnity.Stadium
 		/// <param name="name"></param>
 		public void SetID(PokemonViewModal pokemonViewModal, PokemonSelect pokemonSelect, int id, Pokemons species, bool isRental = true, int? page = null, bool selected = false)
 		{
-            //ToDo: Use battle rules to determine the constraints of the pokemon
-            //ToDo: PokemonSelect is null??
-            Pokemon pokemon = new Pokemon(pkmn: species, level: 50);
+			//ToDo: Use battle rules to determine the constraints of the pokemon
+			//ToDo: PokemonSelect is null??
+			Pokemon pokemon = new Pokemon(pkmn: species, level: 50);
 			SetID(pokemonViewModal, pokemonSelect, id, pokemon, isRental, page, selected);
 		}
 
@@ -133,7 +133,8 @@ namespace PokemonUnity.Stadium
 
 			if (IsRental)
 			{
-				if(MainCameraGameManager.SelectedPokemons.Contains(new KeyValuePair<KeyValuePair<bool, int?>, int>(new KeyValuePair<bool, int?>(IsRental, Position.Key), Position.Value)))
+				//if(MainCameraGameManager.SelectedPokemons.Contains(new KeyValuePair<KeyValuePair<bool, int?>, int>(new KeyValuePair<bool, int?>(IsRental, Position.Key), Position.Value)))
+				if(PokemonSelect.SelectedPokemonPositions.Contains(Position))
 				{
 					//Pokemon is selected and added to party already
 					Debug.Log("This Pokemon is selected and added to party already");
@@ -143,7 +144,7 @@ namespace PokemonUnity.Stadium
 					//Create new entry display for pokemon
 					Level.text = "L" + pokemon.Level;
 					// pokemon.Name caused null reference
-					Name.text = pokemon.Species.ToString();
+					Name.text = pokemon.Name;
 				}
 			}
 			else
@@ -163,14 +164,14 @@ namespace PokemonUnity.Stadium
 			// pokemon.Name caused null reference
 			Core.Logger?.Log($"Pokemon [{pokemon.Species}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
 			//PokemonSelect.Species = pokemon.Species;
-			PokemonSelect.PokemonPosition = Position;
+			//PokemonSelect.PokemonPosition = Position;
 			//if (arg) // If selected
 			//	PokemonSelect.SelectedPokemonPositions.Push(Position);
 			PokemonSelect.IsRentalPokemon = IsRental;
 			PokemonSelect.EditPokemon = true;
-			PokemonViewModal.ActiveGameobject(true);
+			PokemonViewModal.ActiveGameObject(true);
 			//PokemonViewModal.RefreshDisplay(PokemonSelect.CurrentSelectedPokemon);
-			PokemonViewModal.RefreshDisplay(pokemon);
+			PokemonViewModal.RefreshDisplay();//pokemon
 
 			//GameEvents.current.OnLoadLevel(1); //Change scene...
 		}

@@ -12,17 +12,18 @@ namespace PokemonUnity.Stadium
 	public class PageTabButton : MonoBehaviour
 	{
 		public int? Id;
-		public bool IsRental;
+		[SerializeField] private bool isRental;
+		public bool IsRental { get { return isRental; } set { isRental = value; } }
 		public bool IsSelected { get { return toggle.isOn; } set { toggle.isOn = value; } }
 		public bool IsDisabled { get { return toggle.interactable; } set { toggle.interactable = value; } }
-		public string Text 
-		{ 
+		public string Text
+		{
 			get { return string.Format("{0}{1}", //C = Current PArty, GB = Game Box, R = Rental
-				IsRental ? "R" : (!Id.HasValue ? "C" : (Id.Value == 0 ? "GB" : "")), 
-				!Id.HasValue ? (IsRental ? "0" : "") : Id.Value.ToString()); } 
+				IsRental ? "R" : (!Id.HasValue ? "C" : (Id.Value == 0 ? "GB" : "")),
+				!Id.HasValue ? (IsRental ? "0" : "") : Id.Value.ToString()); }
 		}
-		public KeyValuePair<bool, int?> Page 
-		{ 
+		public KeyValuePair<bool, int?> Page
+		{
 			get { return new KeyValuePair<bool, int?>(IsRental, Id); }
 			set { IsRental = value.Key; Id = value.Value; }
 		}
@@ -31,7 +32,7 @@ namespace PokemonUnity.Stadium
 		//[SerializeField] private PokemonUnity.Generation Generation;
 		//[SerializeField] private Image ColorBG;
 		[SerializeField] private Text Name;
-		public PokemonSelect PokemonSelect;
+		public PokemonSelect PokemonSelect; //ToDo: Remove this, and use MainCamera as Singleton?
 
 		public void SetID(int? id, bool isRental = true, bool selected = false)
 		{

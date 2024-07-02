@@ -31,7 +31,7 @@ namespace PokemonUnity.Stadium
 			for (int i = 0; i < 14; i++)
 			{
 				//Instantiate new Prefab to Scene
-				var tabButton = Instantiate<StorageBoxTabButton>(pokemonStorageBoxesTabButtonPrefab, transform);
+				StorageBoxTabButton tabButton = Instantiate<StorageBoxTabButton>(pokemonStorageBoxesTabButtonPrefab, transform);
 				tabButton.tabGroup = this;
 				tabButton.selectable.enabled = true;
 				tabButton.background.color = tabIdle;
@@ -125,8 +125,8 @@ namespace PokemonUnity.Stadium
 			//Core.Logger.Log($"TabButton[{tabButtons[13].name}].Rect.Height = {tabButtons[13].transform.GetComponent<RectTransform>().rect.height};");
 			OnTabSelected(selectedTab); //OnTabSelected(tabButtons[13]);
 			//tabButtons[13].OnPointerClick(new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current));
-			//UnityEngine.EventSystems.ExecuteEvents.Execute(tabButtons[13].gameObject, 
-			//	new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current), 
+			//UnityEngine.EventSystems.ExecuteEvents.Execute(tabButtons[13].gameObject,
+			//	new UnityEngine.EventSystems.PointerEventData(UnityEngine.EventSystems.EventSystem.current),
 			//	UnityEngine.EventSystems.ExecuteEvents.pointerClickHandler);
 			//refreshInUpdate = true;
 			//Canvas.ForceUpdateCanvases();

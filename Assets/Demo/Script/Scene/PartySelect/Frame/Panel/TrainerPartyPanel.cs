@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using PokemonUnity.Application;
 using PokemonEssentials.Interface.PokeBattle;
 using System.Linq;
+using System.Reflection;
 
 namespace PokemonUnity.Stadium
 {

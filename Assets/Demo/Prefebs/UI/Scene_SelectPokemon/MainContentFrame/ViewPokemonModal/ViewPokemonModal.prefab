@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 2832417624045093348}
   - component: {fileID: 2832417624045093349}
   m_Layer: 5
-  m_Name: PokemonViewModal
+  m_Name: ViewPokemonModal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -298,10 +298,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e16c8020289385c47a903f4433540219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSetUIObject: {fileID: 2832417624045093146}
   Data: {fileID: 2832417624676500970}
+  IsPokemonSelected: {fileID: 2832417625837912346}
   RentalViewCount: 5
   PokemonSelect: {fileID: 0}
+  selectedPokemon: {fileID: 0}
 --- !u!114 &2832417624045093349
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1006,13 +1007,14 @@ MonoBehaviour:
   PkmnName: {fileID: 2832417624787249150}
   Level: {fileID: 2832417625836049653}
   PkmnID: {fileID: 2832417625564212628}
-  Species_Name: {fileID: 2832417626071632172}
+  SpeciesName: {fileID: 2832417626071632172}
   PokemonSprite: {fileID: 2832417625230412755}
   Health: {fileID: 6924096366928346003}
   Attack: {fileID: 2832417624486629790}
   Defense: {fileID: 7799538696965043136}
   Speed: {fileID: 7505597713208466643}
-  Special: {fileID: 4108367545642894879}
+  SpecialAtk: {fileID: 4108367545642894879}
+  SpecialDef: {fileID: 388759328739234463}
   Type1: {fileID: 2832417624971006509}
   Type2: {fileID: 2832417624684871785}
   MoveName1: {fileID: 6197850872433932151}
@@ -2274,7 +2276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2832417625676191177
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2685,7 +2687,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2832417625854746841
 RectTransform:
   m_ObjectHideFlags: 0

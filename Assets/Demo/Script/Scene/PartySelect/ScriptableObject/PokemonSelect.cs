@@ -48,13 +48,13 @@ namespace PokemonUnity.Stadium
 		{
 			get
 			{
-				// Use the RosterPage and RosterPosition to get the selected pokemon
-				if (CurrentSelectedRosterPage == null) //Maybe use all negative numbers for multiple rental pages? Can be used for different generations
+                // Use the RosterPage and RosterPosition to get the selected pokemon
+                if (CurrentSelectedRosterPage == null) //Maybe use all negative numbers for multiple rental pages? Can be used for different generations
 				{
 					//Search for the pokemon in the rental list
 					//if(MainCameraGameManager.Instance)
-					//return ViewedRentalPokemon.ElementAt(CurrentSelectedRosterPosition); //FIXME: Use roster collection that populates the rental list
-					return null;
+					return MainCameraGameManager.Instance.StoreButtonData[CurrentSelectedRosterPosition].pokemon; //FIXME: Use roster collection that populates the rental list
+                    //return null;
 				}
 				else if (CurrentSelectedRosterPage == 0)
 				{
@@ -153,7 +153,7 @@ namespace PokemonUnity.Stadium
 		/// True if the pokemon was successfully added to the party
 		public bool RegisterSelectedPokemon()
 		{
-			if (CurrentSelectedPokemon.IsNotNullOrNone())
+			if (!CurrentSelectedPokemon.IsNotNullOrNone())
 			{
 				Core.Logger.Log("Error. There no Pokemon!");
 			}
@@ -179,7 +179,9 @@ namespace PokemonUnity.Stadium
 					//}
 					int index = temporaryParty.Count;
 					TemporaryParty.Push(CurrentSelectedPokemon);
-					SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage,CurrentSelectedPartySlot));
+
+                    //SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage,CurrentSelectedPartySlot));
+                    SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage,CurrentSelectedRosterPosition));
 
 					// ToDo: Signal the Party UI
 					//PartyViewer[CurrentOnParty].DisplayPartyButton();

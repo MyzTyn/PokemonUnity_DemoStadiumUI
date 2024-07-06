@@ -53,7 +53,7 @@ namespace PokemonUnity.Stadium
 
 		//List
 		private Dictionary<int, TrainerPokemonButton> PartyViewer;
-		private Dictionary<int, SelectPokemonButton> StoreButtonData;
+		public Dictionary<int, SelectPokemonButton> StoreButtonData;
 		//Sprite
 		public static UnityEngine.Sprite[] PkmnType { get; private set; }
 		public static UnityEngine.Sprite[] IconSprites { get; private set; }

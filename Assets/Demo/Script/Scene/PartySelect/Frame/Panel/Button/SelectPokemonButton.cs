@@ -9,8 +9,8 @@ using UnityEngine.UI;
 
 namespace PokemonUnity.Stadium
 {
-    // ToDo: Maybe remove the data being stored in this button. Only hold the position.
-    [ExecuteInEditMode]
+	// ToDo: Maybe remove the data being stored in this button. Only hold the position.
+	[ExecuteInEditMode]
 	public class SelectPokemonButton : MonoBehaviour
 	{
 		[SerializeField] public IPokemon pokemon;
@@ -23,9 +23,9 @@ namespace PokemonUnity.Stadium
 		public KeyValuePair<int?,int> Position;
 		private PokemonViewModal PokemonViewModal;
 
-        // ToDo: this still cuase the null reference (May check the DLL for logic check)
-        //public bool IsRental { get { return pokemon?.ot == null; } } //If OriginalTrainer is Null, then it's a rental pokemon
-        public bool IsRental { get { return true; } }
+		// ToDo: this still cuase the null reference (May check the DLL for logic check)
+		//public bool IsRental { get { return pokemon?.ot == null; } } //If OriginalTrainer is Null, then it's a rental pokemon
+		public bool IsRental { get { return true; } }
 		//public int ID { get; private set; }
 
 		#region Unity Monobehavior
@@ -100,31 +100,31 @@ namespace PokemonUnity.Stadium
 
 		public void Refresh()
 		{
-            if ((int)pokemon.Species >= MainCameraGameManager.IconSprites.Length  || pokemon.Species == Pokemons.NONE)
-            {
-                Core.Logger?.LogError($"Pokemon [{pokemon.Name}] Index #{(int)pokemon.Species}:{pokemon.Species} was outside the bounds of the array.");
-				return;
-            }
-			
-            myIcon.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
-
-            if (!IsRental)
+			if ((int)pokemon.Species >= MainCameraGameManager.IconSprites.Length  || pokemon.Species == Pokemons.NONE)
 			{
-                //Load data from player saved games and use as pokemons to select from
-                return;
+				Core.Logger?.LogError($"Pokemon [{pokemon.Name}] Index #{(int)pokemon.Species}:{pokemon.Species} was outside the bounds of the array.");
+				return;
 			}
 
-            if (PokemonSelect.SelectedPokemonPositions.Contains(Position))
-            {
-                //Pokemon is selected and added to party already
-                Debug.Log("This Pokemon is selected and added to party already");
-				return;
-            }
+			myIcon.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
 
-            //Create new entry display for pokemon
-            Level.text = $"L{pokemon.Level}";
-            Name.text = pokemon.Name;
-        }
+			if (!IsRental)
+			{
+				//Load data from player saved games and use as pokemons to select from
+				return;
+			}
+
+			if (PokemonSelect.SelectedPokemonPositions.Contains(Position))
+			{
+				//Pokemon is selected and added to party already
+				Debug.Log("This Pokemon is selected and added to party already");
+				return;
+			}
+
+			//Create new entry display for pokemon
+			Level.text = $"L{pokemon.Level}";
+			Name.text = pokemon.Name;
+		}
 
 		// ToDo: Update the summary. And does this button need the param?
 		// This supposed to open PokemonViewModal for stats
@@ -135,24 +135,24 @@ namespace PokemonUnity.Stadium
 		public void Scene_onButtonPressed(bool arg)
 		{
 			// ToDo: Remove this and somehow PokemonViewModal or something call this button to disable (Visual change)
-            if (PokemonSelect.SelectedPokemonPositions.Contains(Position))
-            {
-                //Pokemon is selected and added to party already
-                Debug.Log("This Pokemon is selected and added to party already");
-                return;
-            }
+			if (PokemonSelect.SelectedPokemonPositions.Contains(Position))
+			{
+				//Pokemon is selected and added to party already
+				Debug.Log("This Pokemon is selected and added to party already");
+				return;
+			}
 
-            IsSelected = arg;
+			IsSelected = arg;
 			//Debug.Log($"Pokemon [{pokemon.Name}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
 			Core.Logger?.Log($"Pokemon [{pokemon.Name}] in position [{Position.Key},{Position.Value}] Pressed!"); //FIXME: Is this for when the pokemon button is pressed or selected?
 
 			PokemonSelect.CurrentSelectedRosterPosition = Position.Value;
 
-            PokemonSelect.IsRentalPokemon = IsRental;
+			PokemonSelect.IsRentalPokemon = IsRental;
 			PokemonSelect.EditPokemon = true;
 			PokemonViewModal.ActiveGameObject(true);
 			PokemonViewModal.RefreshDisplay();//pokemon
-			
+
 			//GameEvents.current.OnLoadLevel(1); //Change scene...
 		}
 		#endregion

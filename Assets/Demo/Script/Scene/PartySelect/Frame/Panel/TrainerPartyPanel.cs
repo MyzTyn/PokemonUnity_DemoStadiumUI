@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Text;
+using System.Linq;
 using System.Collections.Generic;
 using PokemonUnity;
+using PokemonUnity.Application;
+using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using PokemonUnity.Application;
-using PokemonEssentials.Interface.PokeBattle;
-using System.Linq;
-using System.Reflection;
 
 namespace PokemonUnity.Stadium
 {

@@ -11,8 +11,8 @@ namespace PokemonUnity.Stadium
 	{
 		#region Variables
 		[SerializeField] private ViewPokemonData Data;
-        // ToDo: No Button bug. Only if you click two times at sequence (No, No -> won't close the modal)
-        [SerializeField] private Toggle IsPokemonSelected;
+		// ToDo: No Button bug. Only if you click two times at sequence (No, No -> won't close the modal)
+		[SerializeField] private Toggle IsPokemonSelected;
 		[SerializeField] private int RentalViewCount = 5;
 
 		private IPokemon pokemon;
@@ -47,14 +47,14 @@ namespace PokemonUnity.Stadium
 		public void RefreshDisplay()
 		{
 			// ToDo: Is this need?
-			if(pokemon != null) 
+			if(pokemon != null)
 				pokemon = PokemonSelect.CurrentSelectedPokemon;
 
 			//if (PokemonSelect.CurrentSelectedRosterPage == null || PokemonSelect.IsRentalPokemon) //Maybe dont need "IsRental"?...
 			if (PokemonSelect.CurrentSelectedRosterPage == null)
 			{
-				Pokemons species = species = PokemonSelect.CurrentSelectedPokemon.Species;
-                if (PokemonSelect.StorePokemon.ContainsKey(species)) //if selected pokemon is the same as already seen
+				Pokemons species = PokemonSelect.CurrentSelectedPokemon.Species;
+				if (PokemonSelect.StorePokemon.ContainsKey(species)) //if selected pokemon is the same as already seen
 				{
 					//Remove the pokemon from list to prevent duplicates
 					Pokemons pkmn = Pokemons.NONE;
@@ -85,15 +85,13 @@ namespace PokemonUnity.Stadium
 				//}
 				//else
 				{
-					//if (!pokemon.IsNotNullOrNone())
-					//	pokemon = pkmn;
-					//else //ToDo: if pokemon is not null then we can get rid of below
-						//pokemon = new Pokemon(species, PokemonSelect.LevelFixed, isEgg: false);
-					if (pokemon == null)
-						pokemon = PokemonSelect.CurrentSelectedPokemon;
+					if (!pokemon.IsNotNullOrNone()) //if pokemon IS null or none... then create a new pokemon using the species
+						pokemon = new Pokemon(species, PokemonSelect.LevelFixed, isEgg: false);
 
 					PokemonSelect.StorePokemon.Add(species, pokemon);
 					PokemonSelect.ViewedRentalPokemon.Enqueue(species); //Refresh to top of list
+					//if (pokemon == null)
+					//	pokemon = PokemonSelect.CurrentSelectedPokemon;
 				}
 			}
 			RefreshHeaderDisplay();
@@ -120,7 +118,7 @@ namespace PokemonUnity.Stadium
 			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
 
 			Data.Type2.sprite = pokemon.Type2 == PokemonUnity.Types.NONE ? null : MainCameraGameManager.PkmnType[(int)pokemon.Type2];
-            Data.Type2.color = pokemon.Type2 == PokemonUnity.Types.NONE ? UnityEngine.Color.clear : UnityEngine.Color.white;
+			Data.Type2.color = pokemon.Type2 == PokemonUnity.Types.NONE ? UnityEngine.Color.clear : UnityEngine.Color.white;
 		}
 		public void RefreshMoveSetDisplay()
 		{
@@ -187,18 +185,18 @@ namespace PokemonUnity.Stadium
 		{
 			if (!arg0)
 			{
-                Core.Logger.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [NO]!");
+				Core.Logger.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [NO]!");
 				CloseDisplayModal();
 				return;
-            }
+			}
 
-            Core.Logger.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [YES]!");
+			Core.Logger.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [YES]!");
 
-            bool result = PokemonSelect.RegisterSelectedPokemon();
-            CloseDisplayModal();
-            if (result)
-                MainCameraGameManager.Instance.ShowVersusPartyUI();
-        }
+			bool result = PokemonSelect.RegisterSelectedPokemon();
+			CloseDisplayModal();
+			if (result)
+				MainCameraGameManager.Instance.ShowVersusPartyUI();
+		}
 		#endregion
 	}
 }

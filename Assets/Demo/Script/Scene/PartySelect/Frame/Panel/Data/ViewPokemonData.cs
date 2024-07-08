@@ -154,27 +154,6 @@ namespace PokemonUnity.Stadium
 					return string.Empty;
 			}
 		}
-
-		/// <summary>
-		/// </summary>
-		/// <remarks>
-		/// <see cref="ReturnTypeLetter(PokemonUnity.Types)"/>
-		/// </remarks>
-		/// <param name="s"></param>
-		/// <returns>Returns the First Letter of string</returns>
-		/// ToDo: Rename to ReturnMoveTypeLetter or ReturnFirstLetter...
-		//[System.Obsolete("Use `ReturnTypeLetter` instead")]
-		//public static string ReturnMoveFirstLetter(string s)
-		//{
-		//	if (s == "NONE")
-		//	{
-		//		return string.Empty;
-		//	}
-		//	else
-		//	{
-		//		return s[0].ToString().ToUpper();
-		//	}
-		//}
 		#endregion
 	}
 }

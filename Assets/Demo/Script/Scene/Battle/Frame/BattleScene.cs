@@ -142,6 +142,9 @@ namespace PokemonUnity.Stadium
 		#endregion
 
 		#region Unity's MonoBehavior Inspector Properties
+		// ToDo: fix this code
+		public PokemonSelect PokemonSelect;
+
 		[SerializeField] private IDictionary<string, object>		_sprites;
 		[Header("Scene Canvas Panel Layers")]
 		[SerializeField] private IViewport							_viewport;
@@ -252,9 +255,9 @@ namespace PokemonUnity.Stadium
 
 			
 			// The data from PokemonSelect. ToDo: Fix this code and allow to generate pokemons for NPC
-			IPokemon[] p1 = MainCameraGameManager.Instance.PokemonSelect.TemporaryParty.Reverse().ToArray();
+			IPokemon[] p1 = PokemonSelect.TemporaryParty.Reverse().ToArray();
 			// ToDo: Fix the error (No double battle allow)
-			IPokemon[] p2 = MainCameraGameManager.Instance.PokemonSelect.TemporaryParty.Take(1).ToArray(); //, new PokemonUnity.Monster.Pokemon(Pokemons.SEEDOT) };
+			IPokemon[] p2 = PokemonSelect.TemporaryParty.Take(1).ToArray(); //, new PokemonUnity.Monster.Pokemon(Pokemons.SEEDOT) };
 
             //p2[1].moves[0] = new PokemonUnity.Attack.Move(Moves.POUND);
 

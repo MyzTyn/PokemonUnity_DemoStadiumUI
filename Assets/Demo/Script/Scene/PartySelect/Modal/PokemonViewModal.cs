@@ -9,7 +9,12 @@ namespace PokemonUnity.Stadium
 {
 	public class PokemonViewModal : MonoBehaviour
 	{
-		#region Variables
+        #region Variables
+        // ToDo: Remove this code. For now, I am using it to show the VersusParty UI (Then Battle). But it shouldn't be in MainCameraGame
+        [SerializeField] private MainCameraGameManager mainCameraGameManager;
+
+		[SerializeField] private TrainerPartyPanel partyPanel;
+
 		[SerializeField] private ViewPokemonData Data;
         // ToDo: No Button bug. Only if you click two times at sequence (No, No -> won't close the modal)
         [SerializeField] private Toggle IsPokemonSelected;
@@ -50,7 +55,6 @@ namespace PokemonUnity.Stadium
 			if(pokemon != null) 
 				pokemon = PokemonSelect.CurrentSelectedPokemon;
 
-			//if (PokemonSelect.CurrentSelectedRosterPage == null || PokemonSelect.IsRentalPokemon) //Maybe dont need "IsRental"?...
 			if (PokemonSelect.CurrentSelectedRosterPage == null)
 			{
 				Pokemons species = species = PokemonSelect.CurrentSelectedPokemon.Species;
@@ -85,6 +89,7 @@ namespace PokemonUnity.Stadium
 				//}
 				//else
 				{
+					// ToDo: Clean this up
 					//if (!pokemon.IsNotNullOrNone())
 					//	pokemon = pkmn;
 					//else //ToDo: if pokemon is not null then we can get rid of below
@@ -100,13 +105,15 @@ namespace PokemonUnity.Stadium
 			RefreshStatsDisplay();
 			RefreshMoveSetDisplay();
 		}
+		
 		public void RefreshHeaderDisplay()
 		{
 			Data.PkmnName.text = pokemon.Name;
-			Data.Level.text = "L " + pokemon.Level;
-			Data.PkmnID.text = "No." + string.Format("{0:000}", (int)pokemon.Species);
+			Data.Level.text = $"L {pokemon.Level}";
+			Data.PkmnID.text = $"No.{(int)pokemon.Species:000}";
 			Data.SpeciesName.text = pokemon.Species.ToString(TextScripts.Name);
 		}
+
 		public void RefreshStatsDisplay()
 		{
 			Data.PokemonSprite.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
@@ -119,9 +126,11 @@ namespace PokemonUnity.Stadium
 
 			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
 
+			// Not all Pokemons does have second type
 			Data.Type2.sprite = pokemon.Type2 == PokemonUnity.Types.NONE ? null : MainCameraGameManager.PkmnType[(int)pokemon.Type2];
             Data.Type2.color = pokemon.Type2 == PokemonUnity.Types.NONE ? UnityEngine.Color.clear : UnityEngine.Color.white;
 		}
+
 		public void RefreshMoveSetDisplay()
 		{
 			//
@@ -185,19 +194,21 @@ namespace PokemonUnity.Stadium
 		/// <param name="arg0"></param>
 		private void ToggleButtonSelected_Event(bool arg0)
 		{
-			if (!arg0)
+            Core.Logger.Log($"\"Register Pokemon?\" Toggle Button Pressed, value selected is [{(arg0 ? "YES" : "NO")}]!");
+            if (!arg0)
 			{
-                Core.Logger.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [NO]!");
 				CloseDisplayModal();
 				return;
             }
 
-            Core.Logger.Log("\"Register Pokemon?\" Toggle Button Pressed, value selected is [YES]!");
-
             bool result = PokemonSelect.RegisterSelectedPokemon();
+			// ToDo: Fix this code and ensure PokemonSelect add to the party.
+			partyPanel.AddPokemonToParty(PokemonSelect.CurrentSelectedPokemon, PokemonSelect.TemporaryParty.Count - 1);
+
             CloseDisplayModal();
             if (result)
-                MainCameraGameManager.Instance.ShowVersusPartyUI();
+				// ToDo: Remove this!
+                mainCameraGameManager.ShowVersusPartyUI();
         }
 		#endregion
 	}

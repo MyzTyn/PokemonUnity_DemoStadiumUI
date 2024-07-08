@@ -141,11 +141,12 @@ namespace PokemonUnity.Stadium
 				isSelected = SelectionState.SelectedPokemonPositions.Contains(new KeyValuePair<int?, int>(page, i));
 				GameObject Button = Instantiate(rosterEntryPrefab);
 				SelectPokemonButton roster = Button.GetComponent<SelectPokemonButton>();
-				roster.PokemonSelect = SelectionState; //Should be duplicated for each player controller on screen
+				//roster.PokemonSelect = SelectionState; //Should be duplicated for each player controller on screen
 				//RentalData(id, roster);
 				StoreButtonData.Add(id, roster);
 				//Button.GetComponent<SelectPokemonButton>().SetID(id);
-				roster.SetID(SelectedPokemonViewModal,SelectionState,i,(Pokemons)id,page:page,selected:isSelected); i++;
+				//roster.SetID(SelectedPokemonViewModal,SelectionState,i,(Pokemons)id,page:page,selected:isSelected); i++;
+				//roster.SetID(SelectedPokemonViewModal,SelectionState,i,(Pokemons)id,page:page); i++;
 				Button.SetActive(true);
 				Button.transform.SetParent(rosterGridContent, false);
 			} Debug.Log("Highest Species Counted: " + i);

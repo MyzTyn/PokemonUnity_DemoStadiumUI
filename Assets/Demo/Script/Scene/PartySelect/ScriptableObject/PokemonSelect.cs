@@ -1,15 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
-using PokemonUnity;
-using PokemonUnity.Character;
-using PokemonUnity.Monster;
 using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 namespace PokemonUnity.Stadium
 {
@@ -28,23 +21,17 @@ namespace PokemonUnity.Stadium
 		/// State or Mode for viewing stats and attributes of a selected pokemon
 		/// </summary>
 		[NonSerialized] public bool EditPokemon;
-		[NonSerialized] public bool IsRentalPokemon;
+		//[NonSerialized] public bool IsRentalPokemon; // ToDo: Do we need this?
 		[NonSerialized] public byte LevelFixed = 50;
-		//[Obsolete("What is this used for? Use `PokemonPosition` as a pointer to collection to reference pokemon")]
-		//[NonSerialized] public Pokemons Species; //ToDo: Phase this out with a Manager class in scene
-		//May not need since values below does same thing...
-		//[Obsolete("Use `SelectedPokemonPositions` instead")]
-		//[NonSerialized] public KeyValuePair<int?,int> PokemonPosition;
 		[NonSerialized] public int? CurrentSelectedRosterPage;
 		[NonSerialized] public int CurrentSelectedRosterPosition;
 		[NonSerialized] public float CurrentScrollPosition;
-		//[NonSerialized] public Scrollbar CurrentScrollPosition;
 
-		/// <summary>
-		/// Which pokemon slot is currently active for choice of player's decision
-		/// </summary>
-		/// FIXME: use current selected pokemon "slot" or "cursor" to reference the returning pokemon species?
-		public IPokemon CurrentSelectedPokemon
+        /// <summary>
+        /// Which pokemon slot is currently active for choice of player's decision
+        /// </summary>
+        /// FIXME: use current selected pokemon "slot" or "cursor" to reference the returning pokemon species?
+        public IPokemon CurrentSelectedPokemon
 		{
 			get
 			{
@@ -53,8 +40,12 @@ namespace PokemonUnity.Stadium
 				{
 					//Search for the pokemon in the rental list
 					//if(MainCameraGameManager.Instance)
-					return MainCameraGameManager.Instance.StoreButtonData[CurrentSelectedRosterPosition].pokemon; //FIXME: Use roster collection that populates the rental list
-                    //return null;
+					//return MainCameraGameManager.Instance.StoreButtonData[CurrentSelectedRosterPosition].pokemon; //FIXME: Use roster collection that populates the rental list
+					
+					// ToDo: Return the data using database, or something like that
+					var pkmn = new PokemonUnity.Monster.Pokemon((Pokemons)CurrentSelectedRosterPosition + 1, level: LevelFixed);
+					pkmn.SetNickname(pkmn.Species.ToString());
+                    return pkmn;
 				}
 				else if (CurrentSelectedRosterPage == 0)
 				{
@@ -126,16 +117,13 @@ namespace PokemonUnity.Stadium
 		#region Methods
 		public void OnAfterDeserialize()
 		{
-			//RuntimeValue = InitialValue;
-			//PokemonGens = new List<Generation>();
 			Debug.Log("Create Dictionary for Temp Instantiated Pokemon Objects");
 			StorePokemon = new Dictionary<Pokemons, IPokemon>();
+
 			Debug.Log("Create Dictionary for Temp Viewed Pokemons");
 			ViewedRentalPokemon = new Queue<Pokemons>();
-			//Debug.Log("Create Dictionary for Pokemons Selected by Player");
-			//SelectedPokemons = new Dictionary<KeyValuePair<bool, int?>, int>();
+
 			Debug.Log("Create LookUp Table for Pokemons Selected by Player");
-			//SelectedPokemons = new HashSet<KeyValuePair<KeyValuePair<bool, int?>, int>>();
 			SelectedPokemons = new HashSet<IPokemon>();
 			SelectedPokemonPositions = new Stack<KeyValuePair<int?, int>>();
 			temporaryParty = new Stack<IPokemon>();
@@ -153,77 +141,36 @@ namespace PokemonUnity.Stadium
 		/// True if the pokemon was successfully added to the party
 		public bool RegisterSelectedPokemon()
 		{
-			if (!CurrentSelectedPokemon.IsNotNullOrNone())
-			{
-				Core.Logger.Log("Error. There no Pokemon!");
-			}
-			else
-			{
-				// ToDo: Fix this mess code
-				if (CurrentSelectedPartySlot >= 0 && CurrentSelectedPartySlot < Core.MAXPARTYSIZE) //Game.GameData.Global.Features.LimitPokemonPartySize
-				{
-					//if (CurrentSelectedRosterPage != null)
-					//{
-					//	//Search for the pokemon in the rental list
-					//	SelectedPokemonPositions.Push(CurrentSelectedPokemon); //FIXME: Use roster collection that populates the rental list
-					//}
-					//else if (CurrentSelectedRosterPage == 0)
-					//{
-					//	//Search for the pokemon in the party list
-					//	TemporaryParty.Push(Game.GameData.Trainer.party[CurrentSelectedPartySlot]);
-					//}
-					//else if (CurrentSelectedRosterPage > 0)
-					//{
-					//	//Search for the pokemon in the trainer's PC storage box
-					//	TemporaryParty.Push(Game.GameData.PokemonStorage.boxes[CurrentSelectedRosterPage.Value][CurrentSelectedPartySlot]);
-					//}
-					int index = temporaryParty.Count;
-					TemporaryParty.Push(CurrentSelectedPokemon);
+            if (!CurrentSelectedPokemon.IsNotNullOrNone())
+            {
+                Core.Logger.Log("Error. There no Pokemon!");
+				return false;
+            }
 
-                    //SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage,CurrentSelectedPartySlot));
-                    SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage,CurrentSelectedRosterPosition));
+            // ToDo: Fix this mess code
+            // ToDo: Replace to Game.GameData.Global.Features.LimitPokemonPartySize
+            if (CurrentSelectedPartySlot >= 0 && CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
+            {
+                TemporaryParty.Push(CurrentSelectedPokemon);
+                SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage, CurrentSelectedRosterPosition));
+            }
 
-					// ToDo: Signal the Party UI
-					//PartyViewer[CurrentOnParty].DisplayPartyButton();
-					//PartyViewer[CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-					//PartyViewer[CurrentSelectedPartySlot].ActivePokemonDisplay(true);
-					//Instantiate new Prefab to Scene
-					TrainerPokemonButton pokemon = Instantiate(MainCameraGameManager.Instance.partyPanel.pokemonButtonPrefab, MainCameraGameManager.Instance.partyPanel.partyContentFrame.transform);
+            // ToDo: Ask player if they're done and wish to move on; but in another function...
+            if (TemporaryParty.Count == Core.MAXPARTYSIZE)
+            {
+                Debug.Log("The party is full!");
+                return true;
+            }
 
-					// Set the width/height (Fix this code => There's nothing to fix as Unity components are set to automatically adjust size, and position)
-					//var layoutElement = pokemon.GetComponent<LayoutElement>();
-					//layoutElement.preferredWidth = 125;
-					//layoutElement.preferredHeight = 41;
-
-					pokemon.partyIndex = index;
-					pokemon.toggle.group = MainCameraGameManager.Instance.partyPanel.GetComponent<ToggleGroup>(); //toggleGroup;
-					pokemon.toggle.interactable = false;
-					pokemon.name = "Slot" + index;
-					pokemon.SetDisplay(CurrentSelectedPokemon);
-					//pokemon.PokemonSelect = PokemonSelect;
-					MainCameraGameManager.Instance.partyPanel.party[index] = pokemon;
-
-					// ToDo: Fix this code
-					//StoreButtonData[PokemonPosition.Value].DisableOnClick(true);
-				}
-
-				//Ask player if they're done and wish to move on; but in another function...
-				//if (Game.GameData.Trainer.party[5].IsNotNullOrNone())
-				if (TemporaryParty.Count == Core.MAXPARTYSIZE)
-				{
-					Debug.Log("Disable the UI");
-					// RentalControlUI.ActiveRentalUI(false);
-					return true;
-				}
-			}
 			return false;
-		}
+        }
 
-		/// <summary>
-		/// Removes the last pokemon added to the player's party,
-		/// and moves the cursor back to the unselected pokemon
-		/// </summary>
-		public void UnregisterPreviousPokemon()
+        /// <summary>
+        /// Removes the last pokemon added to the player's party,
+        /// and moves the cursor back to the unselected pokemon
+        /// </summary>
+        /// ToDo: Implement this
+        public void UnregisterPreviousPokemon()
 		{
 			if (CurrentSelectedPartySlot > 0)
 			{
@@ -235,12 +182,12 @@ namespace PokemonUnity.Stadium
 				//PartyViewer[CurrentSelectedPartySlot].ActivePokemonDisplay(false);
 				//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(false);
 
-				int index = temporaryParty.Count;
-				Destroy(MainCameraGameManager.Instance.partyPanel.party[index].gameObject);
-				TemporaryParty.Pop();
-				KeyValuePair<int?,int> position = SelectedPokemonPositions.Pop();
-				CurrentSelectedRosterPage = position.Key;
-				CurrentSelectedRosterPosition = position.Value;
+				//int index = temporaryParty.Count;
+				//Destroy(MainCameraGameManager.Instance.partyPanel.party[index].gameObject);
+				//TemporaryParty.Pop();
+				//KeyValuePair<int?,int> position = SelectedPokemonPositions.Pop();
+				//CurrentSelectedRosterPage = position.Key;
+				//CurrentSelectedRosterPosition = position.Value;
 			}
 		}
 		#endregion

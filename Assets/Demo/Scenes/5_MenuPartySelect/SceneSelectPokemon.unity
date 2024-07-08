@@ -289,6 +289,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: ebc96de1486f6164eb2a03705bde6d32,
         type: 2}
+    - target: {fileID: 2832417624045093348, guid: bd65158283687604ab6e61ab7b230d74,
+        type: 3}
+      propertyPath: partyPanel
+      value: 
+      objectReference: {fileID: 7768506945664870261}
+    - target: {fileID: 2832417624045093348, guid: bd65158283687604ab6e61ab7b230d74,
+        type: 3}
+      propertyPath: mainCameraGameManager
+      value: 
+      objectReference: {fileID: 8564518475402942754}
     - target: {fileID: 2832417624071446575, guid: bd65158283687604ab6e61ab7b230d74,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -3815,6 +3825,11 @@ PrefabInstance:
       propertyPath: m_PreferredWidth
       value: 125
       objectReference: {fileID: 0}
+    - target: {fileID: 2029376084844030863, guid: a2ceaa617d2245144892051d1d151311,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3732586716891315348, guid: a2ceaa617d2245144892051d1d151311,
         type: 3}
       propertyPath: m_Name
@@ -5343,7 +5358,6 @@ MonoBehaviour:
   partyContentFrame: {fileID: 1960307177}
   trainerName: {fileID: 1370516753}
   trainerId: {fileID: 1810861063}
-  PokemonSelect: {fileID: 11400000, guid: ebc96de1486f6164eb2a03705bde6d32, type: 2}
 --- !u!224 &7902319380539210603
 RectTransform:
   m_ObjectHideFlags: 0

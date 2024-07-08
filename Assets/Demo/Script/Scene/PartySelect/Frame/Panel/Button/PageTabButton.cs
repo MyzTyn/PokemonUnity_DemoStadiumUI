@@ -73,7 +73,7 @@ namespace PokemonUnity.Stadium
 		{
 			Debug.Log("Change loaded roster to: " + Text);
 			PokemonSelect.CurrentSelectedRosterPage = Id;
-			PokemonSelect.IsRentalPokemon = IsRental;
+			//PokemonSelect.IsRentalPokemon = IsRental;
 			PokemonSelect.EditPokemon = false;
 			//GameEvents.current.OnLoadLevel(1); //Change scene...
 			//Refresh UI from Manager

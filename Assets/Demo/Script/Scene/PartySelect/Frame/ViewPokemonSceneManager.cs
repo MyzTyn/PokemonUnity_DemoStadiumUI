@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using PokemonUnity;
 using PokemonUnity.Character;
 using PokemonUnity.Monster;
+using PokemonUnity.Application;
 using UnityEngine;
 using UnityEngine.UI;
-using PokemonUnity.Application;
 
 namespace PokemonUnity.Stadium
 {

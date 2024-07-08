@@ -35,8 +35,8 @@ namespace PokemonUnity.Stadium
 		{
 			get
 			{
-                // Use the RosterPage and RosterPosition to get the selected pokemon
-                if (CurrentSelectedRosterPage == null) //Maybe use all negative numbers for multiple rental pages? Can be used for different generations
+				// Use the RosterPage and RosterPosition to get the selected pokemon
+				if (CurrentSelectedRosterPage == null) //Maybe use all negative numbers for multiple rental pages? Can be used for different generations
 				{
 					//Search for the pokemon in the rental list
 					//if(MainCameraGameManager.Instance)

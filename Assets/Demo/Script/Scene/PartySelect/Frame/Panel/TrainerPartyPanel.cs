@@ -1,4 +1,4 @@
-﻿using PokemonEssentials.Interface.PokeBattle;
+using PokemonEssentials.Interface.PokeBattle;
 using PokemonUnity.Monster;
 using System.Reflection;
 using UnityEngine;

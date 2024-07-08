@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using PokemonUnity.Application;
 using UnityEngine;
 using UnityEngine.UI;
-using PokemonUnity.Application;
 
 namespace PokemonUnity.Stadium
 {

@@ -2,28 +2,15 @@ using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using PokemonUnity;
 using PokemonUnity.Attack;
-using PokemonUnity.Attack.Data;
 using PokemonUnity.Combat;
 using PokemonUnity.Inventory;
-using PokemonUnity.Interface;
-using PokemonUnity.Stadium;
-using PokemonUnity.Monster;
 using PokemonUnity.Overworld;
 using PokemonUnity.Utility;
-using PokemonEssentials;
 using PokemonEssentials.Interface;
-using PokemonEssentials.Interface.Battle;
-using PokemonEssentials.Interface.Item;
-using PokemonEssentials.Interface.Field;
 using PokemonEssentials.Interface.Screen;
 using PokemonEssentials.Interface.PokeBattle;
-using PokemonEssentials.Interface.PokeBattle.Effects;
 using UnityEngine;
-//using UnityEngine;
-//using UnityEngine.UI;
-//using UnityEngine.Serialization;
 
 namespace PokemonUnity.Stadium
 {
@@ -142,9 +129,6 @@ namespace PokemonUnity.Stadium
 		#endregion
 
 		#region Unity's MonoBehavior Inspector Properties
-		// ToDo: fix this code
-		public PokemonSelect PokemonSelect;
-
 		[SerializeField] private IDictionary<string, object>		_sprites;
 		[Header("Scene Canvas Panel Layers")]
 		[SerializeField] private IViewport							_viewport;
@@ -250,42 +234,37 @@ namespace PokemonUnity.Stadium
 			Core.Logger.Log("# Hello - Welcome to Unity Battle! #");
 			Core.Logger.Log("######################################");
 
-			//IPokeBattle_DebugSceneNoGraphics pokeBattle = new PokeBattleScene();
 			(this as IPokeBattle_SceneIE).initialize(); //pokeBattle.initialize();
 
-			
-			// The data from PokemonSelect. ToDo: Fix this code and allow to generate pokemons for NPC
+			// Load the ScriptableObject from the resources folder
+			PokemonSelect PokemonSelect = Resources.Load<PokemonSelect>("Data/PlayerScriptableObject");
+
+			// The player's roster team. ToDo: Fix this code and allow to generate pokemons for NPC
 			IPokemon[] p1 = PokemonSelect.TemporaryParty.Reverse().ToArray();
-			// ToDo: Fix the error (No double battle allow)
-			IPokemon[] p2 = PokemonSelect.TemporaryParty.Take(1).ToArray(); //, new PokemonUnity.Monster.Pokemon(Pokemons.SEEDOT) };
 
-            //p2[1].moves[0] = new PokemonUnity.Attack.Move(Moves.POUND);
+			// ToDo: Fix the error (Trainer send out code caused the error)
+			//IPokemon[] p2 = PokemonSelect.TemporaryParty.ToArray();
+			// For now, do single battle (Wild Pokemon battle setup)
+			IPokemon[] p2 = PokemonSelect.TemporaryParty.Take(1).ToArray();
 
-            //PokemonUnity.Character.TrainerData trainerData = new PokemonUnity.Character.TrainerData("FlakTester", true, 120, 002);
-            //Game.GameData.Player = new PokemonUnity.Character.Player(trainerData, p1);
-            //Game.GameData.Trainer = new Trainer("FlakTester", true, 120, 002);
+			// ToDo: Remove those when the DLLs are updated to handle the null
+			foreach (var pokemon in p1.Concat(p2))
+				(pokemon as PokemonUnity.Monster.Pokemon).SetNickname(pokemon.species.ToString());
 
-            //(p1[0] as PokemonUnity.Monster.Pokemon).SetNickname("Test1");
-			//(p1[1] as PokemonUnity.Monster.Pokemon).SetNickname("Test2");
-
-			foreach (var pokemon in p1)
-                (pokemon as PokemonUnity.Monster.Pokemon).SetNickname(pokemon.species.ToString());
-
-            foreach (var pokemon in p2)
-                (pokemon as PokemonUnity.Monster.Pokemon).SetNickname(pokemon.species.ToString());
-
-            //(p2[0] as PokemonUnity.Monster.Pokemon).SetNickname("OppTest1");
-			//(p2[1] as PokemonUnity.Monster.Pokemon).SetNickname("OppTest2");
-
-			//ITrainer player = new Trainer(Game.GameData.Trainer.name, TrainerTypes.PLAYER);
-			ITrainer player = new PokemonUnity.Trainer("FlakTester", TrainerTypes.CHAMPION);
+			// Create the Trainer below: (We already created the trainer from Roster Scene)
+			//ITrainer player = new PokemonUnity.Trainer("FlakTester", TrainerTypes.PLAYER);
 			//ITrainer pokemon = new Trainer("Wild Pokemon", TrainerTypes.WildPokemon);
-			Game.GameData.Trainer = player;
+			//Game.GameData.Trainer = player;
 			Game.GameData.Trainer.party = p1;
 
-			//IBattle battle = new Battle(pokeBattle, Game.GameData.Trainer.party, p2, Game.GameData.Trainer, null, 2);
-			battle = new UnityBattleTest(this, p1, p2, Game.GameData.Trainer, null);
+			// Create the Opponent team (For now, we can't assign the trainer until the error is fixed)
+			ITrainer opponent = new Trainer("Mimic Tear", TrainerTypes.RIVAL1);
+			opponent.party = p2;
 
+			battle = new UnityBattleTest(this, Game.GameData.Trainer.party, opponent.party, Game.GameData.Trainer, null);
+			//battle = new UnityBattleTest(this, p1, p2, Game.GameData.Trainer, opponent);
+
+			// Set the battle rules
 			battle.rules.Add(BattleRule.SUDDENDEATH, false);
 			battle.rules.Add("drawclause", false);
 			battle.rules.Add(BattleRule.MODIFIEDSELFDESTRUCTCLAUSE, false);

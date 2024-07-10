@@ -9,9 +9,9 @@ namespace PokemonUnity.Stadium
 {
 	public class PokemonViewModal : MonoBehaviour
 	{
-        #region Variables
-        // ToDo: Remove this code. For now, I am using it to show the VersusParty UI (Then Battle). But it shouldn't be in MainCameraGame
-        [SerializeField] private MainCameraGameManager mainCameraGameManager;
+		#region Variables
+		// ToDo: Remove this code. For now, I am using it to show the VersusParty UI (Then Battle). But it shouldn't be in MainCameraGame
+		[SerializeField] private MainCameraGameManager mainCameraGameManager;
 
 		[SerializeField] private TrainerPartyPanel partyPanel;
 
@@ -101,8 +101,6 @@ namespace PokemonUnity.Stadium
 
 					PokemonSelect.StorePokemon.Add(species, pokemon);
 					PokemonSelect.ViewedRentalPokemon.Enqueue(species); //Refresh to top of list
-					//if (pokemon == null)
-					//	pokemon = PokemonSelect.CurrentSelectedPokemon;
 				}
 			}
 			RefreshHeaderDisplay();
@@ -198,22 +196,22 @@ namespace PokemonUnity.Stadium
 		/// <param name="arg0"></param>
 		private void ToggleButtonSelected_Event(bool arg0)
 		{
-            Core.Logger.Log($"\"Register Pokemon?\" Toggle Button Pressed, value selected is [{(arg0 ? "YES" : "NO")}]!");
-            if (!arg0)
+			Core.Logger.Log($"\"Register Pokemon?\" Toggle Button Pressed, value selected is [{(arg0 ? "YES" : "NO")}]!");
+			if (!arg0)
 			{
 				CloseDisplayModal();
 				return;
 			}
 
-            bool result = PokemonSelect.RegisterSelectedPokemon();
+			bool result = PokemonSelect.RegisterSelectedPokemon();
 			// ToDo: Fix this code and ensure PokemonSelect add to the party.
 			partyPanel.AddPokemonToParty(PokemonSelect.CurrentSelectedPokemon, PokemonSelect.TemporaryParty.Count - 1);
 
-            CloseDisplayModal();
-            if (result)
+			CloseDisplayModal();
+			if (result)
 				// ToDo: Remove this!
-                mainCameraGameManager.ShowVersusPartyUI();
-        }
+				mainCameraGameManager.ShowVersusPartyUI();
+		}
 		#endregion
 	}
 }

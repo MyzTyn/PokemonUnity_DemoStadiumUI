@@ -1,13 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using PokemonUnity;
-using PokemonUnity.Character;
-using PokemonUnity.Monster;
 using UnityEngine;
-using UnityEngine.UI;
-using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -19,26 +12,19 @@ namespace PokemonUnity.Stadium
 	public class MainCameraGameManager : MonoBehaviour
 	{
 		#region Variables
-		public float CurrentScrollPosition { get { return scrollBar.value; } set { scrollBar.value = value; } }
 		public PokemonSelect PokemonSelect;
-		public Scrollbar scrollBar;
 		public GameObject cursorSelectedItem;
-		/// <summary>
-		/// Player slot for currently active trainer
-		/// </summary>
-		public int trainerIndex;
 
 		public PokemonViewModal pokemonViewModal;
 		public TrainerPartyPanel partyPanel;
 
 		[SerializeField] private SelectPokemonButton pokemonButton;
-		[SerializeField] private Transform pokemonListPanel;
+		// ToDo: Do we really need all prefabs?
 		[SerializeField] private GameObject pageTabPrefab;
 		[SerializeField] private GameObject rosterEntryPrefab;
 		[SerializeField] private GameObject partyEntryPrefab;
 		[SerializeField] private Transform rosterGridContent;
 		[SerializeField] private Transform tabGridContent;
-		[SerializeField] private ToggleGroup toggleGroup;
 
 		// Versus Party Script Reference (ToDo: Clean the code)
 		[SerializeField] private VersusPartyModal VersusPartyTop;
@@ -46,9 +32,6 @@ namespace PokemonUnity.Stadium
 		[SerializeField] private GameObject VersusPanel;
 		[SerializeField] private GameObject RosterPanel;
 		[SerializeField] private GameObject TabPanel;
-
-		//List
-		//public Dictionary<int, SelectPokemonButton> StoreButtonData;
 
 		//Sprite
 		public static UnityEngine.Sprite[] PkmnType { get; private set; }
@@ -59,13 +42,9 @@ namespace PokemonUnity.Stadium
 		void Awake()
 		{
 			// Set the Logger System
-            Core.Logger = LogManager.Logger;
+			Core.Logger = LogManager.Logger;
 
-            Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null).ToString());
-			toggleGroup = GetComponent<ToggleGroup>();
-
-			//Debug.Log("Create Dictionary for Roster Entry UI Mono");
-			//StoreButtonData = new Dictionary<int, SelectPokemonButton>();
+			Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null));
 
 			Debug.Log("Load Assets for UI into Array");
 			IconSprites = Resources.LoadAll<UnityEngine.Sprite>("PokemonIcon");
@@ -76,8 +55,8 @@ namespace PokemonUnity.Stadium
 				{
 					Game.DatabasePath = @"Data Source=veekun-pokedex.sqlite";
 					Game.con = new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
-                    //@"Data\veekun-pokedex.sqlite"
-                    Game.ResetSqlConnection(Game.DatabasePath);
+					//@"Data\veekun-pokedex.sqlite"
+					Game.ResetSqlConnection(Game.DatabasePath);
 					Debug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
 
 					Game g = new Game();
@@ -104,18 +83,19 @@ namespace PokemonUnity.Stadium
 							//Game.InitRegions();
 							//Game.InitLocations();
 						}
-						catch (Exception) { 
-							Debug.LogError("There were some problems running sql..."); 
+						catch (Exception)
+						{
+							Debug.LogError("There were some problems running sql...");
 						}
 					}
 					Debug.Log($"Is Pokemon DB Greater than 0? {Kernal.PokemonData.Count > 0} : {Kernal.PokemonData.Count}");
-					
+
 					// ToDo: Is this need?
 					if (Kernal.PokemonData.Count == 0)
 					{
-                        Debug.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
-                        Debug.Log($"Is Pokemon DB Greater than 0? {Kernal.PokemonData.Count > 0} : {Kernal.PokemonData.Count}");
-                    }
+						Debug.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
+						Debug.Log($"Is Pokemon DB Greater than 0? {Kernal.PokemonData.Count > 0} : {Kernal.PokemonData.Count}");
+					}
 				}
 			}
 
@@ -123,23 +103,17 @@ namespace PokemonUnity.Stadium
 
 			// ToDo: Fix this
 			if (Game.GameData.Trainer == null)
-                Game.GameData.Trainer = new Trainer("Player", TrainerTypes.PLAYER);
+				Game.GameData.Trainer = new Trainer("Player", TrainerTypes.PLAYER);
 
-            Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
+			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 		}
 
 		void Start()
 		{
 			Debug.Log("Is Game Events Null? " + GameEvents.current == null);
 
-			if (Game.GameData.Trainer != null)
-			{
-				Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
-				partyPanel.SetTrainerID(Game.GameData.Trainer.publicID(), Game.GameData.Trainer.name);
-			}
-
 			// ToDo: Remove this
-			DisplayRentalPokemons();
+			PrepopulateRentalPokemonsUI();
 		}
 		#endregion
 
@@ -168,26 +142,20 @@ namespace PokemonUnity.Stadium
 		}
 		#endregion
 
-		private void DisplayRentalPokemons()
+		private void PrepopulateRentalPokemonsUI()
 		{
-			//Debug.Log($"Total StoreButtonData: {StoreButtonData.Count}");
-			//Debug.Assert(pokemonButton != null, "PokemonButton is null!!");
-			//
-			//if (StoreButtonData.Count != 0)
-			//	return;
-
+			// This project only have gen 1 sprites
+			Core.PokemonGeneration = (sbyte)PokemonUnity.Generation.RedBlueYellow;
 			Core.Logger.Log("Creating {0} Pokemons",Core.PokemonIndexLimit);
-
+			
 			for (int i = 0; i < Core.PokemonIndexLimit; i++)
 			{
 				Pokemons species = (Pokemons)(i + 1);
 
-                SelectPokemonButton item = Instantiate(pokemonButton, pokemonListPanel);
+				SelectPokemonButton item = Instantiate(pokemonButton, rosterGridContent);
 				item.gameObject.SetActive(true);
-				//item.SetID(pokemonViewModal, PokemonSelect, i, (Pokemons)(i + 1));
 				item.SetID(pokemonViewModal, PokemonSelect, i, species, species.ToString(), 50);
 				item.name = $"ID {i}";
-				//StoreButtonData.Add(i, item);
 			}
 		}
 	}

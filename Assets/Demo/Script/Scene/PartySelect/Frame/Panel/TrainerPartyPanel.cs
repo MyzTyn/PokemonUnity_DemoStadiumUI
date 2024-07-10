@@ -1,6 +1,4 @@
 using PokemonEssentials.Interface.PokeBattle;
-using PokemonUnity.Monster;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,28 +29,16 @@ namespace PokemonUnity.Stadium
 			foreach (Transform child in partyContentFrame.transform)
 				Destroy(child.gameObject);
 
-			//toggleGroup = GetComponent<ToggleGroup>();
 			party = new TrainerPokemonButton[Core.MAXPARTYSIZE]; //Should be 6, or Game.GameData.Global.Features.LimitPokemonPartySize
-			//foreach(TrainerPokemonButton pokemon in party)
-			//for(int i = 0; i < party.Length; i++)
-			//{
-			//	//Instantiate new Prefab to Scene
-			//	TrainerPokemonButton pokemon = Instantiate(pokemonButtonPrefab, partyContentFrame.transform);
-			//
-			//	// Set the width/height (Fix this code => There's nothing to fix as Unity components are set to automatically adjust size, and position)
-			//	//var layoutElement = pokemon.GetComponent<LayoutElement>();
-			//	//layoutElement.preferredWidth = 125;
-			//	//layoutElement.preferredHeight = 41;
-			//
-			//	pokemon.partyIndex = i;
-			//	pokemon.toggle.group = GetComponent<ToggleGroup>(); //toggleGroup;
-			//	pokemon.toggle.interactable = false;
-			//	pokemon.name = "Slot" + i;
-			//	//pokemon.PokemonSelect = PokemonSelect;
-			//	party[i] = pokemon;
-			//}
-			SetTrainerID(0);
-			//RefreshPartyDisplay();
+
+			// ToDo: Move to the Manager?
+			if (Game.GameData.Trainer != null )
+			{
+                Debug.Log("Trainer Id: " + Game.GameData.Trainer.publicID().ToString());
+                SetTrainerID(Game.GameData.Trainer.publicID(), Game.GameData.Trainer.name);
+            }
+			else
+				SetTrainerID(0);
 		}
 		#endregion
 

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using Demo.Script.Scene.PartySelect;
+using Demo.Script.Scene.VersusParty;
 using PokemonUnity;
 using PokemonUnity.Interface;
 using PokemonUnity.Character;
@@ -16,6 +19,7 @@ using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.PokeBattle.Effects;
 //using PokemonEssentials.Interface.PokeBattle.Rules;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace PokemonUnity.Stadium
@@ -25,19 +29,21 @@ namespace PokemonUnity.Stadium
 	/// </summary>
 	//[ExecuteInEditMode]
 	//[RequireComponent(typeof(LevelLoader))]
-	public partial class GameManager : MonoBehaviour
+	public class GameManager : MonoBehaviour
 	{
 		#region Variables
 		public static GameManager current { get; private set; }
+
+		public RosterSelectionScene RosterSelectionScene;
+		public VersusPartyScene VersusPartyScene;
+		
 		public InputManager InputManager;
 		public AudioManager AudioManager;
 		public FileTest FileTest;
 		public IGame game; //game scope used for temp actions, without affecting original copy?
 		public event Action onUpdate;
 		public event Action onLevelLoaded;
-		//public event Action<int> onLoadLevel;
 		public event Action<IScene> onLoadLevel;
-		//public event Action<IOnLoadLevelEventArgs> onLoadLevel;
 		/// <summary>
 		/// <see cref="IGameScenesUI"/>
 		/// </summary>
@@ -47,91 +53,69 @@ namespace PokemonUnity.Stadium
 		/// </summary>
 		//[SerializeField] private BattleScene battle;
 		#endregion
-
+		
 		#region Unity Monobehavior
 		void Awake()
 		{
-			Debug.Log("Game Manager is Awake!");
-			//current = this;
-			if (current == null)
+			if (!current)
 			{
 				current = this;
 			}
+			// The Instance is already set! Cannot have more than one!
 			else if (current != this)
 			{
 				Destroy(gameObject);
 			}
-			//UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject
-			LogManager.Logger.OnLog += (object sender, OnDebugEventArgs e) => {
-				if (e != null || e != System.EventArgs.Empty)
-					if (e.Error == true)
-						//System.Console.WriteLine("[ERR]: " + e.Message);
-						global::UnityEngine.Debug.LogError(string.Format("[ERR] " + global::UnityEngine.Time.frameCount + ": " + e.Message, e.MessageParameters));
-					else if (e.Error == false)
-						//System.Console.WriteLine("[WARN]: " + e.Message);
-						global::UnityEngine.Debug.LogWarning(string.Format("[WARN] " + global::UnityEngine.Time.frameCount + ": " + e.Message, e.MessageParameters));
-					else
-						//System.Console.WriteLine("[LOG]: " + e.Message);
-						global::UnityEngine.Debug.Log(string.Format("[LOG] " + global::UnityEngine.Time.frameCount + ": " + e.Message, e.MessageParameters));
-			};
-
+			
+			// Set the Logger System
+			Core.Logger = LogManager.Logger;
+			
+			Debug.Log("Game Manager is Awake!");
+			
+			// LogManager.Logger.OnLog += (object sender, OnDebugEventArgs e) =>
+			// {
+			// 	if (e == null && e == System.EventArgs.Empty) 
+			// 		return;
+			// 	
+			// 	if (e.Error == true)
+			// 		global::UnityEngine.Debug.LogError(string.Format("[ERR] " + global::UnityEngine.Time.frameCount + ": " + e.Message, e.MessageParameters));
+			// 	else if (e.Error == false)
+			// 		global::UnityEngine.Debug.LogWarning(string.Format("[WARN] " + global::UnityEngine.Time.frameCount + ": " + e.Message, e.MessageParameters));
+			// 	else
+			// 		global::UnityEngine.Debug.Log(string.Format("[LOG] " + global::UnityEngine.Time.frameCount + ": " + e.Message, e.MessageParameters));
+			// };
+			
+			// Set the logger to output the file
 			//Debugger.Instance.Init("\\Logs", "GameLog"); //Path = "Logs\GameLog.txt"
 			//Core.Logger?.Init("\\Logs", "GameLog"); //Path = "Logs\GameLog.txt"
-			Core.Logger?.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
 			try
 			{
-				//Core.Logger?.Log("0-" + System.IO.Path.GetFullPath("..\\veekun-pokedex.sqlite"));
-				//Core.Logger?.Log("1-" + System.IO.Path.GetFullPath("..\\..\\veekun-pokedex.sqlite"));
-				//Core.Logger?.Log("2-" + System.IO.Path.GetFullPath("..\\..\\..\\veekun-pokedex.sqlite"));
-				//Core.Logger?.Log("3-" + System.IO.Path.GetFullPath("..\\..\\..\\..\\veekun-pokedex.sqlite"));
+				// Load the database
+				//Game.DatabasePath = "Data Source =" + UnityEngine.Application.dataPath + "/Data/veekun-pokedex.sqlite";
 				Game.DatabasePath = "Data Source=veekun-pokedex.sqlite";
-				//Game.DatabasePath = "Data Source =" + UnityEngine.Application.dataPath + "/Data/veekun-pokedex.sqlite";
 				Core.Logger?.Log("ConnectionString Database Path: " + Game.DatabasePath);
-				//Game.DatabasePath = "Data Source =" + UnityEngine.Application.dataPath + "/Data/veekun-pokedex.sqlite";
-				Game.con = (System.Data.IDbConnection)new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
-				//Game.con = (System.Data.IDbConnection)new Mono.Data.Sqlite.SqliteConnection(Game.DatabasePath);
-				Game.ResetSqlConnection(Game.DatabasePath);//@"Data\veekun-pokedex.sqlite"
+				Game.con = new System.Data.SQLite.SQLiteConnection(Game.DatabasePath);
+				Game.ResetSqlConnection(Game.DatabasePath);
+
 				Core.Logger?.Log("Framework Connected to Database...");
 				Core.Logger?.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
-				//Core.Logger?.Log("Path to DB: " + ((Mono.Data.Sqlite.SqliteConnection)Game.con).DataSource);
+
+				// Create new Game
 				game = new Game();
 				Core.Logger?.Log("New Game Entity Successfully Instantiated!~");
 			}
-			catch (InvalidOperationException) { Core.Logger?.LogError("Problem executing SQL with connected database"); }
-			catch (Exception e) { Core.Logger?.LogError(e.ToString()); }
-			finally
+			catch (InvalidOperationException)
 			{
-				Core.Logger?.Log("Is Pokemon DB Null? " + (Kernal.PokemonData == null).ToString());
-				if (Kernal.PokemonData == null)
-				{
-					try
-					{
-						Game.InitTypes();
-						Game.InitNatures();
-						Game.InitPokemons();
-						Game.InitPokemonForms();
-						Game.InitPokemonMoves();
-						Game.InitPokemonEvolutions();
-						Game.InitPokemonItems();
-						Game.InitMoves();
-						Game.InitItems();
-						Game.InitBerries();
-						Game.InitTrainers();
-						//Game.InitRegions();
-						//Game.InitLocations();
-					}
-					catch (Exception) { Core.Logger?.LogError("there were some problems running sql..."); } //ignore...
-				}
-				Core.Logger?.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}",
-					(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
-				if (Kernal.PokemonData.Count == 0)
-				{
-					Core.Logger?.Log("Was Pokemon DB Successfully Created? " + Game.InitPokemons());
-					Core.Logger?.Log(string.Format("Is Pokemon DB Greater than 0? {0} : {1}",
-						(Kernal.PokemonData.Count > 0).ToString(), Kernal.PokemonData.Count));
-				}
+				Core.Logger?.LogError("Problem executing SQL with connected database");
 			}
-
+			catch (Exception e)
+			{
+				Core.Logger?.LogError(e.ToString());
+			}
+			
+			Core.Logger?.Log("Is Pokemon DB Null? " + (Kernal.PokemonData == null));
+			Core.Logger?.Log($"Is Pokemon DB Greater than 0? {(Kernal.PokemonData.Count > 0)} : {Kernal.PokemonData.Count}");
+			
 			//Core.Logger?.Log("Is Game Null? " + (Game.GameData == null).ToString());
 			Debug.Assert(Game.GameData != null, "Game is NULL!");
 			
@@ -145,33 +129,58 @@ namespace PokemonUnity.Stadium
 			//	Core.Logger?.Log("Saving Player Object to Global Singleton");
 			//	//Game.GameData.Player = p;
 			//}
-			Core.Logger?.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
-
+			
+			// ToDo: Fix this 
+			if (Game.GameData.Trainer == null)
+				Game.GameData.Trainer = new Trainer("Player", TrainerTypes.PLAYER);
+			
+			Core.Logger?.Log("Is Trainer Null? " + (Game.GameData.Trainer == null));
+			
+			// Prevent from destroying this object
+			DontDestroyOnLoad(this);
+			
 			//ConfigureScenes();
 		}
 		void Start()
 		{
-			Core.Logger?.LogDebug(message: "Run: {0}.{1}", GetType().Name, System.Reflection.MethodBase.GetCurrentMethod().Name);
-
+			// Set the localization
 			string englishLocalization = "..\\..\\..\\LocalizationStrings.xml";
-			//System.Console.WriteLine(System.IO.Directory.GetParent(englishLocalization).FullName);
-			Game.LocalizationDictionary = new XmlStringRes(null); //new Debugger());
+			Game.LocalizationDictionary = new XmlStringRes(null);
 			Game.LocalizationDictionary.Initialize(englishLocalization, (int)Languages.English);
-
+			
 			//Enable "OnStart" to trigger battle scene...
 			//((object)game.Scenes?.BattleScene as GameObject)?.SetActive(true); //Scene is already active... Sort later.
+			Debug.Log((sceneList == null));
+			
+			StartCoroutine(sceneList.LoadScene(RosterSelectionScene));
 		}
 		#endregion
-
+		
+		#region Versus Party UI
+		// Battle Scene ToDo: Fix the scene manager and name. This is rough code
+		private IEnumerator LoadBattleScene()
+		{
+			yield return new WaitForSeconds(3);
+			SceneManager.LoadScene(1);
+		}
+		#endregion
+		
 		#region Methods
 		//public void OnLoadLevel(int id)
 		//{
 		//	if (onLoadLevel != null) onLoadLevel(id);
 		//}
-		//public void OnLoadLevel(IScene scene)
-		//{
-		//	if (onLoadLevel != null) onLoadLevel(scene);
-		//}
+		public void OnLoadLevel(IScene scene)
+		{
+			if (onLoadLevel != null) 
+				onLoadLevel(scene);
+		}
+		
+		public void OnLoadScene(IScene scene)
+		{
+			StartCoroutine(sceneList.LoadScene(scene));
+		}
+		
 		//
 		//private void ConfigureScenes()
 		//{

@@ -62,10 +62,10 @@ namespace PokemonUnity.Stadium
 			}
 		}
 
-		void OnDestroy()
+		private void OnDestroy()
 		{
-			GameManager.current.onLoadLevel -= Scene_onLoadLevel;
-			SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
+			//GameManager.current.onLoadLevel -= Scene_onLoadLevel;
+			//SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
 		}
 		#endregion
 
@@ -117,32 +117,32 @@ namespace PokemonUnity.Stadium
 		/// </remarks>
 		/// <param name="scene">UI Scene</param>
 		/// <returns></returns>
-		IEnumerator LoadScene(IScene scene)
+		public IEnumerator LoadScene(IScene scene)
 		{
 			//begin fade to black...
-			canvasGroup.interactable = true;
-			canvasGroup.blocksRaycasts = true;
+			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
 			//play animation
-			LeanTween.alphaCanvas(canvasGroup, 1f, transitionTime);
+			LeanTween.alphaCanvas(canvasGroup, 0f, transitionTime);
 
 			// wait
 			yield return new WaitForSeconds(transitionTime);
 
 			//load scene
 			//SceneManager.LoadScene(scene, LoadSceneMode.Additive);
-			((object)scene as GameObject).gameObject.SetActive(true); //We can assume the scene is attached to a monobehavior class
-
+			((object)scene as MonoBehaviour).gameObject.SetActive(true); //We can assume the scene is attached to a monobehavior class
+			
 			//ToDo: collect garbage while waiting for scene to load...
 			GC.Collect();
 
 			//ToDo: check start fade, and use matching ending or random fade...
 
 			//undo fade to black...
-			canvasGroup.interactable = false;
-			canvasGroup.blocksRaycasts = false;
+			canvasGroup.interactable = true;
+			canvasGroup.blocksRaycasts = true;
 			//play animation
 			//ToDo: check start fade, and use matching ending or random fade...
-			LeanTween.alphaCanvas(canvasGroup, 0f, transitionTime);
+			LeanTween.alphaCanvas(canvasGroup, 1f, transitionTime);
 		}
 
 		//IEnumerator LoadLevel(IScene level)

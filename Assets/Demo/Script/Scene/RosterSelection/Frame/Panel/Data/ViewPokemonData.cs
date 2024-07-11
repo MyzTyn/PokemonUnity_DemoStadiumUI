@@ -92,14 +92,7 @@ namespace PokemonUnity.Stadium
 
 		public static string ReturnMoveName(PokemonUnity.Moves move)
 		{
-			if (move == PokemonUnity.Moves.NONE)
-			{
-				return null;
-			}
-			else
-			{
-				return move.ToString().Replace("_", " ");
-			}
+			return move == PokemonUnity.Moves.NONE ? null : move.ToString().Replace("_", " ");
 		}
 
 		/// <summary>

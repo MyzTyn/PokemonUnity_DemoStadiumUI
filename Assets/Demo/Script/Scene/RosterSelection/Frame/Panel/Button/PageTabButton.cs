@@ -57,9 +57,9 @@ namespace PokemonUnity.Stadium
 		//{
 		//	PkmnSelected = Pkmn_ID;
 		//	Debug.Log("Pressed! " + Pkmn_ID);
-		//	if (!StorePokemon.ContainsKey((Pokemons)Pkmn_ID))
+		//	if (!TempRentalPokemonObjects.ContainsKey((Pokemons)Pkmn_ID))
 		//	{
-		//		StorePokemon.Add((Pokemons)PkmnSelected, new Pokemon((Pokemons)PkmnSelected, PokemonSelect.LevelFixed, false));
+		//		TempRentalPokemonObjects.Add((Pokemons)PkmnSelected, new Pokemon((Pokemons)PkmnSelected, PokemonSelect.LevelFixed, false));
 		//		Debug.Log("Create Pokemon!");
 		//		DisplayMoveSetUI();
 		//	}

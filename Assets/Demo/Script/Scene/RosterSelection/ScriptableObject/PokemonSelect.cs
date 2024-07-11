@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using PokemonEssentials.Interface.PokeBattle;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace PokemonUnity.Stadium
 {
@@ -20,8 +19,10 @@ namespace PokemonUnity.Stadium
 		/// <summary>
 		/// State or Mode for viewing stats and attributes of a selected pokemon
 		/// </summary>
+		/// ToDo: Do we need those?
 		[NonSerialized] public bool EditPokemon;
-		//[NonSerialized] public bool IsRentalPokemon; // ToDo: Do we need this?
+		// ToDo: Do we need this?
+		//[NonSerialized] public bool IsRentalPokemon;
 		[NonSerialized] public byte LevelFixed = 50;
 		[NonSerialized] public int? CurrentSelectedRosterPage;
 		[NonSerialized] public int CurrentSelectedRosterPosition;
@@ -39,7 +40,7 @@ namespace PokemonUnity.Stadium
 				if (CurrentSelectedRosterPage == null) //Maybe use all negative numbers for multiple rental pages? Can be used for different generations
 				{
 					//Search for the pokemon in the rental list
-					if (StorePokemon.TryGetValue((Pokemons)CurrentSelectedRosterPosition + 1, out IPokemon pokemon))
+					if (TempRentalPokemonObjects.TryGetValue((Pokemons)CurrentSelectedRosterPosition + 1, out IPokemon pokemon))
 					{
 						return pokemon;
 					}
@@ -60,24 +61,26 @@ namespace PokemonUnity.Stadium
 		/// <summary>
 		/// Which pokemon slot is currently active for choice of player's decision
 		/// </summary>
-		public int CurrentSelectedPartySlot { get { return TemporaryParty.Count; } }
+		public int CurrentSelectedPartySlot => TemporaryParty.Count;
+		
 		/// <summary>
 		/// Preserve the rental pokemons that are viewed by player.
 		/// </summary>
 		/// <remarks>
-		/// Use to reset generated pokemon in <see cref="StorePokemon"/>
+		/// Use to reset generated pokemon in <see cref="TempRentalPokemonObjects"/>
 		/// after X amount of pokemons are viewed
 		/// </remarks>
 		/// ToDo: What if instead of a list of pokemons, it was a list of positions? what are the chances the same id could appear in roster?
 		public Queue<Pokemons> ViewedRentalPokemon { get; private set; }
+		
 		/// <summary>
 		/// Use to store temporary instantiated rental pokemon objects
 		/// </summary>
 		/// <remarks>
 		/// Each Pokemon Id is only instantiated once and stored here
 		/// </remarks>
-		/// ToDo: Rename to TempRentalPokemonObjects?
-		public Dictionary<Pokemons, IPokemon> StorePokemon { get; private set; }
+		public Dictionary<Pokemons, IPokemon> TempRentalPokemonObjects { get; private set; }
+		
 		/// <summary>
 		/// When pokemons are selected by player from UI, store in this variable
 		/// </summary>
@@ -88,16 +91,18 @@ namespace PokemonUnity.Stadium
 		/// Should be: IDictionary<SlotId, IsSelected>, PositionId> or something...
 		/// </example>
 		/// Why is the key-value pair using a bool as key, and not value? What is the purpose of the bool?
-		//public HashSet<KeyValuePair<KeyValuePair<bool, int?>, int>> SelectedPokemons { get; private set; }
+		/// ToDo: DO we need those?
 		public HashSet<IPokemon> SelectedPokemons { get; private set; }
+		
 		/// <summary>
 		/// When pokemons are selected by player from UI, store in this variable
 		/// </summary>
 		/// <remarks>
 		/// First-In, Last-Out; Player can deselect their choice by removing their last choice
 		/// </remarks>
-		public Stack<IPokemon> TemporaryParty { get { return temporaryParty; } }
+		public Stack<IPokemon> TemporaryParty => temporaryParty;
 		private Stack<IPokemon> temporaryParty;
+		
 		/// <summary>
 		/// Placeholder to store the source position of the selected pokemon in the party
 		/// </summary>
@@ -112,7 +117,7 @@ namespace PokemonUnity.Stadium
 		public void OnAfterDeserialize()
 		{
 			Debug.Log("Create Dictionary for Temp Instantiated Pokemon Objects");
-			StorePokemon = new Dictionary<Pokemons, IPokemon>();
+			TempRentalPokemonObjects = new Dictionary<Pokemons, IPokemon>();
 
 			Debug.Log("Create Dictionary for Temp Viewed Pokemons");
 			ViewedRentalPokemon = new Queue<Pokemons>();
@@ -137,11 +142,10 @@ namespace PokemonUnity.Stadium
 		{
 			if (!CurrentSelectedPokemon.IsNotNullOrNone())
 			{
-				Core.Logger.Log("Error. There no Pokemon!");
+				Core.Logger.LogError("There no Pokemon!");
 				return false;
 			}
 
-			// ToDo: Fix this mess code
 			// ToDo: Replace to Game.GameData.Global.Features.LimitPokemonPartySize
 			if (CurrentSelectedPartySlot >= 0 && CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
 			{
@@ -150,45 +154,36 @@ namespace PokemonUnity.Stadium
 			}
 
 			// ToDo: Ask player if they're done and wish to move on; but in another function...
-			if (TemporaryParty.Count == Core.MAXPARTYSIZE)
-			{
-				Debug.Log("The party is full!");
-				return true;
-			}
-
-			return false;
+			if (TemporaryParty.Count != Core.MAXPARTYSIZE) 
+				return false;
+			
+			Debug.Log("The party is full!");
+			return true;
 		}
 
 		/// <summary>
 		/// Removes the last pokemon added to the player's party,
 		/// and moves the cursor back to the unselected pokemon
 		/// </summary>
-		/// ToDo: Implement this
 		public void UnregisterPreviousPokemon()
 		{
-			if (CurrentSelectedPartySlot > 0)
-			{
-				//CurrentSelectedPartySlot--;
-				//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(false);
-				//Game.GameData.Trainer.party[PokemonSelect.CurrentSelectedPartySlot] = new Pokemon(Pokemons.NONE, 0, false);
-				//PartyViewer[CurrentOnParty].DisplayPartyButton();
-				//PartyViewer[CurrentSelectedPartySlot].SetDisplay(); //pkmn.Name, pkmn.Species, pkmn.Level);
-				//PartyViewer[CurrentSelectedPartySlot].ActivePokemonDisplay(false);
-				//StoreButtonData[PokemonSelect.CurrentSelectedPartySlot].DisableOnClick(false);
-
-				//int index = temporaryParty.Count;
-				//Destroy(MainCameraGameManager.Instance.partyPanel.party[index].gameObject);
-				//TemporaryParty.Pop();
-				//KeyValuePair<int?,int> position = SelectedPokemonPositions.Pop();
-				//CurrentSelectedRosterPage = position.Key;
-				//CurrentSelectedRosterPosition = position.Value;
-			}
+			if (CurrentSelectedPartySlot <= 0) 
+				return;
+			
+			// ToDo: Implement this
+			//int index = temporaryParty.Count;
+			//Destroy(MainCameraGameManager.Instance.partyPanel.party[index].gameObject);
+			TemporaryParty.Pop();
+			KeyValuePair<int?,int> position = SelectedPokemonPositions.Pop();
+			CurrentSelectedRosterPage = position.Key;
+			CurrentSelectedRosterPosition = position.Value;
 		}
 		#endregion
 
 		/// <summary>
 		/// This should be tracked in the MainCameraManager, or SceneManager not here in scriptable object...
 		/// </summary>
+		/// ToDo: Do we need those?
 		public enum SelectionState
 		{
 			/// <summary>

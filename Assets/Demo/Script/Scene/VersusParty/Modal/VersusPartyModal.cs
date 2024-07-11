@@ -2,6 +2,7 @@
 using PokemonUnity.Application;
 using PokemonUnity.Stadium;
 using System.Linq;
+using Demo.Script.Scene.PartySelect;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,12 +12,11 @@ public class VersusPartyModal : MonoBehaviour
 	[Header("Trainer Card")]
 	[SerializeField] private TextMeshProUGUI TrainerName;
 	[SerializeField] private Image TrainerImage;
-
+	
 	[Space(10)]
-
+	
 	[Header("Party Grid")]
 	[SerializeField] private GameObject PartyGrid;
-
 	[SerializeField] private Image[] pokemons;
 
 	public void Awake()
@@ -40,7 +40,7 @@ public class VersusPartyModal : MonoBehaviour
 
 		for (int i = 0; i < Feature.MAXPARTYSIZE; i++)
 		{
-			pokemons[i].sprite = MainCameraGameManager.IconSprites[(int)party[i].Species];
+			pokemons[i].sprite = RosterSelectionScene.IconSprites[(int)party[i].Species];
 		}
 	}
 

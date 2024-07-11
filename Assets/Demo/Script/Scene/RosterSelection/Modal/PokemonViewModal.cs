@@ -1,6 +1,7 @@
 ﻿using PokemonEssentials.Interface.PokeBattle;
 using PokemonUnity.Monster;
 using System.Linq;
+using Demo.Script.Scene.PartySelect;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +10,6 @@ namespace PokemonUnity.Stadium
 	public class PokemonViewModal : MonoBehaviour
 	{
 		#region Variables
-		// ToDo: Remove this code. For now, I am using it to show the VersusParty UI (Then Battle). But it shouldn't be in MainCameraGame
-		[SerializeField] private MainCameraGameManager mainCameraGameManager;
-		[SerializeField] private TrainerPartyPanel partyPanel;
 		[SerializeField] private ViewPokemonData Data;
 
 		// ToDo: No Button bug. Only if you click two times at sequence (No, No -> won't close the modal)
@@ -56,7 +54,7 @@ namespace PokemonUnity.Stadium
 				Pokemons species = (Pokemons)PokemonSelect.CurrentSelectedRosterPosition + 1;
 
 				// Check if the selected species has already been seen
-				if (PokemonSelect.StorePokemon.ContainsKey(species))
+				if (PokemonSelect.TempRentalPokemonObjects.ContainsKey(species))
 				{
 					Core.Logger.Log($"{species} is already seen!");
 
@@ -69,9 +67,9 @@ namespace PokemonUnity.Stadium
 						PokemonSelect.ViewedRentalPokemon.Enqueue(pkmn);
 					}
 
-					// Retrieve the Pokémon from the StorePokemon and remove it from the StorePokemon
-					pokemon = PokemonSelect.StorePokemon[species];
-					PokemonSelect.StorePokemon.Remove(species);
+					// Retrieve the Pokémon from the TempRentalPokemonObjects and remove it from the TempRentalPokemonObjects
+					pokemon = PokemonSelect.TempRentalPokemonObjects[species];
+					PokemonSelect.TempRentalPokemonObjects.Remove(species);
 				}
 				// If the selected species have not seen
 				else
@@ -79,17 +77,17 @@ namespace PokemonUnity.Stadium
 					Core.Logger.Log($"{species} is not seen! Creating new Pokemon");
 
 					// Create new Pokemon
-					pokemon = new Pokemon(species, level: 50);
+					pokemon = new Pokemon(species, level: PokemonSelect.LevelFixed);
 					// ToDo: Remove this when the DLLs updated to handle the null
 					((Pokemon)pokemon).SetNickname(species.ToString());
 				}
 
 				// If the viewed rental Pokémon list is full, drop the oldest pokemon from the list
 				if (PokemonSelect.ViewedRentalPokemon.Count == RentalViewCount)
-					PokemonSelect.StorePokemon.Remove(PokemonSelect.ViewedRentalPokemon.Dequeue());
+					PokemonSelect.TempRentalPokemonObjects.Remove(PokemonSelect.ViewedRentalPokemon.Dequeue());
 
 				// Add the selected or created Pokémon to the store and the viewed rental list
-				PokemonSelect.StorePokemon[species] = pokemon;
+				PokemonSelect.TempRentalPokemonObjects[species] = pokemon;
 				PokemonSelect.ViewedRentalPokemon.Enqueue(species); //Refresh to top of list
 				
 				// Print the current state of the viewed rental Pokémon list
@@ -114,7 +112,7 @@ namespace PokemonUnity.Stadium
 
 		public void RefreshStatsDisplay()
 		{
-			Data.PokemonSprite.sprite = MainCameraGameManager.IconSprites[(int)pokemon.Species];
+			Data.PokemonSprite.sprite = RosterSelectionScene.IconSprites[(int)pokemon.Species];
 			Data.Health.text		= pokemon.TotalHP.ToString();
 			Data.Attack.text		= pokemon.ATK.ToString();
 			Data.Defense.text		= pokemon.DEF.ToString();
@@ -122,10 +120,10 @@ namespace PokemonUnity.Stadium
 			Data.SpecialAtk.text	= pokemon.SPA.ToString();
 			Data.SpecialDef.text	= pokemon.SPD.ToString();
 
-			Data.Type1.sprite = MainCameraGameManager.PkmnType[(int)pokemon.Type1];
+			Data.Type1.sprite = RosterSelectionScene.PokemonTypes[(int)pokemon.Type1];
 
 			// Not all Pokemons does have second type
-			Data.Type2.sprite = pokemon.Type2 == PokemonUnity.Types.NONE ? null : MainCameraGameManager.PkmnType[(int)pokemon.Type2];
+			Data.Type2.sprite = pokemon.Type2 == PokemonUnity.Types.NONE ? null : RosterSelectionScene.PokemonTypes[(int)pokemon.Type2];
 			Data.Type2.color = pokemon.Type2 == PokemonUnity.Types.NONE ? UnityEngine.Color.clear : UnityEngine.Color.white;
 		}
 
@@ -194,12 +192,11 @@ namespace PokemonUnity.Stadium
 
 			bool result = PokemonSelect.RegisterSelectedPokemon();
 			// ToDo: Fix this code and ensure PokemonSelect add to the party.
-			partyPanel.AddPokemonToParty(PokemonSelect.CurrentSelectedPokemon, PokemonSelect.TemporaryParty.Count - 1);
-
+			RosterSelectionScene.AddPokemonToParty(PokemonSelect.CurrentSelectedPokemon, PokemonSelect.TemporaryParty.Count - 1);
+			
 			ActiveGameObject(false);
 			if (result)
-				// ToDo: Remove this!
-				mainCameraGameManager.ShowVersusPartyUI();
+				GameManager.current.OnLoadScene(GameManager.current.VersusPartyScene);
 		}
 		#endregion
 	}

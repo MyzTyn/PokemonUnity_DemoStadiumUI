@@ -34,12 +34,12 @@ namespace PokemonUnity.Stadium
 		[SerializeField] private GameObject TabPanel;
 
 		//Sprite
-		public static UnityEngine.Sprite[] PkmnType { get; private set; }
-		public static UnityEngine.Sprite[] IconSprites { get; private set; }
+		//public static UnityEngine.Sprite[] PkmnType { get; private set; }
+		//public static UnityEngine.Sprite[] IconSprites { get; private set; }
 		#endregion
 
 		#region Unity Monobehavior
-		void Awake()
+		private void Awake()
 		{
 			// Set the Logger System
 			Core.Logger = LogManager.Logger;
@@ -47,8 +47,8 @@ namespace PokemonUnity.Stadium
 			Debug.Log("Is Scriptable Object Null? " + (PokemonSelect == null));
 
 			Debug.Log("Load Assets for UI into Array");
-			IconSprites = Resources.LoadAll<UnityEngine.Sprite>("PokemonIcon");
-			PkmnType = Resources.LoadAll<UnityEngine.Sprite>("PokemonType");
+			//IconSprites = Resources.LoadAll<UnityEngine.Sprite>("PokemonIcon");
+			//PkmnType = Resources.LoadAll<UnityEngine.Sprite>("PokemonType");
 
 			{
 				try
@@ -59,7 +59,7 @@ namespace PokemonUnity.Stadium
 					Game.ResetSqlConnection(Game.DatabasePath);
 					Debug.Log("Path to DB: " + ((System.Data.SQLite.SQLiteConnection)Game.con).FileName);
 
-					Game g = new Game();
+					//Game g = new Game();
 				}
 				catch (InvalidOperationException) { Debug.LogError("problem connecting with database"); } //ignore...
 				finally
@@ -108,9 +108,9 @@ namespace PokemonUnity.Stadium
 			Debug.Log("Is Trainer Null? " + (Game.GameData.Trainer == null).ToString());
 		}
 
-		void Start()
+		private void Start()
 		{
-			Debug.Log("Is Game Events Null? " + GameEvents.current == null);
+			Debug.Log("Is Game Events Null? " + GameManager.current == null);
 
 			// ToDo: Remove this
 			PrepopulateRentalPokemonsUI();
@@ -119,23 +119,9 @@ namespace PokemonUnity.Stadium
 
 		#region Versus Party UI
 		// ToDo: Remove this
-		public void ShowVersusPartyUI()
-		{
-			Debug.Log("ShowVersusPartyUI Called");
-			partyPanel.gameObject.SetActive(false);
-			RosterPanel.gameObject.SetActive(false);
-			TabPanel.gameObject.SetActive(false);
-
-			VersusPanel.gameObject.SetActive(true);
-
-			VersusPartyTop.RefreshDisplay(Game.GameData.Trainer.name, null, PokemonSelect.TemporaryParty.Reverse().ToArray());
-			VersusPartyBottom.RefreshDisplay("Biker", null, PokemonSelect.TemporaryParty.ToArray());
-
-			StartCoroutine(LoadBattleScene());
-		}
 
 		// Battle Scene ToDo: Fix the scene manager and name. This is rough code
-		public IEnumerator LoadBattleScene()
+		private IEnumerator LoadBattleScene()
 		{
 			yield return new WaitForSeconds(3);
 			SceneManager.LoadScene(1);
@@ -146,7 +132,7 @@ namespace PokemonUnity.Stadium
 		{
 			// This project only have gen 1 sprites
 			Core.PokemonGeneration = (sbyte)PokemonUnity.Generation.RedBlueYellow;
-			Core.Logger.Log("Creating {0} Pokemons",Core.PokemonIndexLimit);
+			Core.Logger.Log("Creating {0} Pokemon",Core.PokemonIndexLimit);
 			
 			for (int i = 0; i < Core.PokemonIndexLimit; i++)
 			{

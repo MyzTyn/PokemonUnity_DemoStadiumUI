@@ -101,7 +101,7 @@ namespace PokemonUnity.Stadium
 
 			Debug.Log("Is Game Null? " + Game.GameData == null);
 
-			// ToDo: Fix this
+			// ToDo: Fix this 
 			if (Game.GameData.Trainer == null)
 				Game.GameData.Trainer = new Trainer("Player", TrainerTypes.PLAYER);
 

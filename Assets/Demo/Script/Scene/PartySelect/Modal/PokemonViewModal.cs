@@ -1,5 +1,4 @@
 ﻿using PokemonEssentials.Interface.PokeBattle;
-using PokemonUnity;
 using PokemonUnity.Monster;
 using System.Linq;
 using UnityEngine;
@@ -12,22 +11,17 @@ namespace PokemonUnity.Stadium
 		#region Variables
 		// ToDo: Remove this code. For now, I am using it to show the VersusParty UI (Then Battle). But it shouldn't be in MainCameraGame
 		[SerializeField] private MainCameraGameManager mainCameraGameManager;
-
 		[SerializeField] private TrainerPartyPanel partyPanel;
-
 		[SerializeField] private ViewPokemonData Data;
+
 		// ToDo: No Button bug. Only if you click two times at sequence (No, No -> won't close the modal)
 		[SerializeField] private Toggle IsPokemonSelected;
 		[SerializeField] private int RentalViewCount = 5;
 
 		private IPokemon pokemon;
 		public PokemonSelect PokemonSelect;
-		/// <summary>
-		/// When you press a pokemon button in scroll window,
-		/// pass the button into the view modal,
-		/// and assign it as selected if chosen by user
-		/// </summary>
-		public Toggle selectedPokemon;
+
+		// ToDo: Do we need this?
 		public bool IsWindowActive { get; private set; }
 		#endregion
 
@@ -40,8 +34,12 @@ namespace PokemonUnity.Stadium
 		#region Methods
 		public void ActiveGameObject(bool active)
 		{
-			IsWindowActive = active;
+			// Clear the display
+			if (!active)
+				ClearDisplay();
+
 			gameObject.SetActive(active);
+			IsWindowActive = active;
 		}
 
 		/// <summary>
@@ -51,58 +49,56 @@ namespace PokemonUnity.Stadium
 		/// ToDo: pokemon should be passed as a parameter for this method, and use the object to assign values to display
 		public void RefreshDisplay()
 		{
-			// ToDo: Is this need?
-			if(pokemon != null)
-				pokemon = PokemonSelect.CurrentSelectedPokemon;
-
+			// If the rental page selected
 			if (PokemonSelect.CurrentSelectedRosterPage == null)
 			{
-				Pokemons species = PokemonSelect.CurrentSelectedPokemon.Species;
-				if (PokemonSelect.StorePokemon.ContainsKey(species)) //if selected pokemon is the same as already seen
+				// Get the species based on the current roster position
+				Pokemons species = (Pokemons)PokemonSelect.CurrentSelectedRosterPosition + 1;
+
+				// Check if the selected species has already been seen
+				if (PokemonSelect.StorePokemon.ContainsKey(species))
 				{
+					Core.Logger.Log($"{species} is already seen!");
+
 					//Remove the pokemon from list to prevent duplicates
-					Pokemons pkmn = Pokemons.NONE;
 					for (int i = 0; i < PokemonSelect.ViewedRentalPokemon.Count; i++)
 					{
-						pkmn = PokemonSelect.ViewedRentalPokemon.Dequeue();
+						Pokemons pkmn = PokemonSelect.ViewedRentalPokemon.Dequeue();
 						if (pkmn == species)
 							break;
 						PokemonSelect.ViewedRentalPokemon.Enqueue(pkmn);
 					}
+
+					// Retrieve the Pokémon from the StorePokemon and remove it from the StorePokemon
 					pokemon = PokemonSelect.StorePokemon[species];
 					PokemonSelect.StorePokemon.Remove(species);
 				}
-				if (PokemonSelect.ViewedRentalPokemon.Count == RentalViewCount) //If the list is full
+				// If the selected species have not seen
+				else
 				{
-					//Remove the oldest pokemon from the list
-					PokemonSelect.ViewedRentalPokemon.Dequeue(); //Drop the last from the list
+					Core.Logger.Log($"{species} is not seen! Creating new Pokemon");
+
+					// Create new Pokemon
+					pokemon = new Pokemon(species, level: 50);
+					// ToDo: Remove this when the DLLs updated to handle the null
+					((Pokemon)pokemon).SetNickname(species.ToString());
 				}
 
-				//if (!pkmn.IsNotNullOrNone())
-				//	species = PokemonSelect.CurrentSelectedPokemon.Species; //PokemonSelect.Species;
+				// If the viewed rental Pokémon list is full, drop the oldest pokemon from the list
+				if (PokemonSelect.ViewedRentalPokemon.Count == RentalViewCount)
+					PokemonSelect.StorePokemon.Remove(PokemonSelect.ViewedRentalPokemon.Dequeue());
 
-				//This is interesting game design logic, but not sure if it should go here...
-				//if(PokemonSelect.ViewedRentalPokemon.Contains(species) &&
-				//	PokemonSelect.StorePokemon.ContainsKey(species))
-				//{
-				//	pokemon = PokemonSelect.StorePokemon[species];
-				//}
-				//else
-				{
-					// ToDo: Clean this up
-					//if (!pokemon.IsNotNullOrNone())
-					//	pokemon = pkmn;
-					//else //ToDo: if pokemon is not null then we can get rid of below
-						//pokemon = new Pokemon(species, PokemonSelect.LevelFixed, isEgg: false);
-					if (pokemon == null)
-						pokemon = PokemonSelect.CurrentSelectedPokemon;
-					//if (!pokemon.IsNotNullOrNone()) //if pokemon IS null or none... then create a new pokemon using the species
-					//	pokemon = new Pokemon(species, PokemonSelect.LevelFixed, isEgg: false);
-
-					PokemonSelect.StorePokemon.Add(species, pokemon);
-					PokemonSelect.ViewedRentalPokemon.Enqueue(species); //Refresh to top of list
-				}
+				// Add the selected or created Pokémon to the store and the viewed rental list
+				PokemonSelect.StorePokemon[species] = pokemon;
+				PokemonSelect.ViewedRentalPokemon.Enqueue(species); //Refresh to top of list
+				
+				// Print the current state of the viewed rental Pokémon list
+				Core.Logger.Log("Current ViewedRentalPokemon: " + string.Join(", ", PokemonSelect.ViewedRentalPokemon.ToList()));
 			}
+
+			// ToDo: Handle another pages?
+
+			// Refresh the Display
 			RefreshHeaderDisplay();
 			RefreshStatsDisplay();
 			RefreshMoveSetDisplay();
@@ -183,13 +179,6 @@ namespace PokemonUnity.Stadium
 			Data.MoveType4.text = null;
 		}
 
-		public void CloseDisplayModal()
-		{
-			ClearDisplay();
-			ActiveGameObject(false);
-			IsWindowActive = false;
-		}
-
 		/// <summary>
 		/// When a toggle button is pressed, close the modal
 		/// </summary>
@@ -199,7 +188,7 @@ namespace PokemonUnity.Stadium
 			Core.Logger.Log($"\"Register Pokemon?\" Toggle Button Pressed, value selected is [{(arg0 ? "YES" : "NO")}]!");
 			if (!arg0)
 			{
-				CloseDisplayModal();
+				ActiveGameObject(false);
 				return;
 			}
 
@@ -207,7 +196,7 @@ namespace PokemonUnity.Stadium
 			// ToDo: Fix this code and ensure PokemonSelect add to the party.
 			partyPanel.AddPokemonToParty(PokemonSelect.CurrentSelectedPokemon, PokemonSelect.TemporaryParty.Count - 1);
 
-			CloseDisplayModal();
+			ActiveGameObject(false);
 			if (result)
 				// ToDo: Remove this!
 				mainCameraGameManager.ShowVersusPartyUI();

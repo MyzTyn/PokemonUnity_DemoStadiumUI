@@ -27,11 +27,11 @@ namespace PokemonUnity.Stadium
 		[NonSerialized] public int CurrentSelectedRosterPosition;
 		[NonSerialized] public float CurrentScrollPosition;
 
-        /// <summary>
-        /// Which pokemon slot is currently active for choice of player's decision
-        /// </summary>
-        /// FIXME: use current selected pokemon "slot" or "cursor" to reference the returning pokemon species?
-        public IPokemon CurrentSelectedPokemon
+		/// <summary>
+		/// Which pokemon slot is currently active for choice of player's decision
+		/// </summary>
+		/// FIXME: use current selected pokemon "slot" or "cursor" to reference the returning pokemon species?
+		public IPokemon CurrentSelectedPokemon
 		{
 			get
 			{
@@ -39,13 +39,10 @@ namespace PokemonUnity.Stadium
 				if (CurrentSelectedRosterPage == null) //Maybe use all negative numbers for multiple rental pages? Can be used for different generations
 				{
 					//Search for the pokemon in the rental list
-					//if(MainCameraGameManager.Instance)
-					//return MainCameraGameManager.Instance.StoreButtonData[CurrentSelectedRosterPosition].pokemon; //FIXME: Use roster collection that populates the rental list
-					
-					// ToDo: Return the data using database, or something like that
-					var pkmn = new PokemonUnity.Monster.Pokemon((Pokemons)CurrentSelectedRosterPosition + 1, level: LevelFixed);
-					pkmn.SetNickname(pkmn.Species.ToString());
-                    return pkmn;
+					if (StorePokemon.TryGetValue((Pokemons)CurrentSelectedRosterPosition + 1, out IPokemon pokemon))
+					{
+						return pokemon;
+					}
 				}
 				else if (CurrentSelectedRosterPage == 0)
 				{
@@ -111,9 +108,6 @@ namespace PokemonUnity.Stadium
 		public Stack<KeyValuePair<int?, int>> SelectedPokemonPositions { get; private set; }
 		#endregion
 
-		#region Unity Monobehavior
-		#endregion
-
 		#region Methods
 		public void OnAfterDeserialize()
 		{
@@ -141,36 +135,36 @@ namespace PokemonUnity.Stadium
 		/// True if the pokemon was successfully added to the party
 		public bool RegisterSelectedPokemon()
 		{
-            if (!CurrentSelectedPokemon.IsNotNullOrNone())
-            {
-                Core.Logger.Log("Error. There no Pokemon!");
+			if (!CurrentSelectedPokemon.IsNotNullOrNone())
+			{
+				Core.Logger.Log("Error. There no Pokemon!");
 				return false;
-            }
+			}
 
-            // ToDo: Fix this mess code
-            // ToDo: Replace to Game.GameData.Global.Features.LimitPokemonPartySize
-            if (CurrentSelectedPartySlot >= 0 && CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
-            {
-                TemporaryParty.Push(CurrentSelectedPokemon);
-                SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage, CurrentSelectedRosterPosition));
-            }
+			// ToDo: Fix this mess code
+			// ToDo: Replace to Game.GameData.Global.Features.LimitPokemonPartySize
+			if (CurrentSelectedPartySlot >= 0 && CurrentSelectedPartySlot < Core.MAXPARTYSIZE)
+			{
+				TemporaryParty.Push(CurrentSelectedPokemon);
+				SelectedPokemonPositions.Push(new KeyValuePair<int?, int>(CurrentSelectedRosterPage, CurrentSelectedRosterPosition));
+			}
 
-            // ToDo: Ask player if they're done and wish to move on; but in another function...
-            if (TemporaryParty.Count == Core.MAXPARTYSIZE)
-            {
-                Debug.Log("The party is full!");
-                return true;
-            }
+			// ToDo: Ask player if they're done and wish to move on; but in another function...
+			if (TemporaryParty.Count == Core.MAXPARTYSIZE)
+			{
+				Debug.Log("The party is full!");
+				return true;
+			}
 
 			return false;
-        }
+		}
 
-        /// <summary>
-        /// Removes the last pokemon added to the player's party,
-        /// and moves the cursor back to the unselected pokemon
-        /// </summary>
-        /// ToDo: Implement this
-        public void UnregisterPreviousPokemon()
+		/// <summary>
+		/// Removes the last pokemon added to the player's party,
+		/// and moves the cursor back to the unselected pokemon
+		/// </summary>
+		/// ToDo: Implement this
+		public void UnregisterPreviousPokemon()
 		{
 			if (CurrentSelectedPartySlot > 0)
 			{

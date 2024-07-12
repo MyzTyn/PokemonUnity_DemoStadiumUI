@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Demo.Script.Scene.PartySelect;
 using PokemonEssentials.Interface.PokeBattle;
 using PokemonUnity.Monster;
 using UnityEngine;

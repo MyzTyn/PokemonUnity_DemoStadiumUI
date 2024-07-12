@@ -1,45 +1,85 @@
-﻿using System;
+﻿using System.Collections;
 using System.Linq;
+using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.Screen;
-using PokemonUnity;
-using PokemonUnity.Stadium;
+using PokemonUnity.Monster;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Demo.Script.Scene.VersusParty
+namespace PokemonUnity.Stadium
 {
     public class VersusPartyScene : MonoBehaviour, IScene
     {
-        public int Id => 3;
+        public int Id => (int)Scenes.VersusParty;
         
-        [FormerlySerializedAs("PokemonSelect")] [SerializeField]
-        private PokemonSelect pokemonSelect;
+        //[SerializeField] private PokemonSelect pokemonSelect;
+        [SerializeField] private VersusPartyModal versusPartyTop;
+        [SerializeField] private VersusPartyModal versusPartyBottom;
         
-        [FormerlySerializedAs("VersusPartyTop")] [SerializeField]
-        private VersusPartyModal versusPartyTop;
-        
-        [FormerlySerializedAs("VersusPartyBottom")] [SerializeField]
-        private VersusPartyModal versusPartyBottom;
-        
+        // ToDo: Remove those below. It is generally good practice to put in one file
+        // For now, I only do this for demo purpose
+        public static UnityEngine.Sprite[] IconSprites { get; private set; }
+
+        #region Unity Methods
         private void Awake()
         {
-            versusPartyTop.RefreshDisplay(Game.GameData.Trainer.name, null, pokemonSelect.TemporaryParty.Reverse().ToArray());
-            versusPartyBottom.RefreshDisplay("Biker", null, pokemonSelect.TemporaryParty.ToArray());
+            Core.Logger?.Log("Load Assets for UI into Array");
+            IconSprites = Resources.LoadAll<UnityEngine.Sprite>("PokemonIcon");
+            
+            // ToDo: Remove those code.
+            // This is for demo purpose only
+            if (GameManager.current.sceneList.canvasGroup == null)
+                GameManager.current.sceneList.canvasGroup = GetComponentInParent<CanvasGroup>();
         }
-
-        public void Refresh()
+        
+        private void Start()
         {
-            throw new System.NotImplementedException();
-        }
+            // Load the ScriptableObject from the resources folder
+            // ToDo: Below the code should be clean up.
+            // Those are for demo purpose only
+            PokemonSelect pokemonSelect = Resources.Load<PokemonSelect>("Data/PlayerScriptableObject");
+            
+            // Use the data from PokemonSelect otherwise use default
+            string challenger = Game.GameData.Trainer != null ? Game.GameData.Trainer.name : "Player";
+            string opponent = Game.GameData.Trainer != null ? Game.GameData.Trainer.name : "Biker";
+            IPokemon[] p1 = pokemonSelect.TemporaryParty.Count != 0 ? pokemonSelect.TemporaryParty.Reverse().ToArray() : GenerateRandomParty();
+            IPokemon[] p2 = pokemonSelect.TemporaryParty.Count != 0 ? pokemonSelect.TemporaryParty.ToArray() : GenerateRandomParty();
+            
+            // Display
+            versusPartyTop.RefreshDisplay(challenger, null, p1);
+            versusPartyBottom.RefreshDisplay(opponent, null, p2);
+            
+            // Battle Scene
+            StartCoroutine(StartBattle());
+            return;
 
-        public void Display(string v)
-        {
-            throw new System.NotImplementedException();
+            // Battle Scene Code
+            IEnumerator StartBattle()
+            {
+                yield return new WaitForSeconds(3);
+                GameManager.current.OnLoadLevel((int)Scenes.Battle, 1.5f);
+            }
         }
-
-        public bool DisplayConfirm(string v)
+        private void OnDestroy()
         {
-            throw new System.NotImplementedException();
+            IconSprites = null;
         }
+        #endregion
+        
+        private IPokemon[] GenerateRandomParty()
+        {
+            var rnd = new System.Random();
+            return Enumerable.Range(0, Core.MAXPARTYSIZE)
+                .Select(_ => 
+                {
+                    var pokemon = new Pokemon((Pokemons)rnd.Next(151) + 1, level: 50);
+                    pokemon.SetNickname(pokemon.Species.ToString()); // ToDo: Remove this line when DLLs updated to handle the null
+                    return (IPokemon)pokemon;
+                })
+                .ToArray();
+        }
+        
+        public void Refresh() {}
+        public void Display(string v) {}
+        public bool DisplayConfirm(string v) => false;
     }
 }

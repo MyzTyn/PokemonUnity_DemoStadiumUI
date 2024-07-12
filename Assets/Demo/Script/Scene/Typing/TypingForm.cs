@@ -18,6 +18,7 @@ namespace PokemonUnity.Stadium
 	{
 		#region Variables
 		public int Id { get { return (int)Scenes.TextEntry;} }
+		
 		public string helptext;
 		public int Minlength;
 		public int Maxlength;

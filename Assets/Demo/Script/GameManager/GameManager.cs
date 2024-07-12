@@ -3,8 +3,6 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using Demo.Script.Scene.PartySelect;
-using Demo.Script.Scene.VersusParty;
 using PokemonUnity;
 using PokemonUnity.Interface;
 using PokemonUnity.Character;
@@ -33,9 +31,6 @@ namespace PokemonUnity.Stadium
 	{
 		#region Variables
 		public static GameManager current { get; private set; }
-
-		public RosterSelectionScene RosterSelectionScene;
-		public VersusPartyScene VersusPartyScene;
 		
 		public InputManager InputManager;
 		public AudioManager AudioManager;
@@ -47,7 +42,7 @@ namespace PokemonUnity.Stadium
 		/// <summary>
 		/// <see cref="IGameScenesUI"/>
 		/// </summary>
-		[SerializeField] private LevelLoader sceneList;
+		public LevelLoader sceneList;
 		/// <summary>
 		/// <see cref="IPokeBattle_SceneIE"/>
 		/// </summary>
@@ -150,19 +145,8 @@ namespace PokemonUnity.Stadium
 			
 			//Enable "OnStart" to trigger battle scene...
 			//((object)game.Scenes?.BattleScene as GameObject)?.SetActive(true); //Scene is already active... Sort later.
-			Debug.Log((sceneList == null));
-			
-			StartCoroutine(sceneList.LoadScene(RosterSelectionScene));
 		}
-		#endregion
 		
-		#region Versus Party UI
-		// Battle Scene ToDo: Fix the scene manager and name. This is rough code
-		private IEnumerator LoadBattleScene()
-		{
-			yield return new WaitForSeconds(3);
-			SceneManager.LoadScene(1);
-		}
 		#endregion
 		
 		#region Methods
@@ -174,6 +158,12 @@ namespace PokemonUnity.Stadium
 		{
 			if (onLoadLevel != null) 
 				onLoadLevel(scene);
+		}
+		
+		public void OnLoadLevel(int scene, float time = 0.5f)
+		{
+			sceneList.transitionTime = time;
+			StartCoroutine(sceneList.LoadLevel(scene));
 		}
 		
 		public void OnLoadScene(IScene scene)

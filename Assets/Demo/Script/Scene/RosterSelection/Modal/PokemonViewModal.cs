@@ -1,8 +1,8 @@
 ﻿using PokemonEssentials.Interface.PokeBattle;
 using PokemonUnity.Monster;
 using System.Linq;
-using Demo.Script.Scene.PartySelect;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace PokemonUnity.Stadium
@@ -196,7 +196,10 @@ namespace PokemonUnity.Stadium
 			
 			ActiveGameObject(false);
 			if (result)
-				GameManager.current.OnLoadScene(GameManager.current.VersusPartyScene);
+			{
+				// ToDo: Remove this code. This is for demo purpose only
+				RosterSelectionScene.GoToVersusParty();
+			}
 		}
 		#endregion
 	}

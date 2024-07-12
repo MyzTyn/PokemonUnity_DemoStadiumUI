@@ -1,44 +1,41 @@
 ﻿using System;
 using PokemonEssentials.Interface.PokeBattle;
 using PokemonEssentials.Interface.Screen;
-using PokemonUnity;
-using PokemonUnity.Stadium;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Sprite = UnityEngine.Sprite;
 
-namespace Demo.Script.Scene.PartySelect
+namespace PokemonUnity.Stadium
 {
     public class RosterSelectionScene : MonoBehaviour, IScene
     {
-        public int Id => 2;
-
-        [FormerlySerializedAs("PokemonSelect")] [SerializeField]
-        private PokemonSelect pokemonSelect;
+        public int Id => (int)Scenes.RosterSelection;
         
-        [FormerlySerializedAs("SelectPokemonButton")] [SerializeField]
-        private SelectPokemonButton selectPokemonButton;
-
-        [FormerlySerializedAs("PokemonViewModal")] [SerializeField]
-        private PokemonViewModal pokemonViewModal;
+        [SerializeField] private PokemonSelect pokemonSelect;
+        [SerializeField] private SelectPokemonButton selectPokemonButton;
+        [SerializeField] private PokemonViewModal pokemonViewModal;
+        [SerializeField] private Transform rosterGridContent;
         
-        [FormerlySerializedAs("RosterGridContent")] [SerializeField]
-        private Transform rosterGridContent;
+        public static UnityEngine.Sprite[] PokemonTypes { get; private set; }
+        public static UnityEngine.Sprite[] IconSprites { get; private set; }
         
-        public static Sprite[] PokemonTypes { get; private set; }
-        public static Sprite[] IconSprites { get; private set; }
-        
-        // UI Events
         public static event Action<IPokemon, int> OnChangePartyLineup;
+        // ToDo: Remove below: This is for demo purpose only
+        private static event Action OnLoadVersusPartyScene;
+        [SerializeField] private VersusPartyScene VersusPartyScene;
         
         #region Unity Methods
         private void Awake()
         {
             Core.Logger?.Log("Load Assets for UI into Array");
-            IconSprites = Resources.LoadAll<Sprite>("PokemonIcon");
-            PokemonTypes = Resources.LoadAll<Sprite>("PokemonType");
+            IconSprites = Resources.LoadAll<UnityEngine.Sprite>("PokemonIcon");
+            PokemonTypes = Resources.LoadAll<UnityEngine.Sprite>("PokemonType");
+            
+            // ToDo: Remove those code.
+            // This is for demo purpose only
+            OnLoadVersusPartyScene += LoadVersusPartyScene;
+            if (GameManager.current.sceneList.canvasGroup == null)
+                GameManager.current.sceneList.canvasGroup = GetComponentInParent<CanvasGroup>();
         }
-
+        
         private void Start()
         {
             PrepopulateRentalPokemonsUI();
@@ -52,6 +49,13 @@ namespace Demo.Script.Scene.PartySelect
                 foreach (Transform child in rosterGridContent)
                     Destroy(child.gameObject);
             }
+            
+            IconSprites = null;
+            PokemonTypes = null;
+            
+            // ToDo: Remove those code.
+            // This is for demo purpose only
+            OnLoadVersusPartyScene -= LoadVersusPartyScene;
         }
         #endregion
 
@@ -61,7 +65,18 @@ namespace Demo.Script.Scene.PartySelect
         {
             OnChangePartyLineup?.Invoke(pokemon, index);
         }
-        
+        public static void GoToVersusParty()
+        {
+            OnLoadVersusPartyScene?.Invoke();
+        }
+        // ToDo: Remove this. This is for demo purpose only
+        private void LoadVersusPartyScene()
+        {
+            if (VersusPartyScene != null)
+                GameManager.current.OnLoadScene(VersusPartyScene);
+            else
+                GameManager.current.OnLoadLevel((int)Scenes.VersusParty);
+        }
         private void PrepopulateRentalPokemonsUI()
         {
             if (rosterGridContent.childCount != 0)
@@ -72,7 +87,7 @@ namespace Demo.Script.Scene.PartySelect
             
             // This project only have gen 1 sprites
             Core.PokemonGeneration = (sbyte)PokemonUnity.Generation.RedBlueYellow;
-            Core.Logger.Log("Creating {0} Pokemon",Core.PokemonIndexLimit);
+            Core.Logger?.Log("Creating {0} Pokemon",Core.PokemonIndexLimit);
 			
             for (int i = 0; i < Core.PokemonIndexLimit; i++)
             {
@@ -87,19 +102,8 @@ namespace Demo.Script.Scene.PartySelect
         
         #endregion
         
-        public void Refresh()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Display(string v)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool DisplayConfirm(string v)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void Refresh() {}
+        public void Display(string v) {}
+        public bool DisplayConfirm(string v) => false;
     }
 }

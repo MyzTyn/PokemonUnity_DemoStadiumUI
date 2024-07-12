@@ -174,6 +174,16 @@ namespace PokemonUnity.Stadium
 		/// <see cref="PokemonEssentials.Interface.Screen.IIntroEventScreen"/>
 		/// </remarks>
 		Intro = 0, //Only need to assign the first scene, the rest will be in order of the enum
+		RosterSelection,
+		VersusParty,
+		/// <summary>
+		/// Scene used for a regulat pokemon battle
+		/// </summary>
+		/// <see cref="PokemonEssentials.Interface.Screen.IPokeBattle_Scene"/>
+		Battle,
+		
+		
+		// ToDo: Do we need those below?
 		/// <summary>
 		/// Scene after title card that displays that displays the main menu,
 		/// and contains a list of save files and allows the player to choose one to load.
@@ -203,18 +213,5 @@ namespace PokemonUnity.Stadium
 		/// <see cref="PokemonEssentials.Interface.Screen.IPokemonEntryScreen"/>
 		/// </remarks>
 		TextEntry,
-		/// <summary>
-		/// Scene used for a regulat pokemon battle
-		/// </summary>
-		/// <see cref="PokemonEssentials.Interface.Screen.IPokeBattle_Scene"/>
-		Battle
-		// "MainMenu"
-		// "Gameplay"
-		// "Pokedex"
-		// "Bag"
-		// "Options"
-		// "Save"
-		// "Load"
-		// "Exit"
 	}
 }

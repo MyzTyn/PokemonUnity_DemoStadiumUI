@@ -80,13 +80,13 @@ namespace PokemonUnity.Stadium
 			Scene_onLoadLevel(scene.Id);
 		}
 
-		IEnumerator LoadLevel(int level)
+		public IEnumerator LoadLevel(int level)
 		{
 			//begin fade to black...
-			canvasGroup.interactable = true;
-			canvasGroup.blocksRaycasts = true;
+			canvasGroup.interactable = false;
+			canvasGroup.blocksRaycasts = false;
 			//play animation
-			LeanTween.alphaCanvas(canvasGroup, 1f, transitionTime);
+			LeanTween.alphaCanvas(canvasGroup, 0f, transitionTime);
 
 			// wait
 			yield return new WaitForSeconds(transitionTime);
@@ -100,11 +100,11 @@ namespace PokemonUnity.Stadium
 			//ToDo: check start fade, and use matching ending or random fade...
 
 			//undo fade to black...
-			canvasGroup.interactable = false;
-			canvasGroup.blocksRaycasts = false;
+			canvasGroup.interactable = true;
+			canvasGroup.blocksRaycasts = true;
 			//play animation
 			//ToDo: check start fade, and use matching ending or random fade...
-			LeanTween.alphaCanvas(canvasGroup, 0f, transitionTime);
+			LeanTween.alphaCanvas(canvasGroup, 1f, transitionTime);
 		}
 
 		/// <summary>
@@ -178,7 +178,8 @@ namespace PokemonUnity.Stadium
 		{
 			//SceneManager.LoadScene(level);
 			//StartCoroutine(LoadLevel(level.Id));
-			Scene_onLoadLevel((int)GetSceneType(level));
+			//Scene_onLoadLevel((int)GetSceneType(level));
+			Scene_onLoadLevel(level.Id);
 		}
 
 		private void Scene_onLoadLevel(Scenes level)

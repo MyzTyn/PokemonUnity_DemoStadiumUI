@@ -72,6 +72,9 @@ namespace PokemonUnity.Stadium
         // ToDo: Remove this. This is for demo purpose only
         private void LoadVersusPartyScene()
         {
+            // ToDo: Slow down before disactive this
+            gameObject.SetActive(false);
+            
             if (VersusPartyScene != null)
                 GameManager.current.OnLoadScene(VersusPartyScene);
             else

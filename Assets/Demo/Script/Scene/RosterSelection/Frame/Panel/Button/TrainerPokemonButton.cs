@@ -42,9 +42,6 @@ namespace PokemonUnity.Stadium
 		/// </summary>
 		public void SetDisplay(IPokemon pkmn = null)
 		{
-			//IPokemon pkmn = Game.GameData.Trainer.party[partyIndex];
-			//IPokemon pkmn = PokemonSelect.TemporaryParty[partyIndex];
-
 			if (!pkmn.IsNotNullOrNone())
 			{
 				ActivePokemonDisplay(false);

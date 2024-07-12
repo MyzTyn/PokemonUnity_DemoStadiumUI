@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using PokemonEssentials.Interface.PokeBattle;
-using PokemonUnity.Monster;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +35,6 @@ namespace PokemonUnity.Stadium
                 .AddListener((value) => Scene_onButtonPressed(value, pokemonSelect, pokemonViewModal));
         }
 
-        // This supposed to open PokemonViewModal for stats
         /// <summary>
         /// When this button pressed, open the PokemonViewModal
         /// </summary>
@@ -52,9 +49,6 @@ namespace PokemonUnity.Stadium
                 Debug.Log("This Pokemon is selected and added to party already");
                 return;
             }
-
-            //IsSelected = arg;
-            //PokemonSelect.IsRentalPokemon = IsRental;
             
             // Set the position value
             PokemonSelect.CurrentSelectedRosterPosition = Position.Value;
@@ -63,8 +57,6 @@ namespace PokemonUnity.Stadium
             // Active PokemonViewModal
             PokemonViewModal.ActiveGameObject(true);
             PokemonViewModal.RefreshDisplay();
-
-            //GameEvents.current.OnLoadLevel(1); //Change scene...
         }
         #endregion
     }

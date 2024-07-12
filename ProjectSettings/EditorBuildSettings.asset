@@ -4,5 +4,17 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Demo/Scenes/0_Intro/IntroScene.unity
+    guid: d72bfef1c4e7d034f95d645e5b29382c
+  - enabled: 1
+    path: Assets/Demo/Scenes/5_MenuRosterSelection/RosterSelection.unity
+    guid: 3533f1c37b20d6948b85a37c73bdd41b
+  - enabled: 1
+    path: Assets/Demo/Scenes/6_VersusParty/VersusParty.unity
+    guid: 5178b1acd949b9446ac18e785ad06ae7
+  - enabled: 1
+    path: Assets/Demo/Scenes/7_BattleScene/BattleScene.unity
+    guid: 50f22e1c45f38c24583e82cadb21e8cb
   m_configObjects: {}
